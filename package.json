@@ -1,6 +1,6 @@
 {
   "name": "@novel-isr/ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "novel-platform UI 组件库 —— Chakra v3 inspired API + 现代克制视觉 + 一等公民 dark mode",
   "license": "UNLICENSED",
   "repository": {
