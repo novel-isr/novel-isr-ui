@@ -13,7 +13,7 @@ novel-platform 自研组件库。Chakra v3 inspired API + Radix Primitives 行�
 ```jsonc
 // package.json
 "dependencies": {
-  "@novel-isr/ui": "git+ssh://git@github.com/novel-isr/novel-isr-ui.git#v0.1.1"
+  "@novel-isr/ui": "git+https://github.com/novel-isr/novel-isr-ui.git#v0.1.1"
 }
 ```
 
@@ -78,7 +78,7 @@ git tag v0.1.1 && git push origin v0.1.1
 
 # 4. 消费方升级 ref
 # novel-rating/package.json:
-#   "@novel-isr/ui": "git+ssh://git@github.com/novel-isr/novel-isr-ui.git#v0.1.1"
+#   "@novel-isr/ui": "git+https://github.com/novel-isr/novel-isr-ui.git#v0.1.1"
 # pnpm install
 ```
 
