@@ -10,7 +10,7 @@
   "homepage": "https://github.com/novel-isr/novel-isr-ui",
   "bugs": "https://github.com/novel-isr/novel-isr-ui/issues",
   "engines": {
-    "node": ">=20.10.0"
+    "node": ">=22.12.0"
   },
   "type": "module",
   "main": "./dist/index.js",
