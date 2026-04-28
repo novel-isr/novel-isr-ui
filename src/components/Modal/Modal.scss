@@ -1,0 +1,94 @@
+.ui-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--ui-color-overlay);
+  z-index: var(--ui-z-overlay);
+  animation: ui-modal-fadein var(--ui-transition-base);
+
+  &[data-state='closed'] { animation: ui-modal-fadeout var(--ui-transition-base); }
+}
+
+.ui-modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--ui-color-bg);
+  border-radius: var(--ui-radius-lg);
+  box-shadow: var(--ui-shadow-xl);
+  z-index: var(--ui-z-modal);
+  width: 90vw;
+  max-width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: ui-modal-zoomin var(--ui-transition-base);
+
+  &:focus { outline: none; }
+  &[data-state='closed'] { animation: ui-modal-zoomout var(--ui-transition-base); }
+}
+
+.ui-modal-size-sm { max-width: 400px; }
+.ui-modal-size-md { max-width: 500px; }
+.ui-modal-size-lg { max-width: 700px; }
+.ui-modal-size-xl { max-width: 900px; }
+.ui-modal-size-full {
+  max-width: none;
+  width: 95vw;
+  height: 95vh;
+  max-height: 95vh;
+}
+
+.ui-modal-header {
+  padding: var(--ui-space-5) var(--ui-space-6) var(--ui-space-3);
+  font-size: var(--ui-font-size-xl);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-fg);
+  flex-shrink: 0;
+}
+
+.ui-modal-body {
+  padding: var(--ui-space-3) var(--ui-space-6);
+  flex: 1;
+  overflow-y: auto;
+  color: var(--ui-color-fg);
+  line-height: var(--ui-line-height-base);
+}
+
+.ui-modal-footer {
+  padding: var(--ui-space-4) var(--ui-space-6) var(--ui-space-5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-space-2);
+  flex-shrink: 0;
+}
+
+.ui-modal-close {
+  position: absolute;
+  top: var(--ui-space-3);
+  right: var(--ui-space-3);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--ui-radius-md);
+  color: var(--ui-color-fg-secondary);
+  cursor: pointer;
+  transition: background-color var(--ui-transition-fast);
+}
+.ui-modal-close:hover { background-color: var(--ui-color-bg-muted); }
+
+@keyframes ui-modal-fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ui-modal-fadeout { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ui-modal-zoomin {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes ui-modal-zoomout {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+}

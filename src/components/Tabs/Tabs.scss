@@ -1,0 +1,105 @@
+.ui-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ui-tabs-orientation-vertical {
+  flex-direction: row;
+}
+
+.ui-tabs-list {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+}
+.ui-tabs-orientation-vertical .ui-tabs-list {
+  flex-direction: column;
+}
+
+.ui-tabs-trigger {
+  appearance: none;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: var(--ui-font-size-md);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-fg-secondary);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--ui-transition-fast);
+  white-space: nowrap;
+
+  &:hover { color: var(--ui-color-fg); }
+  &:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline-offset: -2px;
+  }
+  &[data-state='active'] { color: var(--ui-color-brand-500); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+// variant: line（默认）—— 底部高亮线
+.ui-tabs-variant-line .ui-tabs-list {
+  border-bottom: 1px solid var(--ui-color-border);
+}
+.ui-tabs-variant-line .ui-tabs-trigger {
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.ui-tabs-variant-line .ui-tabs-trigger[data-state='active'] {
+  border-bottom-color: var(--ui-color-brand-500);
+}
+
+// vertical line variant
+.ui-tabs-variant-line.ui-tabs-orientation-vertical .ui-tabs-list {
+  border-bottom: none;
+  border-right: 1px solid var(--ui-color-border);
+}
+.ui-tabs-variant-line.ui-tabs-orientation-vertical .ui-tabs-trigger {
+  border-bottom: none;
+  border-right: 2px solid transparent;
+  margin-bottom: 0;
+  margin-right: -1px;
+  text-align: left;
+}
+.ui-tabs-variant-line.ui-tabs-orientation-vertical .ui-tabs-trigger[data-state='active'] {
+  border-right-color: var(--ui-color-brand-500);
+}
+
+// variant: enclosed —— 类似浏览器 tab 标签
+.ui-tabs-variant-enclosed .ui-tabs-trigger {
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-md) var(--ui-radius-md) 0 0;
+}
+.ui-tabs-variant-enclosed .ui-tabs-trigger[data-state='active'] {
+  border-color: var(--ui-color-border);
+  border-bottom-color: var(--ui-color-bg);
+  background-color: var(--ui-color-bg);
+}
+.ui-tabs-variant-enclosed .ui-tabs-list {
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+// variant: soft —— 圆角软背景
+.ui-tabs-variant-soft .ui-tabs-list {
+  background-color: var(--ui-color-bg-muted);
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-space-1);
+  gap: var(--ui-space-1);
+}
+.ui-tabs-variant-soft .ui-tabs-trigger {
+  border-radius: var(--ui-radius-sm);
+}
+.ui-tabs-variant-soft .ui-tabs-trigger[data-state='active'] {
+  background-color: var(--ui-color-bg);
+  color: var(--ui-color-fg);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.ui-tabs-content {
+  padding: var(--ui-space-4) 0;
+  flex: 1;
+  outline: none;
+}

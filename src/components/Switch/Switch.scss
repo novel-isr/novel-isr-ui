@@ -1,0 +1,62 @@
+.ui-switch-root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--ui-font-family-sans);
+  color: var(--ui-color-fg);
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.ui-switch-control {
+  position: relative;
+  background-color: var(--ui-color-gray-300);
+  border-radius: var(--ui-radius-full);
+  transition: background-color var(--ui-transition-base);
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+
+  &[data-state='checked'] {
+    background-color: var(--ui-color-brand-500);
+  }
+
+  &:disabled { cursor: not-allowed; }
+}
+
+.ui-switch-thumb {
+  display: block;
+  background-color: #ffffff;
+  border-radius: var(--ui-radius-full);
+  box-shadow: var(--ui-shadow-sm);
+  transition: transform var(--ui-transition-base);
+  will-change: transform;
+}
+
+// sizes
+.ui-switch-size-sm .ui-switch-control { width: 28px; height: 16px; }
+.ui-switch-size-sm .ui-switch-thumb { width: 12px; height: 12px; transform: translateX(2px); }
+.ui-switch-size-sm .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(14px); }
+
+.ui-switch-size-md .ui-switch-control { width: 36px; height: 20px; }
+.ui-switch-size-md .ui-switch-thumb { width: 16px; height: 16px; transform: translateX(2px); }
+.ui-switch-size-md .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(18px); }
+
+.ui-switch-size-lg .ui-switch-control { width: 44px; height: 24px; }
+.ui-switch-size-lg .ui-switch-thumb { width: 20px; height: 20px; transform: translateX(2px); }
+.ui-switch-size-lg .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(22px); }
+
+.ui-switch-size-sm { font-size: var(--ui-font-size-sm); }
+.ui-switch-size-md { font-size: var(--ui-font-size-md); }
+.ui-switch-size-lg { font-size: var(--ui-font-size-lg); }

@@ -1,0 +1,320 @@
+/**
+ * @novel-isr/ui design tokens.
+ *
+ * 输出为 CSS 变量，覆盖 :root（默认 light）+ [data-theme="dark"]。
+ * 业务侧用 CSS 变量名引用（var(--ui-color-brand-500)），不要 import scss 变量本体。
+ *
+ * 命名规则：
+ *   --ui-color-<role>-<scale>     语义色 50-900 + 几个 alias
+ *   --ui-space-<n>                4px 步进，0..24（即 0px..96px）
+ *   --ui-radius-<size>            sm/md/lg/full
+ *   --ui-shadow-<size>            sm/md/lg/xl
+ *   --ui-font-size-<size>         xs..6xl
+ *   --ui-font-weight-<n>          400..700
+ *   --ui-line-height-<size>       tight/base/relaxed
+ *   --ui-z-<role>                 base/raised/dropdown/sticky/overlay/modal/popover/toast
+ *   --ui-transition-<speed>       fast/base/slow
+ */
+
+// ─── 调色板（不直接给业务用，只给 :root 变量做底色）─────────────────────────
+// 选色逻辑：
+//   brand    现代克制靛紫蓝（选 #5B6CFF 作为 500）
+//   gray     冷中性灰（带一点蓝调，跟 brand 视觉协调）
+//   success  绿  / warning 琥珀 / danger 红 / info 青：标准互补
+//
+//   每个 scale 覆盖 50-900：50 极浅做背景，500 是主色，900 极深做高对比文字
+//
+// 来自 OKLCH 调色后转成 HSL/HEX，确保感知亮度均匀（不会出现"500 比 400 看起来还浅"的现象）
+
+$brand: (
+  50: #eef0ff,
+  100: #dde2ff,
+  200: #b8c1ff,
+  300: #909cff,
+  400: #6e7bff,
+  500: #5b6cff,
+  // primary
+  600: #4858e6,
+  700: #3744b8,
+  800: #2a3592,
+  900: #1f2870,
+);
+
+$gray: (
+  50: #f7f8fa,
+  100: #eef0f4,
+  200: #d8dde5,
+  300: #b8c0cc,
+  400: #8a94a3,
+  500: #5d6877,
+  600: #424c5c,
+  700: #2f3845,
+  800: #1f2630,
+  900: #131820,
+);
+
+$success: (
+  50: #ecfdf5,
+  500: #10b981,
+  600: #059669,
+  700: #047857,
+);
+$warning: (
+  50: #fffbeb,
+  500: #f59e0b,
+  600: #d97706,
+  700: #b45309,
+);
+$danger: (
+  50: #fef2f2,
+  500: #ef4444,
+  600: #dc2626,
+  700: #b91c1c,
+);
+$info: (
+  50: #ecfeff,
+  500: #06b6d4,
+  600: #0891b2,
+  700: #0e7490,
+);
+
+// ─── 公共 token（不区分主题）──────────────────────────────────────────────
+:root {
+  // 间距：4px 步进
+  --ui-space-0: 0;
+  --ui-space-0-5: 2px;
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-7: 28px;
+  --ui-space-8: 32px;
+  --ui-space-10: 40px;
+  --ui-space-12: 48px;
+  --ui-space-14: 56px;
+  --ui-space-16: 64px;
+  --ui-space-20: 80px;
+  --ui-space-24: 96px;
+
+  // 圆角
+  --ui-radius-none: 0;
+  --ui-radius-sm: 4px;
+  --ui-radius-md: 6px;
+  --ui-radius-lg: 8px;
+  --ui-radius-xl: 12px;
+  --ui-radius-2xl: 16px;
+  --ui-radius-full: 9999px;
+
+  // 字体族
+  --ui-font-family-sans:
+    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN', 'Source Han Sans CN', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  --ui-font-family-mono:
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Courier New', monospace;
+
+  // 字号
+  --ui-font-size-xs: 12px;
+  --ui-font-size-sm: 13px;
+  --ui-font-size-md: 14px; // body 默认
+  --ui-font-size-lg: 16px;
+  --ui-font-size-xl: 18px;
+  --ui-font-size-2xl: 22px;
+  --ui-font-size-3xl: 28px;
+  --ui-font-size-4xl: 36px;
+  --ui-font-size-5xl: 48px;
+  --ui-font-size-6xl: 60px;
+
+  // 字重
+  --ui-font-weight-regular: 400;
+  --ui-font-weight-medium: 500;
+  --ui-font-weight-semibold: 600;
+  --ui-font-weight-bold: 700;
+
+  // 行高
+  --ui-line-height-tight: 1.2;
+  --ui-line-height-base: 1.5;
+  --ui-line-height-relaxed: 1.7;
+
+  // z-index 层级
+  --ui-z-base: 0;
+  --ui-z-raised: 10;
+  --ui-z-dropdown: 1000;
+  --ui-z-sticky: 1100;
+  --ui-z-overlay: 1300;
+  --ui-z-modal: 1400;
+  --ui-z-popover: 1500;
+  --ui-z-toast: 1700;
+
+  // 过渡
+  --ui-transition-fast: 120ms ease-out;
+  --ui-transition-base: 200ms ease-out;
+  --ui-transition-slow: 360ms ease-out;
+
+  // focus ring（无障碍：键盘聚焦必须有可见 ring）
+  --ui-focus-ring-width: 2px;
+  --ui-focus-ring-offset: 2px;
+}
+
+// ─── Light 主题 ──────────────────────────────────────────────────────────
+:root,
+[data-theme='light'] {
+  // brand scale
+  --ui-color-brand-50: #{map-get($brand, 50)};
+  --ui-color-brand-100: #{map-get($brand, 100)};
+  --ui-color-brand-200: #{map-get($brand, 200)};
+  --ui-color-brand-300: #{map-get($brand, 300)};
+  --ui-color-brand-400: #{map-get($brand, 400)};
+  --ui-color-brand-500: #{map-get($brand, 500)};
+  --ui-color-brand-600: #{map-get($brand, 600)};
+  --ui-color-brand-700: #{map-get($brand, 700)};
+  --ui-color-brand-800: #{map-get($brand, 800)};
+  --ui-color-brand-900: #{map-get($brand, 900)};
+
+  // gray scale
+  --ui-color-gray-50: #{map-get($gray, 50)};
+  --ui-color-gray-100: #{map-get($gray, 100)};
+  --ui-color-gray-200: #{map-get($gray, 200)};
+  --ui-color-gray-300: #{map-get($gray, 300)};
+  --ui-color-gray-400: #{map-get($gray, 400)};
+  --ui-color-gray-500: #{map-get($gray, 500)};
+  --ui-color-gray-600: #{map-get($gray, 600)};
+  --ui-color-gray-700: #{map-get($gray, 700)};
+  --ui-color-gray-800: #{map-get($gray, 800)};
+  --ui-color-gray-900: #{map-get($gray, 900)};
+
+  // semantic scales
+  --ui-color-success-50: #{map-get($success, 50)};
+  --ui-color-success-500: #{map-get($success, 500)};
+  --ui-color-success-600: #{map-get($success, 600)};
+  --ui-color-success-700: #{map-get($success, 700)};
+  --ui-color-warning-50: #{map-get($warning, 50)};
+  --ui-color-warning-500: #{map-get($warning, 500)};
+  --ui-color-warning-600: #{map-get($warning, 600)};
+  --ui-color-warning-700: #{map-get($warning, 700)};
+  --ui-color-danger-50: #{map-get($danger, 50)};
+  --ui-color-danger-500: #{map-get($danger, 500)};
+  --ui-color-danger-600: #{map-get($danger, 600)};
+  --ui-color-danger-700: #{map-get($danger, 700)};
+  --ui-color-info-50: #{map-get($info, 50)};
+  --ui-color-info-500: #{map-get($info, 500)};
+  --ui-color-info-600: #{map-get($info, 600)};
+  --ui-color-info-700: #{map-get($info, 700)};
+
+  // semantic alias（业务首选用这个，跨主题自动反转）
+  --ui-color-bg: #ffffff;
+  --ui-color-bg-subtle: #{map-get($gray, 50)};
+  --ui-color-bg-muted: #{map-get($gray, 100)};
+  --ui-color-bg-emphasis: #{map-get($gray, 800)};
+
+  --ui-color-fg: #{map-get($gray, 900)};
+  --ui-color-fg-secondary: #{map-get($gray, 600)};
+  --ui-color-fg-muted: #{map-get($gray, 500)};
+  --ui-color-fg-disabled: #{map-get($gray, 400)};
+  --ui-color-fg-inverse: #ffffff;
+
+  --ui-color-border: #{map-get($gray, 200)};
+  --ui-color-border-strong: #{map-get($gray, 300)};
+
+  --ui-color-overlay: rgba(15, 23, 42, 0.5);
+
+  // 阴影 —— light 用半透明黑
+  --ui-shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+}
+
+// ─── Dark 主题 ───────────────────────────────────────────────────────────
+[data-theme='dark'] {
+  // brand 在 dark 下整体提亮一档（视觉补偿）
+  --ui-color-brand-50: #2a3592;
+  --ui-color-brand-100: #3744b8;
+  --ui-color-brand-200: #4858e6;
+  --ui-color-brand-300: #5b6cff;
+  --ui-color-brand-400: #6e7bff;
+  --ui-color-brand-500: #909cff;
+  --ui-color-brand-600: #b8c1ff;
+  --ui-color-brand-700: #dde2ff;
+  --ui-color-brand-800: #eef0ff;
+  --ui-color-brand-900: #f5f6ff;
+
+  // gray scale —— dark 用反向 scale
+  --ui-color-gray-50: #{map-get($gray, 900)};
+  --ui-color-gray-100: #{map-get($gray, 800)};
+  --ui-color-gray-200: #{map-get($gray, 700)};
+  --ui-color-gray-300: #{map-get($gray, 600)};
+  --ui-color-gray-400: #{map-get($gray, 500)};
+  --ui-color-gray-500: #{map-get($gray, 400)};
+  --ui-color-gray-600: #{map-get($gray, 300)};
+  --ui-color-gray-700: #{map-get($gray, 200)};
+  --ui-color-gray-800: #{map-get($gray, 100)};
+  --ui-color-gray-900: #{map-get($gray, 50)};
+
+  // semantic scales（保留 50/500/600/700 但向 dark 适配）
+  --ui-color-success-50: #022c22;
+  --ui-color-success-500: #34d399;
+  --ui-color-success-600: #6ee7b7;
+  --ui-color-success-700: #a7f3d0;
+  --ui-color-warning-50: #422006;
+  --ui-color-warning-500: #fbbf24;
+  --ui-color-warning-600: #fcd34d;
+  --ui-color-warning-700: #fde68a;
+  --ui-color-danger-50: #450a0a;
+  --ui-color-danger-500: #f87171;
+  --ui-color-danger-600: #fca5a5;
+  --ui-color-danger-700: #fecaca;
+  --ui-color-info-50: #022c30;
+  --ui-color-info-500: #22d3ee;
+  --ui-color-info-600: #67e8f9;
+  --ui-color-info-700: #a5f3fc;
+
+  // semantic alias
+  --ui-color-bg: #0d1117;
+  --ui-color-bg-subtle: #131820;
+  --ui-color-bg-muted: #1f2630;
+  --ui-color-bg-emphasis: #f7f8fa;
+
+  --ui-color-fg: #f7f8fa;
+  --ui-color-fg-secondary: #b8c0cc;
+  --ui-color-fg-muted: #8a94a3;
+  --ui-color-fg-disabled: #5d6877;
+  --ui-color-fg-inverse: #131820;
+
+  --ui-color-border: #2f3845;
+  --ui-color-border-strong: #424c5c;
+
+  --ui-color-overlay: rgba(0, 0, 0, 0.7);
+
+  // 阴影 —— dark 用更深的黑（不然 elevation 看不出）
+  --ui-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.45);
+}
+
+// ─── 全局 reset（最小集，不抢业务）──────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+// 焦点环：键盘用户必须看见，鼠标用户隐藏
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+  outline-offset: var(--ui-focus-ring-offset);
+}

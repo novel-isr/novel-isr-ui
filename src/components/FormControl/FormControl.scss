@@ -1,0 +1,36 @@
+.ui-form-control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  width: 100%;
+}
+
+.ui-form-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-fg);
+  line-height: var(--ui-line-height-tight);
+}
+
+.ui-form-required {
+  color: var(--ui-color-danger-500);
+  margin-left: var(--ui-space-0-5);
+}
+
+.ui-form-helper {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-fg-secondary);
+  line-height: var(--ui-line-height-base);
+}
+
+.ui-form-error {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-danger-500);
+  line-height: var(--ui-line-height-base);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+}

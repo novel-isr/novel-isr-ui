@@ -1,0 +1,41 @@
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  padding: 0 var(--ui-space-2);
+  font-family: var(--ui-font-family-sans);
+  font-weight: var(--ui-font-weight-medium);
+  border-radius: var(--ui-radius-sm);
+  background-color: var(--ui-color-bg-muted);
+  color: var(--ui-color-fg);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.ui-tag-size-sm { height: 20px; font-size: var(--ui-font-size-xs); padding: 0 var(--ui-space-2); }
+.ui-tag-size-md { height: 24px; font-size: var(--ui-font-size-sm); padding: 0 var(--ui-space-2); }
+.ui-tag-size-lg { height: 32px; font-size: var(--ui-font-size-md); padding: 0 var(--ui-space-3); }
+
+.ui-tag-color-brand { background-color: var(--ui-color-brand-50); color: var(--ui-color-brand-700); }
+.ui-tag-color-gray { background-color: var(--ui-color-bg-muted); color: var(--ui-color-fg-secondary); }
+.ui-tag-color-success { background-color: var(--ui-color-success-50); color: var(--ui-color-success-700); }
+.ui-tag-color-warning { background-color: var(--ui-color-warning-50); color: var(--ui-color-warning-700); }
+.ui-tag-color-danger { background-color: var(--ui-color-danger-50); color: var(--ui-color-danger-700); }
+
+.ui-tag-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--ui-space-1);
+  font-size: 14px;
+  line-height: 1;
+  transition: opacity var(--ui-transition-fast);
+}
+.ui-tag-close:hover { opacity: 1; }

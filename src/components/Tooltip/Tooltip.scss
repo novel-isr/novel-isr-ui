@@ -1,0 +1,28 @@
+.ui-tooltip-content {
+  background-color: var(--ui-color-bg-emphasis);
+  color: var(--ui-color-fg-inverse);
+  padding: var(--ui-space-1) var(--ui-space-2);
+  border-radius: var(--ui-radius-sm);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-tight);
+  box-shadow: var(--ui-shadow-md);
+  z-index: var(--ui-z-popover);
+  max-width: 280px;
+  user-select: none;
+  animation: ui-tooltip-fadein var(--ui-transition-fast);
+
+  &[data-state='closed'] { animation: ui-tooltip-fadeout var(--ui-transition-fast); }
+}
+
+.ui-tooltip-arrow {
+  fill: var(--ui-color-bg-emphasis);
+}
+
+@keyframes ui-tooltip-fadein {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ui-tooltip-fadeout {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}

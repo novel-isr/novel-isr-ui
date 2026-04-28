@@ -1,0 +1,29 @@
+/**
+ * @novel-isr/ui 全局样式入口
+ */
+
+@use './tokens.scss';
+
+@use '../components/Button/Button.scss';
+@use '../components/Spinner/Spinner.scss';
+@use '../components/Input/Input.scss';
+@use '../components/Stack/Stack.scss';
+@use '../components/FormControl/FormControl.scss';
+@use '../components/Textarea/Textarea.scss';
+@use '../components/Checkbox/Checkbox.scss';
+@use '../components/Radio/Radio.scss';
+@use '../components/Switch/Switch.scss';
+@use '../components/Select/Select.scss';
+@use '../components/Alert/Alert.scss';
+@use '../components/Avatar/Avatar.scss';
+@use '../components/Badge/Badge.scss';
+@use '../components/Tag/Tag.scss';
+@use '../components/Divider/Divider.scss';
+@use '../components/Modal/Modal.scss';
+@use '../components/Drawer/Drawer.scss';
+@use '../components/Tooltip/Tooltip.scss';
+@use '../components/Popover/Popover.scss';
+@use '../components/Toast/Toast.scss';
+@use '../components/Tabs/Tabs.scss';
+@use '../components/Pagination/Pagination.scss';
+@use '../components/Table/Table.scss';

@@ -1,0 +1,82 @@
+.ui-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border-radius: var(--ui-radius-md);
+  font-family: var(--ui-font-family-sans);
+  line-height: var(--ui-line-height-base);
+}
+
+.ui-alert-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.ui-alert-content { flex: 1; min-width: 0; }
+.ui-alert-title {
+  font-weight: var(--ui-font-weight-semibold);
+  margin-bottom: var(--ui-space-1);
+}
+.ui-alert-description {
+  font-size: var(--ui-font-size-sm);
+  color: inherit;
+  opacity: 0.85;
+}
+
+// status × variant 组合
+// variant: solid / subtle / outline (default subtle)
+
+.ui-alert-status-info.ui-alert-variant-subtle {
+  background-color: var(--ui-color-info-50);
+  color: var(--ui-color-info-700);
+}
+.ui-alert-status-info.ui-alert-variant-solid {
+  background-color: var(--ui-color-info-500);
+  color: #ffffff;
+}
+.ui-alert-status-info.ui-alert-variant-outline {
+  border: 1px solid var(--ui-color-info-500);
+  color: var(--ui-color-info-700);
+}
+
+.ui-alert-status-success.ui-alert-variant-subtle {
+  background-color: var(--ui-color-success-50);
+  color: var(--ui-color-success-700);
+}
+.ui-alert-status-success.ui-alert-variant-solid {
+  background-color: var(--ui-color-success-500);
+  color: #ffffff;
+}
+.ui-alert-status-success.ui-alert-variant-outline {
+  border: 1px solid var(--ui-color-success-500);
+  color: var(--ui-color-success-700);
+}
+
+.ui-alert-status-warning.ui-alert-variant-subtle {
+  background-color: var(--ui-color-warning-50);
+  color: var(--ui-color-warning-700);
+}
+.ui-alert-status-warning.ui-alert-variant-solid {
+  background-color: var(--ui-color-warning-500);
+  color: #ffffff;
+}
+.ui-alert-status-warning.ui-alert-variant-outline {
+  border: 1px solid var(--ui-color-warning-500);
+  color: var(--ui-color-warning-700);
+}
+
+.ui-alert-status-danger.ui-alert-variant-subtle {
+  background-color: var(--ui-color-danger-50);
+  color: var(--ui-color-danger-700);
+}
+.ui-alert-status-danger.ui-alert-variant-solid {
+  background-color: var(--ui-color-danger-500);
+  color: #ffffff;
+}
+.ui-alert-status-danger.ui-alert-variant-outline {
+  border: 1px solid var(--ui-color-danger-500);
+  color: var(--ui-color-danger-700);
+}
