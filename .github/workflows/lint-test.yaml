@@ -29,10 +29,18 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      # corepack 把 packageManager 字段当 source of truth,确保所有 pnpm
+      # 子进程(包括装 git deps 时跑 prepare 的子 install)都用 setup-node
+      # 设置的 Node 版本,而非 runner system 默认 Node。
+      - name: Enable corepack (pnpm via packageManager)
+        run: corepack enable pnpm
+
+      - name: Diagnostics
+        run: |
+          node --version
+          pnpm --version
+          which node
+          which pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
