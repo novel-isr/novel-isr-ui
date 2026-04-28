@@ -29,9 +29,13 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      # corepack 把 packageManager 字段当 source of truth,确保所有 pnpm
-      # 子进程(包括装 git deps 时跑 prepare 的子 install)都用 setup-node
-      # 设置的 Node 版本,而非 runner system 默认 Node。
+      - name: Override system Node (prevent pnpm subprocess fallback to v20)
+        run: |
+          NODE_BIN="$(which node)"
+          sudo ln -sf "$NODE_BIN" /usr/bin/node
+          sudo ln -sf "$NODE_BIN" /usr/local/bin/node || true
+          echo "system node now: $(/usr/bin/node --version)"
+
       - name: Enable corepack (pnpm via packageManager)
         run: corepack enable pnpm
 
@@ -41,6 +45,7 @@ jobs:
           pnpm --version
           which node
           which pnpm
+          /usr/bin/node --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
