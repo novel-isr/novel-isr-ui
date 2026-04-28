@@ -1,0 +1,47 @@
+name: Lint and Test
+
+# 触发：所有分支 push + PR 到 main/develop。
+# 走 Git URL 路线,不发 npm —— CI 仅做"代码可构建/类型干净"验证。
+# tag push (v*.*.*) 不重复跑(消费方装包时 prepare 会自己再 build 一次)。
+
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['**']
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.10.0'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm run type-check
+
+      - name: Test (vitest, passWithNoTests)
+        run: pnpm run test
+
+      - name: Build (vite lib + sass)
+        run: pnpm run build
