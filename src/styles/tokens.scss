@@ -16,6 +16,8 @@
  *   --ui-transition-<speed>       fast/base/slow
  */
 
+@use 'sass:map';
+
 // ─── 调色板（不直接给业务用，只给 :root 变量做底色）─────────────────────────
 // 选色逻辑：
 //   brand    现代克制靛紫蓝（选 #5B6CFF 作为 500）
@@ -161,61 +163,61 @@ $info: (
 :root,
 [data-theme='light'] {
   // brand scale
-  --ui-color-brand-50: #{map-get($brand, 50)};
-  --ui-color-brand-100: #{map-get($brand, 100)};
-  --ui-color-brand-200: #{map-get($brand, 200)};
-  --ui-color-brand-300: #{map-get($brand, 300)};
-  --ui-color-brand-400: #{map-get($brand, 400)};
-  --ui-color-brand-500: #{map-get($brand, 500)};
-  --ui-color-brand-600: #{map-get($brand, 600)};
-  --ui-color-brand-700: #{map-get($brand, 700)};
-  --ui-color-brand-800: #{map-get($brand, 800)};
-  --ui-color-brand-900: #{map-get($brand, 900)};
+  --ui-color-brand-50: #{map.get($brand, 50)};
+  --ui-color-brand-100: #{map.get($brand, 100)};
+  --ui-color-brand-200: #{map.get($brand, 200)};
+  --ui-color-brand-300: #{map.get($brand, 300)};
+  --ui-color-brand-400: #{map.get($brand, 400)};
+  --ui-color-brand-500: #{map.get($brand, 500)};
+  --ui-color-brand-600: #{map.get($brand, 600)};
+  --ui-color-brand-700: #{map.get($brand, 700)};
+  --ui-color-brand-800: #{map.get($brand, 800)};
+  --ui-color-brand-900: #{map.get($brand, 900)};
 
   // gray scale
-  --ui-color-gray-50: #{map-get($gray, 50)};
-  --ui-color-gray-100: #{map-get($gray, 100)};
-  --ui-color-gray-200: #{map-get($gray, 200)};
-  --ui-color-gray-300: #{map-get($gray, 300)};
-  --ui-color-gray-400: #{map-get($gray, 400)};
-  --ui-color-gray-500: #{map-get($gray, 500)};
-  --ui-color-gray-600: #{map-get($gray, 600)};
-  --ui-color-gray-700: #{map-get($gray, 700)};
-  --ui-color-gray-800: #{map-get($gray, 800)};
-  --ui-color-gray-900: #{map-get($gray, 900)};
+  --ui-color-gray-50: #{map.get($gray, 50)};
+  --ui-color-gray-100: #{map.get($gray, 100)};
+  --ui-color-gray-200: #{map.get($gray, 200)};
+  --ui-color-gray-300: #{map.get($gray, 300)};
+  --ui-color-gray-400: #{map.get($gray, 400)};
+  --ui-color-gray-500: #{map.get($gray, 500)};
+  --ui-color-gray-600: #{map.get($gray, 600)};
+  --ui-color-gray-700: #{map.get($gray, 700)};
+  --ui-color-gray-800: #{map.get($gray, 800)};
+  --ui-color-gray-900: #{map.get($gray, 900)};
 
   // semantic scales
-  --ui-color-success-50: #{map-get($success, 50)};
-  --ui-color-success-500: #{map-get($success, 500)};
-  --ui-color-success-600: #{map-get($success, 600)};
-  --ui-color-success-700: #{map-get($success, 700)};
-  --ui-color-warning-50: #{map-get($warning, 50)};
-  --ui-color-warning-500: #{map-get($warning, 500)};
-  --ui-color-warning-600: #{map-get($warning, 600)};
-  --ui-color-warning-700: #{map-get($warning, 700)};
-  --ui-color-danger-50: #{map-get($danger, 50)};
-  --ui-color-danger-500: #{map-get($danger, 500)};
-  --ui-color-danger-600: #{map-get($danger, 600)};
-  --ui-color-danger-700: #{map-get($danger, 700)};
-  --ui-color-info-50: #{map-get($info, 50)};
-  --ui-color-info-500: #{map-get($info, 500)};
-  --ui-color-info-600: #{map-get($info, 600)};
-  --ui-color-info-700: #{map-get($info, 700)};
+  --ui-color-success-50: #{map.get($success, 50)};
+  --ui-color-success-500: #{map.get($success, 500)};
+  --ui-color-success-600: #{map.get($success, 600)};
+  --ui-color-success-700: #{map.get($success, 700)};
+  --ui-color-warning-50: #{map.get($warning, 50)};
+  --ui-color-warning-500: #{map.get($warning, 500)};
+  --ui-color-warning-600: #{map.get($warning, 600)};
+  --ui-color-warning-700: #{map.get($warning, 700)};
+  --ui-color-danger-50: #{map.get($danger, 50)};
+  --ui-color-danger-500: #{map.get($danger, 500)};
+  --ui-color-danger-600: #{map.get($danger, 600)};
+  --ui-color-danger-700: #{map.get($danger, 700)};
+  --ui-color-info-50: #{map.get($info, 50)};
+  --ui-color-info-500: #{map.get($info, 500)};
+  --ui-color-info-600: #{map.get($info, 600)};
+  --ui-color-info-700: #{map.get($info, 700)};
 
   // semantic alias（业务首选用这个，跨主题自动反转）
   --ui-color-bg: #ffffff;
-  --ui-color-bg-subtle: #{map-get($gray, 50)};
-  --ui-color-bg-muted: #{map-get($gray, 100)};
-  --ui-color-bg-emphasis: #{map-get($gray, 800)};
+  --ui-color-bg-subtle: #{map.get($gray, 50)};
+  --ui-color-bg-muted: #{map.get($gray, 100)};
+  --ui-color-bg-emphasis: #{map.get($gray, 800)};
 
-  --ui-color-fg: #{map-get($gray, 900)};
-  --ui-color-fg-secondary: #{map-get($gray, 600)};
-  --ui-color-fg-muted: #{map-get($gray, 500)};
-  --ui-color-fg-disabled: #{map-get($gray, 400)};
+  --ui-color-fg: #{map.get($gray, 900)};
+  --ui-color-fg-secondary: #{map.get($gray, 600)};
+  --ui-color-fg-muted: #{map.get($gray, 500)};
+  --ui-color-fg-disabled: #{map.get($gray, 400)};
   --ui-color-fg-inverse: #ffffff;
 
-  --ui-color-border: #{map-get($gray, 200)};
-  --ui-color-border-strong: #{map-get($gray, 300)};
+  --ui-color-border: #{map.get($gray, 200)};
+  --ui-color-border-strong: #{map.get($gray, 300)};
 
   --ui-color-overlay: rgba(15, 23, 42, 0.5);
 
@@ -241,16 +243,16 @@ $info: (
   --ui-color-brand-900: #f5f6ff;
 
   // gray scale —— dark 用反向 scale
-  --ui-color-gray-50: #{map-get($gray, 900)};
-  --ui-color-gray-100: #{map-get($gray, 800)};
-  --ui-color-gray-200: #{map-get($gray, 700)};
-  --ui-color-gray-300: #{map-get($gray, 600)};
-  --ui-color-gray-400: #{map-get($gray, 500)};
-  --ui-color-gray-500: #{map-get($gray, 400)};
-  --ui-color-gray-600: #{map-get($gray, 300)};
-  --ui-color-gray-700: #{map-get($gray, 200)};
-  --ui-color-gray-800: #{map-get($gray, 100)};
-  --ui-color-gray-900: #{map-get($gray, 50)};
+  --ui-color-gray-50: #{map.get($gray, 900)};
+  --ui-color-gray-100: #{map.get($gray, 800)};
+  --ui-color-gray-200: #{map.get($gray, 700)};
+  --ui-color-gray-300: #{map.get($gray, 600)};
+  --ui-color-gray-400: #{map.get($gray, 500)};
+  --ui-color-gray-500: #{map.get($gray, 400)};
+  --ui-color-gray-600: #{map.get($gray, 300)};
+  --ui-color-gray-700: #{map.get($gray, 200)};
+  --ui-color-gray-800: #{map.get($gray, 100)};
+  --ui-color-gray-900: #{map.get($gray, 50)};
 
   // semantic scales（保留 50/500/600/700 但向 dark 适配）
   --ui-color-success-50: #022c22;
