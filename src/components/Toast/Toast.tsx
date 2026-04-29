@@ -25,7 +25,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -190,14 +189,14 @@ export function ToastProvider({ position = 'top-right', children }: ToastProvide
 function ToastViewport() {
   const { position } = useContext(ToastContext);
   const [items, setItems] = useState<ToastItem[]>([]);
-  const mountedRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    mountedRef.current = true;
+    setMounted(true);
     return store.subscribe(setItems);
   }, []);
 
-  if (typeof document === 'undefined') return null;
+  if (!mounted) return null;
 
   return createPortal(
     <div className="ui-toast-viewport" data-position={position} role="region" aria-label="通知">
