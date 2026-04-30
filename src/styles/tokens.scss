@@ -20,7 +20,7 @@
 
 // ─── 调色板（不直接给业务用，只给 :root 变量做底色）─────────────────────────
 // 选色逻辑：
-//   brand    现代克制靛紫蓝（选 #5B6CFF 作为 500）
+//   brand    商业后台常用的高可读蓝（接近 MUI / Ant Design 暗色后台主色）
 //   gray     冷中性灰（带一点蓝调，跟 brand 视觉协调）
 //   success  绿  / warning 琥珀 / danger 红 / info 青：标准互补
 //
@@ -29,17 +29,17 @@
 // 来自 OKLCH 调色后转成 HSL/HEX，确保感知亮度均匀（不会出现"500 比 400 看起来还浅"的现象）
 
 $brand: (
-  50: #eef0ff,
-  100: #dde2ff,
-  200: #b8c1ff,
-  300: #909cff,
-  400: #6e7bff,
-  500: #5b6cff,
+  50: #e6f4ff,
+  100: #bae0ff,
+  200: #91caff,
+  300: #69b1ff,
+  400: #4096ff,
+  500: #1677ff,
   // primary
-  600: #4858e6,
-  700: #3744b8,
-  800: #2a3592,
-  900: #1f2870,
+  600: #0958d9,
+  700: #003eb3,
+  800: #002c8c,
+  900: #001d66,
 );
 
 $gray: (
@@ -230,17 +230,17 @@ $info: (
 
 // ─── Dark 主题 ───────────────────────────────────────────────────────────
 [data-theme='dark'] {
-  // brand 在 dark 下整体提亮一档（视觉补偿）
-  --ui-color-brand-50: #2a3592;
-  --ui-color-brand-100: #3744b8;
-  --ui-color-brand-200: #4858e6;
-  --ui-color-brand-300: #5b6cff;
-  --ui-color-brand-400: #6e7bff;
-  --ui-color-brand-500: #909cff;
-  --ui-color-brand-600: #b8c1ff;
-  --ui-color-brand-700: #dde2ff;
-  --ui-color-brand-800: #eef0ff;
-  --ui-color-brand-900: #f5f6ff;
+  // brand 在 dark 下整体提亮一档（视觉补偿），50/100 用作暗色低对比背景。
+  --ui-color-brand-50: #071a2f;
+  --ui-color-brand-100: #0b2a4a;
+  --ui-color-brand-200: #11406f;
+  --ui-color-brand-300: #1763a8;
+  --ui-color-brand-400: #2384d8;
+  --ui-color-brand-500: #40a9ff;
+  --ui-color-brand-600: #69c0ff;
+  --ui-color-brand-700: #91d5ff;
+  --ui-color-brand-800: #bae7ff;
+  --ui-color-brand-900: #e6f7ff;
 
   // gray scale —— dark 用反向 scale
   --ui-color-gray-50: #{map.get($gray, 900)};
@@ -273,19 +273,19 @@ $info: (
   --ui-color-info-700: #a5f3fc;
 
   // semantic alias
-  --ui-color-bg: #0d1117;
-  --ui-color-bg-subtle: #131820;
-  --ui-color-bg-muted: #1f2630;
+  --ui-color-bg: #05070b;
+  --ui-color-bg-subtle: #0b1117;
+  --ui-color-bg-muted: #111827;
   --ui-color-bg-emphasis: #f7f8fa;
 
-  --ui-color-fg: #f7f8fa;
-  --ui-color-fg-secondary: #b8c0cc;
-  --ui-color-fg-muted: #8a94a3;
-  --ui-color-fg-disabled: #5d6877;
+  --ui-color-fg: #f8fafc;
+  --ui-color-fg-secondary: #cbd5e1;
+  --ui-color-fg-muted: #94a3b8;
+  --ui-color-fg-disabled: #64748b;
   --ui-color-fg-inverse: #131820;
 
-  --ui-color-border: #2f3845;
-  --ui-color-border-strong: #424c5c;
+  --ui-color-border: #1f2937;
+  --ui-color-border-strong: #334155;
 
   --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
