@@ -37,6 +37,7 @@ export * from './components/Select';
 export * from './components/Alert';
 export * from './components/Modal';
 export * from './components/Drawer';
+export * from './components/Command';
 export * from './components/Tooltip';
 export * from './components/Popover';
 export * from './components/Toast';
