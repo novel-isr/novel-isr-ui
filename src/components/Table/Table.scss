@@ -1,6 +1,9 @@
 .ui-table-wrapper {
   width: 100%;
   overflow-x: auto;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-lg);
+  background-color: var(--ui-color-bg);
 }
 
 .ui-table {
@@ -38,8 +41,6 @@
 }
 
 .ui-table-variant-bordered {
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
   overflow: hidden;
 }
 .ui-table-variant-bordered .ui-table th + th,
