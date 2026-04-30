@@ -29,6 +29,11 @@ export interface CommandDialogProps {
   placeholder?: string;
   emptyText?: ReactNode;
   shortcutLabel?: ReactNode;
+  /**
+   * Global keyboard shortcut handled by the component itself.
+   * Example: "mod+k" means Cmd+K on macOS and Ctrl+K elsewhere.
+   */
+  shortcut?: string | string[];
   maxResults?: number;
   className?: string;
 }
@@ -43,6 +48,7 @@ export function CommandDialog(props: CommandDialogProps) {
     placeholder = '搜索命令、路径或关键字',
     emptyText = '没有匹配结果',
     shortcutLabel,
+    shortcut,
     maxResults = 12,
     className,
   } = props;
@@ -68,6 +74,19 @@ export function CommandDialog(props: CommandDialogProps) {
   useEffect(() => {
     setActiveIndex(0);
   }, [query]);
+
+  useEffect(() => {
+    if (!shortcut) return;
+    const shortcuts = Array.isArray(shortcut) ? shortcut : [shortcut];
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (!shortcuts.some(value => matchesShortcut(event, value))) return;
+      event.preventDefault();
+      event.stopPropagation();
+      onOpenChange(true);
+    };
+    document.addEventListener('keydown', onKeyDown, { capture: true });
+    return () => document.removeEventListener('keydown', onKeyDown, true);
+  }, [onOpenChange, shortcut]);
 
   const selectItem = (item: CommandItem) => {
     onSelect(item);
@@ -159,4 +178,22 @@ function commandSearchText(item: CommandItem): string {
 
 function normalize(value: string): string {
   return value.trim().toLowerCase();
+}
+
+function matchesShortcut(event: globalThis.KeyboardEvent, shortcut: string): boolean {
+  const parts = shortcut.toLowerCase().split('+');
+  const key = parts.at(-1);
+  if (!key || event.key.toLowerCase() !== key) return false;
+  const needsMod = parts.includes('mod');
+  const needsCtrl = parts.includes('ctrl');
+  const needsMeta = parts.includes('meta') || parts.includes('cmd');
+  const needsShift = parts.includes('shift');
+  const needsAlt = parts.includes('alt') || parts.includes('option');
+
+  if (needsMod && !event.metaKey && !event.ctrlKey) return false;
+  if (needsCtrl && !event.ctrlKey) return false;
+  if (needsMeta && !event.metaKey) return false;
+  if (needsShift && !event.shiftKey) return false;
+  if (needsAlt && !event.altKey) return false;
+  return true;
 }
