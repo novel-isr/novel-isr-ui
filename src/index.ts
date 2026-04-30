@@ -12,6 +12,7 @@
 // ─── Provider / hooks ─────────────────────────────────────────────────
 export { ThemeProvider, useTheme } from './components/ThemeProvider';
 export type { Theme, ResolvedTheme } from './components/ThemeProvider';
+export * from './components/ThemeToggle';
 
 export { useDisclosure } from './hooks/useDisclosure';
 export type { UseDisclosureProps, UseDisclosureReturn } from './hooks/useDisclosure';
