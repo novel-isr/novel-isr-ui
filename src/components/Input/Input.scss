@@ -1,4 +1,6 @@
 .ui-input-root {
+  --ui-input-focus-ring: var(--ui-color-brand-100);
+
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -13,7 +15,18 @@
 
   &:focus-within {
     border-color: var(--ui-color-brand-500);
-    box-shadow: 0 0 0 3px var(--ui-color-brand-100);
+    box-shadow: 0 0 0 3px var(--ui-input-focus-ring);
+  }
+}
+
+[data-theme='dark'] .ui-input-root {
+  --ui-input-focus-ring: rgba(144, 156, 255, 0.22);
+
+  background-color: var(--ui-color-bg-subtle);
+  border-color: var(--ui-color-border-strong);
+
+  &:hover:not(.ui-input-disabled) {
+    border-color: var(--ui-color-gray-500);
   }
 }
 
