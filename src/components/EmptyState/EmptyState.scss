@@ -1,0 +1,89 @@
+/* EmptyState —— 空态
+ *
+ * 设计：居中 + icon 弱化（fg-muted）+ title 主文字 + description 次文字
+ * 不加 border / background —— 嵌任何容器都和谐
+ */
+
+.ui-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--ui-font-family-sans);
+  color: var(--ui-color-fg);
+  gap: var(--ui-space-3);
+}
+
+.ui-empty-state-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-color-fg-muted);
+  opacity: 0.7;
+}
+
+.ui-empty-state-title {
+  color: var(--ui-color-fg);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: var(--ui-line-height-tight);
+}
+
+.ui-empty-state-description {
+  color: var(--ui-color-fg-secondary);
+  line-height: var(--ui-line-height-base);
+  max-width: 36ch; /* 控制行宽更易读 */
+}
+
+.ui-empty-state-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  margin-top: var(--ui-space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── size 档位 ──────────────────────────────────── */
+
+.ui-empty-state-size-compact {
+  padding: var(--ui-space-4) var(--ui-space-3);
+}
+.ui-empty-state-size-compact .ui-empty-state-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.ui-empty-state-size-compact .ui-empty-state-title {
+  font-size: var(--ui-font-size-sm);
+}
+.ui-empty-state-size-compact .ui-empty-state-description {
+  font-size: var(--ui-font-size-xs);
+}
+
+.ui-empty-state-size-default {
+  padding: var(--ui-space-8) var(--ui-space-4);
+}
+.ui-empty-state-size-default .ui-empty-state-icon svg {
+  width: 40px;
+  height: 40px;
+}
+.ui-empty-state-size-default .ui-empty-state-title {
+  font-size: var(--ui-font-size-md);
+}
+.ui-empty-state-size-default .ui-empty-state-description {
+  font-size: var(--ui-font-size-sm);
+}
+
+.ui-empty-state-size-lg {
+  padding: var(--ui-space-12) var(--ui-space-6);
+}
+.ui-empty-state-size-lg .ui-empty-state-icon svg {
+  width: 56px;
+  height: 56px;
+}
+.ui-empty-state-size-lg .ui-empty-state-title {
+  font-size: var(--ui-font-size-xl);
+}
+.ui-empty-state-size-lg .ui-empty-state-description {
+  font-size: var(--ui-font-size-md);
+}

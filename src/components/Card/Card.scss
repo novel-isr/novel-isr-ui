@@ -1,0 +1,163 @@
+/* Card —— 内容容器。
+ * 视觉策略：
+ *   - outline 默认：1px border + 极轻底，list / grid 大面积适用
+ *   - elevated：阴影 + 无 border，详情页 hero / 抽屉式聚焦使用
+ *   - subtle：浅底无边，做区块分隔不抢视觉
+ *   - ghost：透明底，hover 时再浮现，适合 list item
+ *
+ * 颜色全部走 ui-color-* 语义 token，自动跟随 light/dark 主题。
+ */
+
+.ui-card {
+  display: block;
+  border-radius: var(--ui-radius-lg);
+  background-color: var(--ui-color-bg);
+  color: var(--ui-color-fg);
+  text-decoration: none; /* 当 as="a" 时去掉默认下划线 */
+  transition:
+    background-color var(--ui-transition-fast),
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast),
+    transform var(--ui-transition-fast);
+}
+
+/* ── variants ──────────────────────────────────────── */
+
+.ui-card-variant-outline {
+  background-color: var(--ui-color-bg);
+  border: 1px solid var(--ui-color-border);
+}
+
+.ui-card-variant-elevated {
+  background-color: var(--ui-color-bg);
+  border: 1px solid transparent;
+  box-shadow: var(--ui-shadow-md);
+}
+
+.ui-card-variant-subtle {
+  background-color: var(--ui-color-bg-subtle);
+  border: 1px solid transparent;
+}
+
+.ui-card-variant-ghost {
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+
+/* ── interactive：hover / focus 反馈 ────────────────── */
+
+.ui-card-interactive {
+  cursor: pointer;
+  outline: none;
+}
+
+.ui-card-interactive.ui-card-variant-outline:hover {
+  border-color: var(--ui-color-border-strong);
+  background-color: var(--ui-color-bg-subtle);
+}
+
+.ui-card-interactive.ui-card-variant-elevated:hover {
+  box-shadow: var(--ui-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ui-card-interactive.ui-card-variant-subtle:hover,
+.ui-card-interactive.ui-card-variant-ghost:hover {
+  background-color: var(--ui-color-bg-muted);
+}
+
+.ui-card-interactive:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--ui-color-bg),
+    0 0 0 4px var(--ui-color-brand-500);
+}
+
+.ui-card-interactive:active {
+  transform: translateY(0);
+}
+
+/* ── padding 档位 ──────────────────────────────────── */
+
+.ui-card-padding-none {
+  padding: 0;
+}
+.ui-card-padding-sm {
+  padding: var(--ui-space-3);
+}
+.ui-card-padding-md {
+  padding: var(--ui-space-5);
+}
+.ui-card-padding-lg {
+  padding: var(--ui-space-8);
+}
+
+/* 子组件：内部段落使用容器自己的 padding，除非显式覆盖 */
+.ui-card > .ui-card-header,
+.ui-card > .ui-card-body,
+.ui-card > .ui-card-footer {
+  padding: 0;
+}
+
+/* 内部分隔：仅当 header/footer 与 body 同级时显示分隔线 */
+.ui-card > .ui-card-header + .ui-card-body {
+  margin-top: var(--ui-space-3);
+}
+.ui-card > .ui-card-body + .ui-card-footer,
+.ui-card > .ui-card-header + .ui-card-footer {
+  margin-top: var(--ui-space-4);
+  padding-top: var(--ui-space-4);
+  border-top: 1px solid var(--ui-color-border);
+}
+
+/* 当子组件自带 padding 档位时，额外加边距形成"段落"视觉 */
+.ui-card-header.ui-card-padding-none,
+.ui-card-body.ui-card-padding-none,
+.ui-card-footer.ui-card-padding-none {
+  padding: 0;
+}
+.ui-card-header.ui-card-padding-sm {
+  padding: var(--ui-space-3);
+}
+.ui-card-header.ui-card-padding-md {
+  padding: var(--ui-space-5);
+}
+.ui-card-header.ui-card-padding-lg {
+  padding: var(--ui-space-8);
+}
+.ui-card-body.ui-card-padding-sm {
+  padding: var(--ui-space-3);
+}
+.ui-card-body.ui-card-padding-md {
+  padding: var(--ui-space-5);
+}
+.ui-card-body.ui-card-padding-lg {
+  padding: var(--ui-space-8);
+}
+.ui-card-footer.ui-card-padding-sm {
+  padding: var(--ui-space-3);
+}
+.ui-card-footer.ui-card-padding-md {
+  padding: var(--ui-space-5);
+}
+.ui-card-footer.ui-card-padding-lg {
+  padding: var(--ui-space-8);
+}
+
+/* ── 标题 / 描述 ─────────────────────────────────── */
+
+.ui-card-title {
+  margin: 0;
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: var(--ui-line-height-tight);
+}
+
+.ui-card-description {
+  margin: var(--ui-space-1) 0 0;
+  color: var(--ui-color-fg-secondary);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-base);
+}

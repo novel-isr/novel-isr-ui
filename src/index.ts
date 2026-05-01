@@ -23,6 +23,9 @@ export * from './components/Spinner';
 export * from './components/Box';
 export * from './components/Stack';
 export * from './components/Divider';
+export * from './components/Card';
+export * from './components/Skeleton';
+export * from './components/EmptyState';
 
 // ─── 表单 ─────────────────────────────────────────────────────────────
 export * from './components/FormControl';
@@ -47,6 +50,7 @@ export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Tag';
 export * from './components/Table';
+export * from './components/Rating';
 
 // ─── 导航 ─────────────────────────────────────────────────────────────
 export * from './components/NavTree';

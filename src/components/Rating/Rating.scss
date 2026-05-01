@@ -1,0 +1,105 @@
+/* Rating —— 评分组件
+ *
+ * 颜色：用 warning（金色）色阶，社区站惯例
+ * 交互：hover 整体高亮，点击星左半 → 0.5；右半 → 1
+ */
+
+.ui-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  color: var(--ui-color-warning-500);
+  font-family: var(--ui-font-family-sans);
+}
+
+.ui-rating-stars {
+  display: inline-flex;
+  gap: 1px;
+  line-height: 0;
+}
+
+.ui-rating-star {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ui-rating-star-empty {
+  color: var(--ui-color-border-strong);
+}
+
+/* 交互态：键盘 focus 整体高亮 */
+.ui-rating-interactive {
+  outline: none;
+  border-radius: var(--ui-radius-sm);
+}
+.ui-rating-interactive:focus-visible {
+  box-shadow: 0 0 0 2px var(--ui-color-brand-500);
+}
+
+.ui-rating-star-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  transition: transform var(--ui-transition-fast);
+}
+.ui-rating-star-btn:hover {
+  transform: scale(1.15);
+}
+.ui-rating-star-btn:focus-visible {
+  outline: 2px solid var(--ui-color-brand-500);
+  outline-offset: 2px;
+  border-radius: var(--ui-radius-sm);
+}
+
+/* 数值区 */
+.ui-rating-value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--ui-space-1);
+  color: var(--ui-color-fg);
+  font-size: var(--ui-font-size-sm);
+}
+.ui-rating-value strong {
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-warning-600);
+}
+.ui-rating-count {
+  color: var(--ui-color-fg-muted);
+  font-size: var(--ui-font-size-xs);
+}
+
+/* size 变体调整数值字号 */
+.ui-rating-size-sm .ui-rating-value {
+  font-size: var(--ui-font-size-xs);
+}
+.ui-rating-size-lg .ui-rating-value {
+  font-size: var(--ui-font-size-md);
+}
+
+/* ── RatingScale ─────────────────────────────────── */
+
+.ui-rating-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  font-family: var(--ui-font-family-sans);
+}
+
+.ui-rating-scale-row {
+  display: grid;
+  grid-template-columns: minmax(64px, auto) 1fr;
+  align-items: center;
+  gap: var(--ui-space-4);
+}
+
+.ui-rating-scale-label {
+  color: var(--ui-color-fg-secondary);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+}

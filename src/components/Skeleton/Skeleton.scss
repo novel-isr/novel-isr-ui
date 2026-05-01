@@ -1,0 +1,62 @@
+/* Skeleton —— 加载占位
+ *
+ * shimmer 动画：渐变 + background-position 走位；prefers-reduced-motion 自动关。
+ */
+
+.ui-skeleton {
+  display: inline-block;
+  background-color: var(--ui-color-bg-muted);
+  background-image: linear-gradient(
+    90deg,
+    var(--ui-color-bg-muted) 0%,
+    var(--ui-color-bg-subtle) 50%,
+    var(--ui-color-bg-muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: ui-skeleton-shimmer 1.4s ease-in-out infinite;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.ui-skeleton-static {
+  animation: none;
+  background-image: none;
+}
+
+.ui-skeleton-variant-text {
+  display: block;
+  width: 100%;
+  height: 1em;
+  border-radius: var(--ui-radius-sm);
+}
+
+.ui-skeleton-variant-rect {
+  display: block;
+  border-radius: var(--ui-radius-md);
+}
+
+.ui-skeleton-variant-circle {
+  display: inline-block;
+  border-radius: var(--ui-radius-full);
+}
+
+.ui-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@keyframes ui-skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: -100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton {
+    animation: none;
+  }
+}
