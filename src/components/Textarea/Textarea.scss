@@ -8,7 +8,7 @@
   color: var(--ui-color-fg);
   padding: var(--ui-space-2) var(--ui-space-3);
   line-height: var(--ui-line-height-base);
-  resize: vertical;
+  resize: none;
   transition:
     border-color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast),
@@ -61,3 +61,4 @@
 .ui-textarea-resize-none { resize: none; }
 .ui-textarea-resize-both { resize: both; }
 .ui-textarea-resize-horizontal { resize: horizontal; }
+.ui-textarea-resize-vertical { resize: vertical; }

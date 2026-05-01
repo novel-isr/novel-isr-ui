@@ -22,7 +22,7 @@
  */
 
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -37,21 +37,40 @@ export interface ModalContentProps extends Omit<RadixDialog.DialogContentProps, 
   size?: ModalSize;
   /** 不渲染右上角 × 关闭按钮 */
   hideCloseButton?: boolean;
+  /** a11y 描述；不传时会渲染 visually-hidden 描述，避免 Radix warning。 */
+  description?: ReactNode;
 }
 
 export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(function ModalContent(
   props,
   ref
 ) {
-  const { size = 'md', hideCloseButton = false, className, children, ...rest } = props;
+  const {
+    size = 'md',
+    hideCloseButton = false,
+    description,
+    className,
+    children,
+    ...rest
+  } = props;
+  const fallbackDescriptionId = useId();
+  const describedBy = rest['aria-describedby'] ?? fallbackDescriptionId;
+
   return (
     <RadixDialog.Portal>
       <RadixDialog.Overlay className="ui-modal-overlay" />
       <RadixDialog.Content
         ref={ref}
         className={cn('ui-modal-content', `ui-modal-size-${size}`, className)}
+        aria-describedby={describedBy}
         {...rest}
       >
+        <RadixDialog.Description
+          id={fallbackDescriptionId}
+          className={description ? 'ui-modal-description' : 'ui-visually-hidden'}
+        >
+          {description ?? 'Dialog content'}
+        </RadixDialog.Description>
         {children}
         {!hideCloseButton && (
           <RadixDialog.Close className="ui-modal-close" aria-label="关闭">
@@ -105,16 +124,17 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: ReactNode;
+  description?: ReactNode;
   size?: ModalSize;
   hideCloseButton?: boolean;
   children: ReactNode;
 }
 
 export function Modal(props: ModalProps) {
-  const { isOpen, onClose, title, size, hideCloseButton, children } = props;
+  const { isOpen, onClose, title, description, size, hideCloseButton, children } = props;
   return (
     <ModalRoot open={isOpen} onOpenChange={open => !open && onClose()}>
-      <ModalContent size={size} hideCloseButton={hideCloseButton}>
+      <ModalContent size={size} hideCloseButton={hideCloseButton} description={description}>
         {title && <ModalHeader>{title}</ModalHeader>}
         {children}
       </ModalContent>

@@ -202,3 +202,32 @@ export const FormErrorMessage = forwardRef<HTMLDivElement, FormErrorMessageProps
     );
   }
 );
+
+export interface FormFieldProps extends FormControlProps {
+  label: ReactNode;
+  helperText?: ReactNode;
+  errorMessage?: ReactNode;
+}
+
+export const FormField = forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
+  props,
+  ref
+) {
+  const {
+    label,
+    helperText,
+    errorMessage,
+    children,
+    isInvalid = Boolean(errorMessage),
+    ...rest
+  } = props;
+
+  return (
+    <FormControl ref={ref} isInvalid={isInvalid} {...rest}>
+      <FormLabel>{label}</FormLabel>
+      {children}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+    </FormControl>
+  );
+});

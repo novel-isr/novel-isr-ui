@@ -29,7 +29,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     variant = 'outline',
     size = 'md',
     isInvalid = false,
-    resize = 'vertical',
+    resize = 'none',
     className,
     ...rest
   } = props;
@@ -43,7 +43,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         'ui-textarea',
         `ui-textarea-variant-${variant}`,
         `ui-textarea-size-${size}`,
-        resize !== 'vertical' && `ui-textarea-resize-${resize}`,
+        `ui-textarea-resize-${resize}`,
         (isInvalid || fc['aria-invalid']) && 'ui-textarea-error',
         className
       )}

@@ -47,6 +47,15 @@
   flex-shrink: 0;
 }
 
+.ui-modal-description {
+  order: 1;
+  margin: 0;
+  padding: 0 var(--ui-space-6) var(--ui-space-2);
+  color: var(--ui-color-fg-muted);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-base);
+}
+
 .ui-modal-body {
   padding: var(--ui-space-3) var(--ui-space-6);
   flex: 1;
@@ -81,6 +90,18 @@
   transition: background-color var(--ui-transition-fast);
 }
 .ui-modal-close:hover { background-color: var(--ui-color-bg-muted); }
+
+.ui-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
 
 @keyframes ui-modal-fadein { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ui-modal-fadeout { from { opacity: 1; } to { opacity: 0; } }

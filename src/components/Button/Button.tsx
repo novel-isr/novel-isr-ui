@@ -13,11 +13,22 @@ import { Spinner } from '../Spinner/Spinner';
 
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'link';
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
-export type ButtonColorScheme = 'brand' | 'danger' | 'success' | 'warning' | 'gray';
+export type ButtonColorScheme =
+  | 'primary'
+  | 'secondary'
+  | 'neutral'
+  | 'brand'
+  | 'danger'
+  | 'success'
+  | 'warning'
+  | 'gray';
+export type ButtonIntent = 'primary' | 'secondary' | 'confirm' | 'danger' | 'warning' | 'neutral';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  /** 业务语义。优先用 intent，colorScheme 只作为视觉 token 兼容。 */
+  intent?: ButtonIntent;
   colorScheme?: ButtonColorScheme;
   isLoading?: boolean;
   loadingText?: string;
@@ -30,7 +41,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const {
     variant = 'solid',
     size = 'md',
-    colorScheme = 'brand',
+    intent,
+    colorScheme,
     isLoading = false,
     loadingText,
     leftIcon,
@@ -44,6 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   } = props;
 
   const spinnerSize = size === 'xs' || size === 'sm' ? 'xs' : 'sm';
+  const resolvedColorScheme = colorScheme ?? colorSchemeFromIntent(intent);
 
   return (
     <button
@@ -54,7 +67,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         'ui-button',
         `ui-button-variant-${variant}`,
         `ui-button-size-${size}`,
-        `ui-button-color-${colorScheme}`,
+        `ui-button-color-${resolvedColorScheme}`,
+        intent && `ui-button-intent-${intent}`,
         fullWidth && 'ui-button-fullwidth',
         isLoading && 'ui-button-loading',
         className
@@ -79,3 +93,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     </button>
   );
 });
+
+function colorSchemeFromIntent(intent?: ButtonIntent): ButtonColorScheme {
+  if (intent === 'danger') return 'danger';
+  if (intent === 'warning') return 'warning';
+  if (intent === 'confirm') return 'success';
+  if (intent === 'secondary') return 'secondary';
+  if (intent === 'neutral') return 'neutral';
+  return 'primary';
+}

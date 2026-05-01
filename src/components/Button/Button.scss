@@ -52,6 +52,36 @@
   --button-link-fg: var(--ui-color-brand-500);
   --button-link-fg-hover: var(--ui-color-brand-700);
 }
+.ui-button-color-primary {
+  --button-solid-bg: var(--ui-color-brand-500);
+  --button-solid-bg-hover: var(--ui-color-brand-600);
+  --button-solid-bg-active: var(--ui-color-brand-700);
+  --button-solid-fg: #ffffff;
+  --button-outline-fg: var(--ui-color-brand-500);
+  --button-outline-fg-hover: var(--ui-color-brand-600);
+  --button-outline-border: var(--ui-color-brand-500);
+  --button-outline-bg-hover: var(--ui-color-brand-50);
+  --button-ghost-fg: var(--ui-color-brand-500);
+  --button-ghost-fg-hover: var(--ui-color-brand-600);
+  --button-ghost-bg-hover: var(--ui-color-brand-50);
+  --button-link-fg: var(--ui-color-brand-500);
+  --button-link-fg-hover: var(--ui-color-brand-700);
+}
+.ui-button-color-secondary {
+  --button-solid-bg: var(--ui-color-info-500);
+  --button-solid-bg-hover: var(--ui-color-info-600);
+  --button-solid-bg-active: var(--ui-color-info-700);
+  --button-solid-fg: #061417;
+  --button-outline-fg: var(--ui-color-info-500);
+  --button-outline-fg-hover: var(--ui-color-info-600);
+  --button-outline-border: var(--ui-color-info-500);
+  --button-outline-bg-hover: var(--ui-color-info-50);
+  --button-ghost-fg: var(--ui-color-info-500);
+  --button-ghost-fg-hover: var(--ui-color-info-600);
+  --button-ghost-bg-hover: var(--ui-color-info-50);
+  --button-link-fg: var(--ui-color-info-500);
+  --button-link-fg-hover: var(--ui-color-info-700);
+}
 .ui-button-color-danger {
   --button-solid-bg: var(--ui-color-danger-500);
   --button-solid-bg-hover: var(--ui-color-danger-600);
@@ -98,6 +128,21 @@
   --button-link-fg-hover: var(--ui-color-warning-700);
 }
 .ui-button-color-gray {
+  --button-solid-bg: var(--ui-color-gray-700);
+  --button-solid-bg-hover: var(--ui-color-gray-800);
+  --button-solid-bg-active: var(--ui-color-gray-900);
+  --button-solid-fg: #ffffff;
+  --button-outline-fg: var(--ui-color-fg);
+  --button-outline-fg-hover: var(--ui-color-fg);
+  --button-outline-border: var(--ui-color-border-strong);
+  --button-outline-bg-hover: var(--ui-color-bg-subtle);
+  --button-ghost-fg: var(--ui-color-fg);
+  --button-ghost-fg-hover: var(--ui-color-fg);
+  --button-ghost-bg-hover: var(--ui-color-bg-subtle);
+  --button-link-fg: var(--ui-color-fg);
+  --button-link-fg-hover: var(--ui-color-brand-500);
+}
+.ui-button-color-neutral {
   --button-solid-bg: var(--ui-color-gray-700);
   --button-solid-bg-hover: var(--ui-color-gray-800);
   --button-solid-bg-active: var(--ui-color-gray-900);
