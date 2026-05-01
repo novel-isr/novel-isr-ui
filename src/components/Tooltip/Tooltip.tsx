@@ -17,7 +17,7 @@ export const TooltipProvider = RadixTooltip.Provider;
 
 export type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
 export type TooltipAlign = 'start' | 'center' | 'end';
-export type TooltipTone = 'default' | 'inverse';
+export type TooltipTone = 'auto' | 'dark' | 'light' | 'default' | 'inverse';
 
 export interface TooltipProps {
   /** 提示内容 */
@@ -30,7 +30,11 @@ export interface TooltipProps {
   delayDuration?: number;
   /** 渲染指向 trigger 的小三角 */
   showArrow?: boolean;
-  /** 视觉风格。inverse 是跨主题稳定的黑底白字提示，适合 icon-only 导航。 */
+  /**
+   * 视觉风格。
+   * auto 跟随主题；dark 是黑底白字；light 是白底黑字。
+   * default/inverse 是历史别名，分别等同 auto/dark。
+   */
   tone?: TooltipTone;
   /** disabled 时不显示 */
   disabled?: boolean;
@@ -46,12 +50,13 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(function Tooltip
     align = 'center',
     delayDuration = 300,
     showArrow = false,
-    tone = 'default',
+    tone = 'auto',
     disabled = false,
     className,
   } = props;
 
   if (disabled) return children;
+  const resolvedTone = tone === 'default' ? 'auto' : tone === 'inverse' ? 'dark' : tone;
 
   return (
     <RadixTooltip.Root delayDuration={delayDuration}>
@@ -64,7 +69,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(function Tooltip
           sideOffset={6}
           className={cn(
             'ui-tooltip-content',
-            tone === 'inverse' && 'ui-tooltip-content-inverse',
+            `ui-tooltip-tone-${resolvedTone}`,
             className,
           )}
         >
