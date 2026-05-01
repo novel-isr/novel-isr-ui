@@ -71,6 +71,13 @@
 .ui-drawer-size-lg.ui-drawer-side-bottom { height: 70vh; }
 
 .ui-drawer-header { padding: var(--ui-space-5) var(--ui-space-6) var(--ui-space-3); font-size: var(--ui-font-size-xl); font-weight: var(--ui-font-weight-semibold); flex-shrink: 0; }
+.ui-drawer-description {
+  padding: 0 var(--ui-space-6) var(--ui-space-3);
+  color: var(--ui-color-fg-secondary);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-relaxed);
+  flex-shrink: 0;
+}
 .ui-drawer-body { padding: var(--ui-space-3) var(--ui-space-6); flex: 1; overflow-y: auto; }
 .ui-drawer-footer { padding: var(--ui-space-4) var(--ui-space-6) var(--ui-space-5); display: flex; justify-content: flex-end; gap: var(--ui-space-2); flex-shrink: 0; }
 .ui-drawer-close {

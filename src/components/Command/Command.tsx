@@ -26,6 +26,8 @@ export interface CommandDialogProps {
   items: CommandItem[];
   onSelect: (item: CommandItem) => void;
   title?: ReactNode;
+  /** a11y 描述，供屏幕阅读器说明这个命令面板的用途。 */
+  description?: ReactNode;
   placeholder?: string;
   emptyText?: ReactNode;
   shortcutLabel?: ReactNode;
@@ -45,6 +47,7 @@ export function CommandDialog(props: CommandDialogProps) {
     items,
     onSelect,
     title = '命令面板',
+    description = '搜索并跳转到后台模块、配置页或操作入口。',
     placeholder = '搜索命令、路径或关键字',
     emptyText = '没有匹配结果',
     shortcutLabel,
@@ -114,6 +117,7 @@ export function CommandDialog(props: CommandDialogProps) {
     <ModalRoot open={isOpen} onOpenChange={onOpenChange}>
       <ModalContent
         className={cn('ui-command-dialog', className)}
+        description={description}
         hideCloseButton
         size="lg"
       >

@@ -8,7 +8,7 @@
  */
 
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 
 export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
@@ -22,14 +22,26 @@ export interface DrawerContentProps extends Omit<RadixDialog.DialogContentProps,
   side?: DrawerSide;
   size?: DrawerSize;
   hideCloseButton?: boolean;
+  /** a11y 描述；不传时会渲染 visually-hidden 描述，避免 Radix warning。 */
+  description?: ReactNode;
 }
 
 export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(function DrawerContent(
   props,
   ref
 ) {
-  const { side = 'right', size = 'md', hideCloseButton = false, className, children, ...rest } =
-    props;
+  const {
+    side = 'right',
+    size = 'md',
+    hideCloseButton = false,
+    description,
+    className,
+    children,
+    ...rest
+  } = props;
+  const fallbackDescriptionId = useId();
+  const describedBy = rest['aria-describedby'] ?? fallbackDescriptionId;
+
   return (
     <RadixDialog.Portal>
       <RadixDialog.Overlay className="ui-drawer-overlay" />
@@ -42,7 +54,14 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
           className
         )}
         {...rest}
+        aria-describedby={describedBy}
       >
+        <RadixDialog.Description
+          id={fallbackDescriptionId}
+          className={description ? 'ui-drawer-description' : 'ui-visually-hidden'}
+        >
+          {description ?? 'Drawer content'}
+        </RadixDialog.Description>
         {children}
         {!hideCloseButton && (
           <RadixDialog.Close className="ui-drawer-close" aria-label="关闭">
@@ -92,15 +111,21 @@ export interface DrawerProps {
   side?: DrawerSide;
   size?: DrawerSize;
   title?: ReactNode;
+  description?: ReactNode;
   hideCloseButton?: boolean;
   children: ReactNode;
 }
 
 export function Drawer(props: DrawerProps) {
-  const { isOpen, onClose, side, size, title, hideCloseButton, children } = props;
+  const { isOpen, onClose, side, size, title, description, hideCloseButton, children } = props;
   return (
     <DrawerRoot open={isOpen} onOpenChange={open => !open && onClose()}>
-      <DrawerContent side={side} size={size} hideCloseButton={hideCloseButton}>
+      <DrawerContent
+        side={side}
+        size={size}
+        description={description}
+        hideCloseButton={hideCloseButton}
+      >
         {title && <DrawerHeader>{title}</DrawerHeader>}
         {children}
       </DrawerContent>
