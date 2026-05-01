@@ -40,6 +40,7 @@
 }
 
 .ui-modal-header {
+  order: 0;
   padding: var(--ui-space-5) var(--ui-space-6) var(--ui-space-3);
   font-size: var(--ui-font-size-xl);
   font-weight: var(--ui-font-weight-semibold);
@@ -48,6 +49,7 @@
 }
 
 .ui-modal-description {
+  order: 1;
   margin: 0;
   padding: 0 var(--ui-space-6) var(--ui-space-2);
   color: var(--ui-color-fg-muted);
@@ -56,6 +58,7 @@
 }
 
 .ui-modal-body {
+  order: 2;
   padding: var(--ui-space-3) var(--ui-space-6);
   flex: 1;
   overflow-y: auto;
@@ -64,6 +67,7 @@
 }
 
 .ui-modal-footer {
+  order: 3;
   padding: var(--ui-space-4) var(--ui-space-6) var(--ui-space-5);
   display: flex;
   align-items: center;
