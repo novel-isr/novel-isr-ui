@@ -40,9 +40,9 @@
 }
 
 .ui-nav-tree-children {
-  margin-left: 18px;
-  padding-left: var(--ui-space-2);
-  border-left: 1px solid var(--ui-color-border);
+  margin-left: 0;
+  padding-left: calc(var(--ui-space-3) + 10px);
+  border-left: 0;
 }
 
 .ui-nav-tree-item {
@@ -157,6 +157,7 @@
 .ui-nav-tree-depth-1 {
   min-height: 34px;
   grid-template-columns: 26px minmax(0, 1fr) auto;
+  border-radius: var(--ui-radius-md);
 }
 
 .ui-nav-tree-depth-1 .ui-nav-tree-icon {
