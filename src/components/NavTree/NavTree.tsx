@@ -23,6 +23,7 @@ export interface NavTreeSection {
 
 export interface NavTreeItemState {
   active: boolean;
+  ancestorActive: boolean;
   expanded: boolean;
   depth: number;
   collapsed: boolean;
@@ -151,8 +152,9 @@ function renderItem(options: RenderItemOptions): ReactNode {
     toggleItem,
   } = options;
   const hasChildren = Boolean(item.children?.length);
-  const active = item.id === activeId || activeAncestorIds.has(item.id);
-  const expanded = hasChildren && (expandedSet.has(item.id) || activeAncestorIds.has(item.id));
+  const active = item.id === activeId;
+  const ancestorActive = activeAncestorIds.has(item.id);
+  const expanded = hasChildren && (expandedSet.has(item.id) || ancestorActive);
   const className = cn(
     'ui-nav-tree-item',
     hasChildren ? 'ui-nav-tree-trigger' : 'ui-nav-tree-link',
@@ -162,6 +164,7 @@ function renderItem(options: RenderItemOptions): ReactNode {
   );
   const state: NavTreeItemState = {
     active,
+    ancestorActive,
     expanded,
     depth,
     collapsed,
@@ -198,6 +201,7 @@ function renderItem(options: RenderItemOptions): ReactNode {
           title={title}
           aria-expanded={expanded}
           data-active={active || undefined}
+          data-ancestor-active={ancestorActive || undefined}
           data-expanded={expanded || undefined}
           disabled={item.disabled}
           onClick={() => toggleItem(item)}
