@@ -206,18 +206,18 @@ $info: (
 
   // semantic alias（业务首选用这个，跨主题自动反转）
   --ui-color-bg: #ffffff;
-  --ui-color-bg-subtle: #{map.get($gray, 50)};
-  --ui-color-bg-muted: #{map.get($gray, 100)};
+  --ui-color-bg-subtle: #f6f8fb;
+  --ui-color-bg-muted: #edf2f7;
   --ui-color-bg-emphasis: #{map.get($gray, 800)};
 
   --ui-color-fg: #{map.get($gray, 900)};
   --ui-color-fg-secondary: #{map.get($gray, 600)};
-  --ui-color-fg-muted: #{map.get($gray, 500)};
-  --ui-color-fg-disabled: #{map.get($gray, 400)};
+  --ui-color-fg-muted: #4f5b6b;
+  --ui-color-fg-disabled: #6b7788;
   --ui-color-fg-inverse: #ffffff;
 
-  --ui-color-border: #{map.get($gray, 200)};
-  --ui-color-border-strong: #{map.get($gray, 300)};
+  --ui-color-border: #d6dee9;
+  --ui-color-border-strong: #b8c3d3;
 
   --ui-color-overlay: rgba(15, 23, 42, 0.5);
 
