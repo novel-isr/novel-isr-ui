@@ -62,8 +62,8 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
       <RadixDialog.Content
         ref={ref}
         className={cn('ui-modal-content', `ui-modal-size-${size}`, className)}
-        aria-describedby={describedBy}
         {...rest}
+        aria-describedby={describedBy}
       >
         <RadixDialog.Description
           id={fallbackDescriptionId}
