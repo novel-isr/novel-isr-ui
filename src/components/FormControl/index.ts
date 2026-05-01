@@ -3,7 +3,8 @@ export {
   FormLabel,
   FormHelperText,
   FormErrorMessage,
+  FormField,
   useFormControlContext,
   useFormControlProps,
 } from './FormControl';
-export type { FormControlProps, FormLabelProps } from './FormControl';
+export type { FormControlProps, FormFieldProps, FormLabelProps } from './FormControl';
