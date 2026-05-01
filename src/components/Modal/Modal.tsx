@@ -54,7 +54,10 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
     ...rest
   } = props;
   const fallbackDescriptionId = useId();
-  const describedBy = rest['aria-describedby'] ?? fallbackDescriptionId;
+  const externalDescriptionId = rest['aria-describedby'];
+  const descriptionId = description
+    ? externalDescriptionId ?? fallbackDescriptionId
+    : externalDescriptionId;
 
   return (
     <RadixDialog.Portal>
@@ -63,14 +66,16 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
         ref={ref}
         className={cn('ui-modal-content', `ui-modal-size-${size}`, className)}
         {...rest}
-        aria-describedby={describedBy}
+        aria-describedby={descriptionId}
       >
-        <RadixDialog.Description
-          id={fallbackDescriptionId}
-          className={description ? 'ui-modal-description' : 'ui-visually-hidden'}
-        >
-          {description ?? 'Dialog content'}
-        </RadixDialog.Description>
+        {description && (
+          <RadixDialog.Description
+            id={descriptionId}
+            className="ui-modal-description"
+          >
+            {description}
+          </RadixDialog.Description>
+        )}
         {children}
         {!hideCloseButton && (
           <RadixDialog.Close className="ui-modal-close" aria-label="关闭">
