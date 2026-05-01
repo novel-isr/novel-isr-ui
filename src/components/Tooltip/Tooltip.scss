@@ -1,8 +1,8 @@
 .ui-tooltip-content {
-  --ui-tooltip-bg: #ffffff;
+  --ui-tooltip-bg: rgba(255, 255, 255, 0.96);
   --ui-tooltip-fg: #101418;
   --ui-tooltip-border: rgba(17, 24, 39, 0.14);
-  --ui-tooltip-shadow: 0 12px 32px rgba(17, 24, 39, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  --ui-tooltip-shadow: 0 16px 40px rgba(17, 24, 39, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.78);
   --ui-tooltip-arrow-bg: #ffffff;
 
   background: var(--ui-tooltip-bg);
@@ -14,9 +14,11 @@
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-tight);
   box-shadow: var(--ui-tooltip-shadow);
-  z-index: var(--ui-z-popover);
+  z-index: calc(var(--ui-z-toast) + 10);
   max-width: 280px;
+  pointer-events: none;
   user-select: none;
+  backdrop-filter: blur(14px) saturate(1.12);
   animation: ui-tooltip-fadein var(--ui-transition-fast);
 
   &[data-state='closed'] { animation: ui-tooltip-fadeout var(--ui-transition-fast); }
@@ -28,7 +30,7 @@
 
 .ui-tooltip-tone-auto,
 .ui-tooltip-tone-light {
-  --ui-tooltip-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --ui-tooltip-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.94) 100%);
   --ui-tooltip-fg: #101418;
   --ui-tooltip-border: rgba(17, 24, 39, 0.14);
   --ui-tooltip-shadow: 0 12px 32px rgba(17, 24, 39, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.78);
@@ -36,18 +38,18 @@
 }
 
 .ui-tooltip-tone-dark {
-  --ui-tooltip-bg: linear-gradient(180deg, #171d24 0%, #0c1117 100%);
+  --ui-tooltip-bg: linear-gradient(180deg, rgba(23, 29, 36, 0.96) 0%, rgba(8, 12, 18, 0.94) 100%);
   --ui-tooltip-fg: #f8fafc;
-  --ui-tooltip-border: rgba(255, 255, 255, 0.11);
-  --ui-tooltip-shadow: 0 14px 36px rgba(2, 6, 12, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --ui-tooltip-border: rgba(255, 255, 255, 0.14);
+  --ui-tooltip-shadow: 0 18px 44px rgba(2, 6, 12, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --ui-tooltip-arrow-bg: #0c1117;
 }
 
 [data-theme='dark'] .ui-tooltip-tone-auto {
-  --ui-tooltip-bg: linear-gradient(180deg, #171d24 0%, #0c1117 100%);
+  --ui-tooltip-bg: linear-gradient(180deg, rgba(23, 29, 36, 0.96) 0%, rgba(8, 12, 18, 0.94) 100%);
   --ui-tooltip-fg: #f8fafc;
-  --ui-tooltip-border: rgba(255, 255, 255, 0.11);
-  --ui-tooltip-shadow: 0 14px 36px rgba(2, 6, 12, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --ui-tooltip-border: rgba(255, 255, 255, 0.14);
+  --ui-tooltip-shadow: 0 18px 44px rgba(2, 6, 12, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --ui-tooltip-arrow-bg: #0c1117;
 }
 

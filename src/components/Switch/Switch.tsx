@@ -20,11 +20,13 @@ export interface SwitchProps extends Omit<RadixSwitch.SwitchProps, 'asChild' | '
 export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch(props, ref) {
   const { size = 'md', className, children, ...rest } = props;
   const fc = useFormControlContext();
+  const checked = rest.checked ?? rest.defaultChecked;
 
   return (
     <label
       className={cn('ui-switch-root', `ui-switch-size-${size}`, className)}
       data-disabled={rest.disabled || fc?.isDisabled || undefined}
+      data-state={checked ? 'checked' : 'unchecked'}
     >
       <RadixSwitch.Root
         ref={ref}

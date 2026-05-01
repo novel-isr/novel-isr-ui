@@ -6,6 +6,7 @@
   user-select: none;
   font-family: var(--ui-font-family-sans);
   color: var(--ui-color-fg);
+  font-weight: var(--ui-font-weight-medium);
 
   &[data-disabled] {
     cursor: not-allowed;
@@ -16,8 +17,9 @@
 .ui-switch-control {
   position: relative;
   background-color: var(--ui-color-gray-300);
+  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
   border-radius: var(--ui-radius-full);
-  transition: background-color var(--ui-transition-base);
+  transition: background-color var(--ui-transition-base), box-shadow var(--ui-transition-base);
   flex-shrink: 0;
   border: none;
   cursor: pointer;
@@ -30,6 +32,7 @@
 
   &[data-state='checked'] {
     background-color: var(--ui-color-brand-500);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 18%, transparent);
   }
 
   &:disabled { cursor: not-allowed; }
@@ -39,9 +42,23 @@
   display: block;
   background-color: #ffffff;
   border-radius: var(--ui-radius-full);
-  box-shadow: var(--ui-shadow-sm);
-  transition: transform var(--ui-transition-base);
+  box-shadow: var(--ui-shadow-sm), 0 1px 3px rgba(15, 23, 42, 0.18);
+  transition: transform var(--ui-transition-base), box-shadow var(--ui-transition-base);
   will-change: transform;
+}
+
+.ui-switch-root[data-state='checked'] > span {
+  color: var(--ui-color-brand-500);
+}
+
+[data-theme='dark'] .ui-switch-control {
+  background-color: rgba(148, 163, 184, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .ui-switch-control[data-state='checked'] {
+  background-color: var(--ui-color-brand-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 24%, transparent);
 }
 
 // sizes
