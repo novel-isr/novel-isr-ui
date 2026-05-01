@@ -49,6 +49,7 @@ export * from './components/Tag';
 export * from './components/Table';
 
 // ─── 导航 ─────────────────────────────────────────────────────────────
+export * from './components/NavTree';
 export * from './components/Tabs';
 export * from './components/Pagination';
 
