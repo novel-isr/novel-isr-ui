@@ -21,7 +21,14 @@
  *   - 分离子组件而非靠 props 控制内边距，避免 "padding=0 但 header 仍然 padding=12" 这种特例分支
  *   - interactive 用 :hover / :focus-visible 不用 JS 状态，符合可访问性
  */
-import { forwardRef, type ElementType, type HTMLAttributes, type ReactNode } from 'react';
+import {
+  forwardRef,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ElementType,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
 import { cn } from '../../utils/cn';
 
 export type CardVariant = 'outline' | 'elevated' | 'subtle' | 'ghost';
@@ -29,9 +36,18 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 type AsProp = { as?: ElementType };
 
-export interface CardProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
-    AsProp {
+/**
+ * Card 在不同 `as` 标签下需要不同的 HTML 属性集合。完整 polymorphic 组件
+ * 类型推导在 React 19 + forwardRef 下样板太多，这里采取**实用主义**：
+ * Card 默认接受常见的「容器属性 + 锚点属性 + 按钮属性」并集，覆盖
+ * `<div>` / `<a>` / `<button>` / `<article>` 等绝大多数业务用法。
+ * 若业务需要其它 HTML 属性，可用 `as` 配合 `{...rest}` 自然透传。
+ */
+type CardCommonAttributes = HTMLAttributes<HTMLElement> &
+  Pick<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'target' | 'rel' | 'download'> &
+  Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'disabled' | 'form'>;
+
+export interface CardProps extends Omit<CardCommonAttributes, 'color'>, AsProp {
   /**
    * 视觉风格
    *   - outline（默认）：1px 边框 + 微背景，适合大面积 grid 卡片
