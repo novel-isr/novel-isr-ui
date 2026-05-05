@@ -37,8 +37,12 @@ export interface NumberInputProps {
   isInvalid?: boolean;
   disabled?: boolean;
   placeholder?: string;
-  /** 隐藏右侧 +/- 按钮（紧凑场景，比如 admin form 里的「延迟 ms」） */
-  hideStepper?: boolean;
+  /**
+   * 显示右侧 chevron up/down stepper 按钮。默认 false（不显示）——
+   * 大多数 admin / 移动端场景下 stepper 多余且占空间，需要时显式开启。
+   * 键盘 ArrowUp/Down 始终可调（不依赖此选项）。
+   */
+  showStepper?: boolean;
   /** 允许清空（输入空字符串时回调 null）；默认 true */
   allowEmpty?: boolean;
   className?: string;
@@ -73,7 +77,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       isInvalid: isInvalidProp = false,
       disabled,
       placeholder,
-      hideStepper = false,
+      showStepper = false,
       allowEmpty = true,
       className,
       ...attrs
@@ -160,7 +164,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           `ui-number-input-size-${size}`,
           isInvalid && 'ui-number-input-error',
           isDisabled && 'ui-number-input-disabled',
-          hideStepper && 'ui-number-input-no-stepper',
+          !showStepper && 'ui-number-input-no-stepper',
           className,
         )}
         data-invalid={isInvalid || undefined}
@@ -182,7 +186,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           aria-valuemax={max}
           aria-valuenow={value ?? undefined}
         />
-        {!hideStepper && (
+        {showStepper && (
           <div className="ui-number-input-stepper" aria-hidden="true">
             <button
               type="button"
