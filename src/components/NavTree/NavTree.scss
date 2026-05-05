@@ -138,20 +138,39 @@
   color: var(--ui-color-info-500);
 }
 
+/* 分支项 chevron —— SVG 实现，统一 stroke 而非依赖系统字体的 Unicode 三角。
+ * 折叠态：rotate(-90)，箭头朝右（"展开方向"）。
+ * 展开态：rotate(0)，箭头朝下。
+ * 颜色随父项 hover/active 状态变化（用 currentColor 继承）。
+ */
 .ui-nav-tree-chevron {
-  display: grid;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 18px;
   height: 18px;
-  place-items: center;
-  color: var(--ui-color-fg-disabled);
-  font-size: 12px;
-  line-height: 1;
+  flex-shrink: 0;
+  color: var(--ui-color-fg-muted);
   transform: rotate(-90deg);
-  transition: transform var(--ui-transition-fast);
+  transition:
+    transform var(--ui-transition-base),
+    color var(--ui-transition-fast);
+}
+
+.ui-nav-tree-chevron > svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .ui-nav-tree-trigger[data-expanded='true'] .ui-nav-tree-chevron {
   transform: rotate(0);
+}
+
+.ui-nav-tree-trigger:hover .ui-nav-tree-chevron,
+.ui-nav-tree-trigger[data-active='true'] .ui-nav-tree-chevron,
+.ui-nav-tree-trigger[data-ancestor-active='true'] .ui-nav-tree-chevron {
+  color: var(--ui-color-fg);
 }
 
 .ui-nav-tree-depth-1 {
