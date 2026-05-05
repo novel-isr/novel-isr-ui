@@ -6,26 +6,47 @@
   background-color: var(--ui-color-bg);
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-md);
+  /* 全部跨度都 transition：边框、阴影（focus halo）、底色（filled variant） */
   transition:
     border-color var(--ui-transition-fast),
-    box-shadow var(--ui-transition-fast),
+    box-shadow var(--ui-transition-base),
     background-color var(--ui-transition-fast);
 
-  &:hover:not(.ui-number-input-disabled) {
+  &:hover:not(.ui-number-input-disabled):not(.ui-number-input-error) {
     border-color: var(--ui-color-brand-500);
   }
-  &:focus-within {
+
+  /* focus：brand 边 + 3px brand@22% halo，跟 Input / Select 同款放大式聚焦 */
+  &:focus-within:not(.ui-number-input-error) {
     border-color: var(--ui-color-brand-500);
-    box-shadow: 0 0 0 2px var(--ui-color-brand-100);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 22%, transparent);
   }
 }
 
 .ui-number-input-error {
   border-color: var(--ui-color-danger-500);
+
+  /* invalid 状态下 focus 也走红色 halo —— 不让 brand 抢回视觉，错误就是错误 */
   &:focus-within {
     border-color: var(--ui-color-danger-500);
-    box-shadow: 0 0 0 2px var(--ui-color-danger-50);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-danger-500) 22%, transparent);
   }
+}
+
+/* shake：值非法的瞬间触发左右抖动一次，给用户「输入被拒」的反馈。
+ * 用 animation-name + animation-iteration-count: 1，每次 invalid 状态切到 true
+ * 时会 replay（依赖 React re-render，class 一直在但浏览器对相同 animation
+ * 重置规则取决于 animation-name 是否变）—— 实际不会无限抖，因为只播一次。 */
+.ui-number-input-shake input {
+  animation: ui-number-input-shake 220ms ease-in-out;
+}
+
+@keyframes ui-number-input-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-1.5px); }
+  80% { transform: translateX(1.5px); }
 }
 
 .ui-number-input-disabled {
@@ -42,7 +63,6 @@
   background: transparent;
   font-family: inherit;
   color: var(--ui-color-fg);
-  /* tabular-nums 让数字宽度稳定，调整时输入框不抖动 */
   font-variant-numeric: tabular-nums;
   padding: 0 var(--ui-space-3);
   height: 100%;
@@ -54,11 +74,18 @@
   padding-right: var(--ui-space-3);
 }
 
+.ui-number-input-error .ui-number-input-field {
+  /* invalid 时文本也染一点点红，让人立刻看出输入有问题（视觉提示，非语义） */
+  color: var(--ui-color-danger-700);
+}
+[data-theme='dark'] .ui-number-input-error .ui-number-input-field {
+  color: var(--ui-color-danger-300, var(--ui-color-danger-500));
+}
+
 .ui-number-input-size-sm { height: 32px; font-size: var(--ui-font-size-sm); }
 .ui-number-input-size-md { height: 40px; font-size: var(--ui-font-size-md); }
 .ui-number-input-size-lg { height: 48px; font-size: var(--ui-font-size-lg); }
 
-/* stepper：右侧 column，两个小按钮上下叠 */
 .ui-number-input-stepper {
   display: flex;
   flex-direction: column;
@@ -106,9 +133,12 @@
   background-color: var(--ui-color-bg-subtle);
   border-color: var(--ui-color-border-strong);
 }
-[data-theme='dark'] .ui-number-input-root:focus-within {
+[data-theme='dark'] .ui-number-input-root:focus-within:not(.ui-number-input-error) {
   background-color: var(--ui-color-bg-muted);
-  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.22);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 28%, transparent);
+}
+[data-theme='dark'] .ui-number-input-error:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-danger-500) 28%, transparent);
 }
 [data-theme='dark'] .ui-number-input-stepper {
   border-left-color: var(--ui-color-border-strong);

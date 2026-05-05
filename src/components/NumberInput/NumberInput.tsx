@@ -157,18 +157,43 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       commit(e.currentTarget.value);
     };
 
+    /* 内部 invalid：draft 非空但解析不出数字（e.g. "abc"）/ 超出 min/max。
+     * 跟外部传的 isInvalid prop 合并 —— 任一 true 都标红。 */
+    const draftTrim = draft.trim();
+    const internalInvalid = (() => {
+      if (!draftTrim || draftTrim === '-' || draftTrim === '.') return false;
+      const parsed = parseDraft(draftTrim);
+      if (parsed === null) return true;
+      if (min !== undefined && parsed < min) return true;
+      if (max !== undefined && parsed > max) return true;
+      return false;
+    })();
+    const finalInvalid = isInvalid || internalInvalid;
+
+    /* 错误提示文案：解析失败 / 越界 */
+    const errorMessage = (() => {
+      if (!internalInvalid) return null;
+      if (parseDraft(draftTrim) === null) return '请输入数字';
+      const parsed = parseDraft(draftTrim)!;
+      if (min !== undefined && parsed < min) return `最小值 ${min}`;
+      if (max !== undefined && parsed > max) return `最大值 ${max}`;
+      return null;
+    })();
+
     return (
       <div
         className={cn(
           'ui-number-input-root',
           `ui-number-input-size-${size}`,
-          isInvalid && 'ui-number-input-error',
+          finalInvalid && 'ui-number-input-error',
+          internalInvalid && 'ui-number-input-shake',
           isDisabled && 'ui-number-input-disabled',
           !showStepper && 'ui-number-input-no-stepper',
           className,
         )}
-        data-invalid={isInvalid || undefined}
+        data-invalid={finalInvalid || undefined}
         data-disabled={isDisabled || undefined}
+        title={errorMessage ?? undefined}
       >
         <input
           ref={ref}
