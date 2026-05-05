@@ -1,10 +1,13 @@
 /* Switch active color is driven by --ui-switch-active-color so the same
- * track / pill rules work across colorScheme variants without duplication. */
+ * track / pill rules work across colorScheme variants without duplication.
+ * Note: var() must be set on .ui-switch-root / .ui-switch-segmented (the
+ * outermost elements) so descendants inherit. CSS vars only cascade DOWN. */
 .ui-switch-color-brand   { --ui-switch-active-color: var(--ui-color-brand-500); }
 .ui-switch-color-success { --ui-switch-active-color: var(--ui-color-success-500); }
 .ui-switch-color-info    { --ui-switch-active-color: var(--ui-color-info-500); }
 .ui-switch-color-warning { --ui-switch-active-color: var(--ui-color-warning-500); }
 .ui-switch-color-danger  { --ui-switch-active-color: var(--ui-color-danger-500); }
+
 
 .ui-switch-root {
   display: inline-flex;
@@ -179,6 +182,16 @@
     inset 0 0 0 1px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 40%, transparent),
     0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 28%, transparent);
 }
+
+/* 显式 colorScheme 规则放最后 —— 同特异度下后写后赢。
+ * 这是真正写死颜色的兜底，避免任何变量级联意外（容器上重定义 --ui-color-* token、
+ * specifity 翻车、Cascade Layers 等）让 active 状态显示不出来。
+ * 在合规 cascade 路径下这套规则与上面的 var() 路径产出一致，纯属「双保险」。 */
+.ui-switch-color-brand   .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-brand-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-brand-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 22%, transparent); }
+.ui-switch-color-success .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-success-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-success-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-success-500) 22%, transparent); }
+.ui-switch-color-info    .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-info-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-info-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-info-500) 22%, transparent); }
+.ui-switch-color-warning .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-warning-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-warning-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-warning-500) 22%, transparent); }
+.ui-switch-color-danger  .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-danger-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-danger-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-danger-500) 22%, transparent); }
 
 /* 尺寸：track 高度 = thumb 高度 + 4（上下各 2px gap）。
  * checked 时 thumb 的 left = track 宽度 - thumb 宽度 - 2（右侧 2px gap）。 */
