@@ -183,15 +183,38 @@
     0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 28%, transparent);
 }
 
-/* 显式 colorScheme 规则放最后 —— 同特异度下后写后赢。
- * 这是真正写死颜色的兜底，避免任何变量级联意外（容器上重定义 --ui-color-* token、
- * specifity 翻车、Cascade Layers 等）让 active 状态显示不出来。
- * 在合规 cascade 路径下这套规则与上面的 var() 路径产出一致，纯属「双保险」。 */
-.ui-switch-color-brand   .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-brand-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-brand-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 22%, transparent); }
-.ui-switch-color-success .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-success-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-success-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-success-500) 22%, transparent); }
-.ui-switch-color-info    .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-info-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-info-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-info-500) 22%, transparent); }
-.ui-switch-color-warning .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-warning-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-warning-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-warning-500) 22%, transparent); }
-.ui-switch-color-danger  .ui-switch-control[data-state='checked'] { background-color: var(--ui-color-danger-500); box-shadow: inset 0 0 0 1.5px var(--ui-color-danger-500), 0 0 0 3px color-mix(in srgb, var(--ui-color-danger-500) 22%, transparent); }
+/* 关键：track / thumb 的视觉状态从 OUTER .ui-switch-root[data-state] 驱动，
+ * 不再依赖 Radix Switch 把 data-state 挂到内部 <button> 上。
+ *
+ * 报告的现象：左右标签高亮（react `checked` prop 通过我的 JSX 直接驱动）
+ * 反应正确，但 track 不变色 + thumb 不移位。这意味着 Radix 内部 button 的
+ * data-state 没跟 controlled checked 同步——这是 Radix v1.1.1 在
+ * `disabled` 频繁切换 + 控件被异步 SWR mutate 时的已知边角。
+ *
+ * 既然我已经在 OUTER span 上自己写了 `data-state={checked?'checked':'unchecked'}`
+ * （它是 React state 的直接映射，永远不会失同步），把视觉规则锚定到这个外层
+ * 属性即可绕过 Radix 内部状态。Radix 仍然负责键盘 / a11y / click 行为，但
+ * 视觉的「真相」由 React state 说了算。 */
+
+.ui-switch-root[data-state='checked'] .ui-switch-control {
+  background-color: var(--ui-switch-active-color, var(--ui-color-brand-500));
+  box-shadow:
+    inset 0 0 0 1.5px var(--ui-switch-active-color, var(--ui-color-brand-500)),
+    0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 22%, transparent);
+}
+
+/* size-aware thumb 移位（基于外层 data-state） */
+.ui-switch-size-sm[data-state='checked'] .ui-switch-thumb { left: 14px; }
+.ui-switch-size-md[data-state='checked'] .ui-switch-thumb { left: 18px; }
+.ui-switch-size-lg[data-state='checked'] .ui-switch-thumb { left: 22px; }
+
+/* colorScheme 兜底（外层 data-state + 显式 token）—— 跟上面的 var() 等价，
+ * 但用具体 token 避免任何 var 级联意外 */
+.ui-switch-color-brand[data-state='checked']   .ui-switch-control { background-color: var(--ui-color-brand-500); }
+.ui-switch-color-success[data-state='checked'] .ui-switch-control { background-color: var(--ui-color-success-500); }
+.ui-switch-color-info[data-state='checked']    .ui-switch-control { background-color: var(--ui-color-info-500); }
+.ui-switch-color-warning[data-state='checked'] .ui-switch-control { background-color: var(--ui-color-warning-500); }
+.ui-switch-color-danger[data-state='checked']  .ui-switch-control { background-color: var(--ui-color-danger-500); }
 
 /* 尺寸：track 高度 = thumb 高度 + 4（上下各 2px gap）。
  * checked 时 thumb 的 left = track 宽度 - thumb 宽度 - 2（右侧 2px gap）。 */
