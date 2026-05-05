@@ -38,29 +38,31 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
   const isDisabled = rest.disabled ?? fc?.isDisabled;
   const segmented = offLabel !== undefined && onLabel !== undefined;
 
-  /**
-   * 用 <span> 而不是 <label>。Radix Switch 渲染 <button>；HTML <label> 只对
-   * <input> 有 implicit-click 转发，对 <button> 无效；且被 Tooltip 用 asChild
-   * 包起来时 Radix 会把 pointerdown 挂到 <label>，部分浏览器把 click 截在
-   * label 阶段，让人误以为「点不动」。span 没有这层语义负担。
+  /* segmented 模式直接渲染分段 pill —— 两半各一个 button，激活半有 brand 底色。
+   * 不再渲染 Radix Switch 的 slider thumb：当左右都是显式文本时，中间的滑块
+   * 既不传额外信息又容易跟「Switch 看上去有方向感但点了不动」的体验割裂。
+   * iOS / macOS 的 SegmentedControl 也是这个范式。
+   *
+   * 单标签（非 segmented）继续走 Radix Switch + 滑块的原版形态。
    */
-  return (
-    <span
-      className={cn(
-        'ui-switch-root',
-        `ui-switch-size-${size}`,
-        segmented && 'ui-switch-segmented',
-        className,
-      )}
-      data-disabled={isDisabled || undefined}
-      data-state={checked ? 'checked' : 'unchecked'}
-    >
-      {segmented && (
+  if (segmented) {
+    return (
+      <span
+        ref={ref as React.Ref<HTMLSpanElement> as never}
+        className={cn(
+          'ui-switch-segmented',
+          `ui-switch-segmented-size-${size}`,
+          className,
+        )}
+        role="group"
+        data-disabled={isDisabled || undefined}
+        data-state={checked ? 'checked' : 'unchecked'}
+      >
         <button
           type="button"
           className={cn(
-            'ui-switch-side ui-switch-side-off',
-            !checked && 'ui-switch-side-active',
+            'ui-switch-segment',
+            !checked && 'ui-switch-segment-active',
           )}
           disabled={isDisabled}
           aria-pressed={!checked}
@@ -68,7 +70,32 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
         >
           {offLabel}
         </button>
-      )}
+        <button
+          type="button"
+          className={cn(
+            'ui-switch-segment',
+            checked && 'ui-switch-segment-active',
+          )}
+          disabled={isDisabled}
+          aria-pressed={Boolean(checked)}
+          onClick={() => rest.onCheckedChange?.(true)}
+        >
+          {onLabel}
+        </button>
+      </span>
+    );
+  }
+
+  /* 单标签经典 Switch。<span> 而非 <label> 是因为 Radix Switch 渲染 <button>
+   * 而 HTML <label> 对 <button> 没有 implicit click 转发；且被 Tooltip 用
+   * asChild 包起来时 Radix 会把 pointerdown 挂到 <label>，部分浏览器把
+   * click 截在 label 阶段，让人误以为「点不动」。 */
+  return (
+    <span
+      className={cn('ui-switch-root', `ui-switch-size-${size}`, className)}
+      data-disabled={isDisabled || undefined}
+      data-state={checked ? 'checked' : 'unchecked'}
+    >
       <RadixSwitch.Root
         ref={ref}
         className="ui-switch-control"
@@ -77,21 +104,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
       >
         <RadixSwitch.Thumb className="ui-switch-thumb" />
       </RadixSwitch.Root>
-      {segmented && (
-        <button
-          type="button"
-          className={cn(
-            'ui-switch-side ui-switch-side-on',
-            checked && 'ui-switch-side-active',
-          )}
-          disabled={isDisabled}
-          aria-pressed={Boolean(checked)}
-          onClick={() => rest.onCheckedChange?.(true)}
-        >
-          {onLabel}
-        </button>
-      )}
-      {children && !segmented && <span className="ui-switch-text">{children}</span>}
+      {children && <span className="ui-switch-text">{children}</span>}
     </span>
   );
 });
