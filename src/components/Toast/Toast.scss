@@ -17,15 +17,22 @@
 .ui-toast-viewport[data-position='bottom-center'] { bottom: 0; left: 50%; transform: translateX(-50%); flex-direction: column-reverse; }
 
 .ui-toast {
-  --ui-toast-bg: rgba(255, 255, 255, 0.74);
-  --ui-toast-border: rgba(17, 24, 39, 0.14);
-  --ui-toast-shadow: 0 18px 52px rgba(17, 24, 39, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.62);
+  --ui-toast-bg: rgba(255, 255, 255, 0.86);
+  --ui-toast-border: rgba(17, 24, 39, 0.08);
+  --ui-toast-shadow: 0 14px 40px rgba(17, 24, 39, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --ui-toast-accent: var(--ui-color-fg);
+  /* 状态色淡到 18% 当 border / 6% 当 bg tint，亮态需要克制不抢主信息 */
+  --ui-toast-tint-soft: transparent;
 
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: flex-start;
   gap: var(--ui-space-3);
   padding: var(--ui-space-3) var(--ui-space-4);
-  background: var(--ui-toast-bg);
+  background:
+    linear-gradient(0deg, var(--ui-toast-tint-soft), var(--ui-toast-tint-soft)),
+    var(--ui-toast-bg);
   border: 1px solid var(--ui-toast-border);
   border-radius: var(--ui-radius-md);
   box-shadow: var(--ui-toast-shadow);
@@ -33,13 +40,13 @@
   font-family: var(--ui-font-family-sans);
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-fg);
-  backdrop-filter: blur(18px) saturate(1.14);
+  backdrop-filter: blur(20px) saturate(1.2);
   animation: ui-toast-slidein var(--ui-transition-base);
 
   &[data-state='closing'] { animation: ui-toast-slideout var(--ui-transition-base); }
 }
 
-.ui-toast-icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; }
+.ui-toast-icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; color: var(--ui-toast-accent); }
 .ui-toast-content { flex: 1; min-width: 0; }
 .ui-toast-title { font-weight: var(--ui-font-weight-semibold); }
 .ui-toast-description { color: var(--ui-color-fg-secondary); margin-top: 2px; }
@@ -56,20 +63,52 @@
 }
 .ui-toast-close:hover { background-color: var(--ui-color-bg-muted); }
 
-.ui-toast-status-info { border-color: var(--ui-color-info-500); }
-.ui-toast-status-info .ui-toast-icon { color: var(--ui-color-info-500); }
-.ui-toast-status-success { border-color: var(--ui-color-success-500); }
-.ui-toast-status-success .ui-toast-icon { color: var(--ui-color-success-500); }
-.ui-toast-status-warning { border-color: var(--ui-color-warning-500); }
-.ui-toast-status-warning .ui-toast-icon { color: var(--ui-color-warning-500); }
-.ui-toast-status-danger { border-color: var(--ui-color-danger-500); }
-.ui-toast-status-danger .ui-toast-icon { color: var(--ui-color-danger-500); }
+/* 进度条：贴底部 2px 线，从满宽缩到 0，配 toast 的 duration 同步收尾。
+ * 用 transform: scaleX 的动画比 width: % 更轻，GPU 合成不重排。 */
+.ui-toast-progress {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: var(--ui-toast-accent);
+  opacity: 0.55;
+  transform-origin: left center;
+  animation: ui-toast-progress var(--ui-toast-duration, 4000ms) linear forwards;
+  /* hover 暂停进度（视觉），同时 store 的 hover-extend 延长真正 timer */
+}
+.ui-toast:hover .ui-toast-progress { animation-play-state: paused; }
+
+/* 状态色：border 一阶 / accent 一阶 / bg-tint 一阶（亮 vs 暗各一组） */
+.ui-toast-status-info {
+  --ui-toast-border: color-mix(in srgb, var(--ui-color-info-500) 32%, var(--ui-color-border));
+  --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-info-500) 6%, transparent);
+  --ui-toast-accent: var(--ui-color-info-500);
+}
+.ui-toast-status-success {
+  --ui-toast-border: color-mix(in srgb, var(--ui-color-success-500) 32%, var(--ui-color-border));
+  --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-success-500) 6%, transparent);
+  --ui-toast-accent: var(--ui-color-success-500);
+}
+.ui-toast-status-warning {
+  --ui-toast-border: color-mix(in srgb, var(--ui-color-warning-500) 32%, var(--ui-color-border));
+  --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-warning-500) 6%, transparent);
+  --ui-toast-accent: var(--ui-color-warning-500);
+}
+.ui-toast-status-danger {
+  --ui-toast-border: color-mix(in srgb, var(--ui-color-danger-500) 36%, var(--ui-color-border));
+  --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-danger-500) 7%, transparent);
+  --ui-toast-accent: var(--ui-color-danger-500);
+}
 
 [data-theme='dark'] .ui-toast {
-  --ui-toast-bg: rgba(8, 12, 18, 0.72);
-  --ui-toast-border: rgba(255, 255, 255, 0.14);
-  --ui-toast-shadow: 0 20px 56px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --ui-toast-bg: rgba(8, 12, 18, 0.78);
+  --ui-toast-border: rgba(255, 255, 255, 0.08);
+  --ui-toast-shadow: 0 18px 48px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
+/* 暗色模式下状态色 tint 提一点点，否则在深底上看不见 */
+[data-theme='dark'] .ui-toast-status-info { --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-info-500) 10%, transparent); }
+[data-theme='dark'] .ui-toast-status-success { --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-success-500) 10%, transparent); }
+[data-theme='dark'] .ui-toast-status-warning { --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-warning-500) 10%, transparent); }
+[data-theme='dark'] .ui-toast-status-danger { --ui-toast-tint-soft: color-mix(in srgb, var(--ui-color-danger-500) 12%, transparent); }
 
 @keyframes ui-toast-slidein {
   from { opacity: 0; transform: translateY(-8px); }
@@ -78,4 +117,8 @@
 @keyframes ui-toast-slideout {
   from { opacity: 1; transform: translateY(0); }
   to { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes ui-toast-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
 }

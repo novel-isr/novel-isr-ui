@@ -6,6 +6,8 @@
   border-radius: var(--ui-radius-md);
   font-family: var(--ui-font-family-sans);
   line-height: var(--ui-line-height-base);
+  /* 默认底色透明，让 variant 各自决定。subtle 是 status tint @ 8%， */
+  background-color: transparent;
 }
 
 .ui-alert-icon {
@@ -23,14 +25,19 @@
 .ui-alert-description {
   font-size: var(--ui-font-size-sm);
   color: inherit;
-  opacity: 0.85;
+  opacity: 0.82;
 }
 
-// status × variant 组合
-// variant: solid / subtle / outline (default subtle)
+/* status × variant 组合
+ * 设计：
+ *   - subtle  : status @ 8% bg, status @ 22% border, 文本用 color-700（亮）/ status-300（暗）
+ *   - solid   : 完整 status 色，白字
+ *   - outline : 透明 bg, status @ 28% border 给一点呼吸感（不要 1px solid 全饱和）
+ */
 
 .ui-alert-status-info.ui-alert-variant-subtle {
-  background-color: var(--ui-color-info-50);
+  background-color: color-mix(in srgb, var(--ui-color-info-500) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ui-color-info-500) 22%, transparent);
   color: var(--ui-color-info-700);
 }
 .ui-alert-status-info.ui-alert-variant-solid {
@@ -38,12 +45,13 @@
   color: #ffffff;
 }
 .ui-alert-status-info.ui-alert-variant-outline {
-  border: 1px solid var(--ui-color-info-500);
+  border: 1px solid color-mix(in srgb, var(--ui-color-info-500) 28%, transparent);
   color: var(--ui-color-info-700);
 }
 
 .ui-alert-status-success.ui-alert-variant-subtle {
-  background-color: var(--ui-color-success-50);
+  background-color: color-mix(in srgb, var(--ui-color-success-500) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ui-color-success-500) 22%, transparent);
   color: var(--ui-color-success-700);
 }
 .ui-alert-status-success.ui-alert-variant-solid {
@@ -51,12 +59,13 @@
   color: #ffffff;
 }
 .ui-alert-status-success.ui-alert-variant-outline {
-  border: 1px solid var(--ui-color-success-500);
+  border: 1px solid color-mix(in srgb, var(--ui-color-success-500) 28%, transparent);
   color: var(--ui-color-success-700);
 }
 
 .ui-alert-status-warning.ui-alert-variant-subtle {
-  background-color: var(--ui-color-warning-50);
+  background-color: color-mix(in srgb, var(--ui-color-warning-500) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ui-color-warning-500) 26%, transparent);
   color: var(--ui-color-warning-700);
 }
 .ui-alert-status-warning.ui-alert-variant-solid {
@@ -64,12 +73,13 @@
   color: #ffffff;
 }
 .ui-alert-status-warning.ui-alert-variant-outline {
-  border: 1px solid var(--ui-color-warning-500);
+  border: 1px solid color-mix(in srgb, var(--ui-color-warning-500) 32%, transparent);
   color: var(--ui-color-warning-700);
 }
 
 .ui-alert-status-danger.ui-alert-variant-subtle {
-  background-color: var(--ui-color-danger-50);
+  background-color: color-mix(in srgb, var(--ui-color-danger-500) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ui-color-danger-500) 26%, transparent);
   color: var(--ui-color-danger-700);
 }
 .ui-alert-status-danger.ui-alert-variant-solid {
@@ -77,6 +87,24 @@
   color: #ffffff;
 }
 .ui-alert-status-danger.ui-alert-variant-outline {
-  border: 1px solid var(--ui-color-danger-500);
+  border: 1px solid color-mix(in srgb, var(--ui-color-danger-500) 32%, transparent);
   color: var(--ui-color-danger-700);
+}
+
+/* 暗色模式：subtle 文本色用 status-300 而非 700，否则字会和淡 tint 撞色看不清 */
+[data-theme='dark'] .ui-alert-status-info.ui-alert-variant-subtle,
+[data-theme='dark'] .ui-alert-status-info.ui-alert-variant-outline {
+  color: var(--ui-color-info-300, var(--ui-color-info-200));
+}
+[data-theme='dark'] .ui-alert-status-success.ui-alert-variant-subtle,
+[data-theme='dark'] .ui-alert-status-success.ui-alert-variant-outline {
+  color: var(--ui-color-success-300, var(--ui-color-success-200));
+}
+[data-theme='dark'] .ui-alert-status-warning.ui-alert-variant-subtle,
+[data-theme='dark'] .ui-alert-status-warning.ui-alert-variant-outline {
+  color: var(--ui-color-warning-300, var(--ui-color-warning-200));
+}
+[data-theme='dark'] .ui-alert-status-danger.ui-alert-variant-subtle,
+[data-theme='dark'] .ui-alert-status-danger.ui-alert-variant-outline {
+  color: var(--ui-color-danger-300, var(--ui-color-danger-200));
 }

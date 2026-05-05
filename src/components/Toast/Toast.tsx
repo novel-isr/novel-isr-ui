@@ -194,6 +194,11 @@ function ToastItemComponent({ item }: { item: ToastItem }) {
       className={cn('ui-toast', `ui-toast-status-${item.status}`)}
       data-state={item.state === 'closing' ? 'closing' : 'open'}
       role={item.status === 'danger' ? 'alert' : 'status'}
+      style={
+        item.duration > 0
+          ? ({ '--ui-toast-duration': `${item.duration}ms` } as React.CSSProperties)
+          : undefined
+      }
     >
       <span className="ui-toast-icon">{ICONS[item.status]}</span>
       <div className="ui-toast-content">
@@ -208,6 +213,9 @@ function ToastItemComponent({ item }: { item: ToastItem }) {
       >
         ×
       </button>
+      {item.duration > 0 && item.state === 'open' && (
+        <span className="ui-toast-progress" aria-hidden="true" />
+      )}
     </div>
   );
 }

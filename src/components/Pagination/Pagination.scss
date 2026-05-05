@@ -50,3 +50,24 @@
   justify-content: center;
   color: var(--ui-color-fg-muted);
 }
+
+// simple / hideNumbers 的 X / N 计数文本
+.ui-pagination-counter {
+  padding: 0 var(--ui-space-2);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-fg);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+// 每页条数下拉的容器：让出一点 gap，跟页码组拉开
+.ui-pagination-page-size {
+  margin-left: var(--ui-space-3);
+  display: inline-flex;
+  align-items: center;
+}
+
+// simple 模式整体收紧
+.ui-pagination-simple {
+  gap: var(--ui-space-2);
+}

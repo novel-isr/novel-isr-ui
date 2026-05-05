@@ -47,8 +47,37 @@
   will-change: transform;
 }
 
-.ui-switch-root[data-state='checked'] > span {
+.ui-switch-root[data-state='checked'] .ui-switch-text {
   color: var(--ui-color-brand-500);
+}
+
+/* segmented 模式：左右文字 + 中间 slider，整条都能点 */
+.ui-switch-segmented {
+  gap: var(--ui-space-3);
+}
+
+.ui-switch-side {
+  background: transparent;
+  border: none;
+  padding: 2px var(--ui-space-1);
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-fg-muted);
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition-fast);
+  white-space: nowrap;
+  &:hover:not(:disabled) { color: var(--ui-color-fg); }
+  &:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+  &:disabled { cursor: not-allowed; }
+}
+
+.ui-switch-side-active {
+  color: var(--ui-color-brand-500);
+  font-weight: var(--ui-font-weight-semibold);
 }
 
 [data-theme='dark'] .ui-switch-control {

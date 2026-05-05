@@ -23,6 +23,7 @@ import {
   type ThHTMLAttributes,
 } from 'react';
 import { cn } from '../../utils/cn';
+import { Skeleton } from '../Skeleton/Skeleton';
 
 export type TableSize = 'sm' | 'md' | 'lg';
 export type TableVariant = 'simple' | 'striped' | 'bordered';
@@ -114,10 +115,22 @@ export interface TableProps<T> extends Omit<TableRootProps, 'children'> {
   rowKey?: (row: T, index: number) => string | number;
   /** 空数据时显示 */
   emptyText?: ReactNode;
+  /** 加载中：渲染等量骨架行替代真实数据。需配合 loadingRows 控制行数 */
+  loading?: boolean;
+  /** loading=true 时渲染的骨架行数（默认 5） */
+  loadingRows?: number;
 }
 
 export function Table<T>(props: TableProps<T>) {
-  const { columns, data, rowKey, emptyText = '暂无数据', ...rootProps } = props;
+  const {
+    columns,
+    data,
+    rowKey,
+    emptyText = '暂无数据',
+    loading = false,
+    loadingRows = 5,
+    ...rootProps
+  } = props;
 
   return (
     <TableRoot {...rootProps}>
@@ -137,7 +150,17 @@ export function Table<T>(props: TableProps<T>) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {data.length === 0 ? (
+        {loading ? (
+          Array.from({ length: loadingRows }).map((_, i) => (
+            <TableRow key={`skeleton-${i}`} aria-hidden="true">
+              {columns.map(col => (
+                <TableCell key={col.key} style={{ textAlign: col.align }}>
+                  <Skeleton variant="text" width="80%" height={16} />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : data.length === 0 ? (
           <TableRow>
             <TableCell colSpan={columns.length} className="ui-table-empty">
               {emptyText}
