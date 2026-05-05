@@ -1,0 +1,118 @@
+.ui-number-input-root {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+  background-color: var(--ui-color-bg);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  transition:
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
+
+  &:hover:not(.ui-number-input-disabled) {
+    border-color: var(--ui-color-brand-500);
+  }
+  &:focus-within {
+    border-color: var(--ui-color-brand-500);
+    box-shadow: 0 0 0 2px var(--ui-color-brand-100);
+  }
+}
+
+.ui-number-input-error {
+  border-color: var(--ui-color-danger-500);
+  &:focus-within {
+    border-color: var(--ui-color-danger-500);
+    box-shadow: 0 0 0 2px var(--ui-color-danger-50);
+  }
+}
+
+.ui-number-input-disabled {
+  background-color: var(--ui-color-bg-subtle);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.ui-number-input-field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  color: var(--ui-color-fg);
+  /* tabular-nums 让数字宽度稳定，调整时输入框不抖动 */
+  font-variant-numeric: tabular-nums;
+  padding: 0 var(--ui-space-3);
+  height: 100%;
+  &::placeholder { color: var(--ui-color-fg-muted); }
+  &:disabled { cursor: not-allowed; }
+}
+
+.ui-number-input-no-stepper .ui-number-input-field {
+  padding-right: var(--ui-space-3);
+}
+
+.ui-number-input-size-sm { height: 32px; font-size: var(--ui-font-size-sm); }
+.ui-number-input-size-md { height: 40px; font-size: var(--ui-font-size-md); }
+.ui-number-input-size-lg { height: 48px; font-size: var(--ui-font-size-lg); }
+
+/* stepper：右侧 column，两个小按钮上下叠 */
+.ui-number-input-stepper {
+  display: flex;
+  flex-direction: column;
+  width: 22px;
+  border-left: 1px solid var(--ui-color-border);
+  flex-shrink: 0;
+}
+
+.ui-number-input-step {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-color-fg-muted);
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+  transition: background-color var(--ui-transition-fast), color var(--ui-transition-fast);
+
+  &:hover:not(:disabled) {
+    background-color: var(--ui-color-bg-muted);
+    color: var(--ui-color-fg);
+  }
+  &:active:not(:disabled) {
+    background-color: var(--ui-color-bg-subtle);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.ui-number-input-step-up {
+  border-bottom: 1px solid var(--ui-color-border);
+  border-radius: 0 calc(var(--ui-radius-md) - 1px) 0 0;
+}
+.ui-number-input-step-down {
+  border-radius: 0 0 calc(var(--ui-radius-md) - 1px) 0;
+}
+
+[data-theme='dark'] .ui-number-input-root {
+  background-color: var(--ui-color-bg-subtle);
+  border-color: var(--ui-color-border-strong);
+}
+[data-theme='dark'] .ui-number-input-root:focus-within {
+  background-color: var(--ui-color-bg-muted);
+  box-shadow: 0 0 0 2px rgba(64, 169, 255, 0.22);
+}
+[data-theme='dark'] .ui-number-input-stepper {
+  border-left-color: var(--ui-color-border-strong);
+}
+[data-theme='dark'] .ui-number-input-step-up {
+  border-bottom-color: var(--ui-color-border-strong);
+}

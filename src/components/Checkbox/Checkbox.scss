@@ -1,3 +1,10 @@
+/* Checkbox 激活色由 --ui-checkbox-active-color 驱动；五种 colorScheme 对齐 Switch */
+.ui-checkbox-color-brand   { --ui-checkbox-active-color: var(--ui-color-brand-500); }
+.ui-checkbox-color-success { --ui-checkbox-active-color: var(--ui-color-success-500); }
+.ui-checkbox-color-info    { --ui-checkbox-active-color: var(--ui-color-info-500); }
+.ui-checkbox-color-warning { --ui-checkbox-active-color: var(--ui-color-warning-500); }
+.ui-checkbox-color-danger  { --ui-checkbox-active-color: var(--ui-color-danger-500); }
+
 .ui-checkbox-root {
   display: inline-flex;
   align-items: center;
@@ -6,11 +13,22 @@
   user-select: none;
   font-family: var(--ui-font-family-sans);
   color: var(--ui-color-fg);
+  line-height: var(--ui-line-height-tight);
+
+  /* hover 时 control 边框跟着亮一档 —— 让用户知道是可交互的 */
+  &:hover:not([data-disabled]) .ui-checkbox-control:not([data-state='checked']):not([data-state='indeterminate']) {
+    border-color: var(--ui-checkbox-active-color, var(--ui-color-brand-500));
+  }
 
   &[data-disabled] {
     cursor: not-allowed;
     opacity: 0.5;
   }
+}
+
+.ui-checkbox-text {
+  font-size: inherit;
+  line-height: var(--ui-line-height-tight);
 }
 
 .ui-checkbox-control {
@@ -22,20 +40,31 @@
   border: 1px solid var(--ui-color-border-strong);
   border-radius: var(--ui-radius-sm);
   color: #ffffff;
+  cursor: pointer;
+  padding: 0;
   transition:
     background-color var(--ui-transition-fast),
     border-color var(--ui-transition-fast),
-    box-shadow var(--ui-transition-fast);
+    box-shadow var(--ui-transition-fast),
+    transform var(--ui-transition-fast);
 
   &:focus-visible {
-    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
-    outline-offset: var(--ui-focus-ring-offset);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-checkbox-active-color, var(--ui-color-brand-500)) 30%, transparent);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.92);
   }
 
   &[data-state='checked'],
   &[data-state='indeterminate'] {
-    background-color: var(--ui-color-brand-500);
-    border-color: var(--ui-color-brand-500);
+    background-color: var(--ui-checkbox-active-color, var(--ui-color-brand-500));
+    border-color: var(--ui-checkbox-active-color, var(--ui-color-brand-500));
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -56,10 +85,8 @@
 }
 
 .ui-checkbox-icon {
-  /* 显式 width/height 100% + 强制 stroke 白色 —— 之前 70% 在 16px 容器里只有
-   * 11px 视觉，加上 lucide 默认 stroke-width=2 在小尺寸下几乎看不到。改成 100%
-   * 配 stroke-width=3.5 让对勾在 16x16 里可读；color 写死 #fff 保证不被外部
-   * 父级 color 干扰（前端有时 color: inherit 链不到 ui-checkbox-control）。 */
+  /* 显式 100% + 强制 stroke 白色，stroke-width=3.5 在 14-20px 范围都清晰可见。
+   * indeterminate 时是 lucide Minus（一条横线），check 时是 lucide Check（对勾）。 */
   width: 100%;
   height: 100%;
   fill: none;
@@ -67,7 +94,7 @@
   stroke-width: 3.5;
 }
 
-// invalid
+/* invalid 状态：borderColor 红，激活色也红 */
 .ui-checkbox-error .ui-checkbox-control {
   border-color: var(--ui-color-danger-500);
 
@@ -75,5 +102,9 @@
   &[data-state='indeterminate'] {
     background-color: var(--ui-color-danger-500);
     border-color: var(--ui-color-danger-500);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-danger-500) 30%, transparent);
   }
 }

@@ -1,0 +1,62 @@
+.ui-json-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  width: 100%;
+}
+
+.ui-json-field-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2);
+  padding: 0 var(--ui-space-1);
+}
+
+.ui-json-field-format {
+  background: transparent;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  padding: 2px var(--ui-space-2);
+  font-family: var(--ui-font-family-mono);
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-fg-secondary);
+  cursor: pointer;
+  transition: background-color var(--ui-transition-fast), color var(--ui-transition-fast);
+
+  &:hover:not(:disabled) {
+    background-color: var(--ui-color-bg-muted);
+    color: var(--ui-color-fg);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.ui-json-field-status {
+  font-size: var(--ui-font-size-xs);
+  font-family: var(--ui-font-family-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.ui-json-field-status-success {
+  color: var(--ui-color-success-500);
+}
+
+.ui-json-field-status-danger {
+  color: var(--ui-color-danger-500);
+}
+
+.ui-json-field-textarea {
+  font-family: var(--ui-font-family-mono);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.55;
+  /* JSON 经常很宽，禁掉换行让滚动条出来更直观 */
+  white-space: pre;
+  overflow-x: auto;
+  tab-size: 2;
+}
