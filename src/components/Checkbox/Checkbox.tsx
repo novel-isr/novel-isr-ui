@@ -9,6 +9,7 @@
 
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 import { forwardRef, type ReactNode } from 'react';
+import { Check } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useFormControlContext } from '../FormControl/FormControl';
 
@@ -44,10 +45,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Ch
         {...rest}
       >
         <RadixCheckbox.Indicator className="ui-checkbox-indicator">
-          {/* check icon */}
-          <svg className="ui-checkbox-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="4 12 10 18 20 6" />
-          </svg>
+          <Check className='ui-checkbox-icon' aria-hidden='true' />
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
       {children && <span>{children}</span>}

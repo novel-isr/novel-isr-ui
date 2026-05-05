@@ -25,13 +25,13 @@
  */
 import {
   forwardRef,
-  useId,
   useState,
   type HTMLAttributes,
   type KeyboardEvent,
   type MouseEvent,
   type ReactNode,
 } from 'react';
+import { Star as StarIcon, StarHalf as StarHalfIcon } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export type RatingSize = 'sm' | 'md' | 'lg';
@@ -72,7 +72,6 @@ export const Rating = forwardRef<HTMLSpanElement, RatingProps>(function Rating(p
 
   const interactive = Boolean(onChange) && !readOnly;
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const groupId = useId();
 
   // 把 value 归一到 5 星刻度
   const stars5 = (value / max) * 5;
@@ -151,18 +150,11 @@ export const Rating = forwardRef<HTMLSpanElement, RatingProps>(function Rating(p
                 onMouseEnter={() => setHoverIndex(i + 1)}
                 tabIndex={-1}
               >
-                <Star fill={fill} size={px} gradientId={`${groupId}-${i}`} />
+                <Star fill={fill} size={px} />
               </button>
             );
           }
-          return (
-            <Star
-              key={i}
-              fill={fill}
-              size={px}
-              gradientId={`${groupId}-${i}`}
-            />
-          );
+          return <Star key={i} fill={fill} size={px} />;
         })}
       </span>
       {showValue && (
@@ -177,39 +169,29 @@ export const Rating = forwardRef<HTMLSpanElement, RatingProps>(function Rating(p
   );
 });
 
-function Star({
-  fill,
-  size,
-  gradientId,
-}: {
-  fill: 'full' | 'half' | 'empty';
-  size: number;
-  gradientId: string;
-}) {
-  return (
-    <svg
-      viewBox='0 0 24 24'
-      width={size}
-      height={size}
-      className={cn('ui-rating-star', `ui-rating-star-${fill}`)}
-      aria-hidden='true'
-    >
-      <defs>
-        <linearGradient id={gradientId}>
-          <stop offset='50%' stopColor='currentColor' />
-          <stop offset='50%' stopColor='transparent' stopOpacity='0' />
-        </linearGradient>
-      </defs>
-      <path
-        d='M12 2 L14.85 8.5 L22 9.27 L16.5 14.14 L18.18 21 L12 17.27 L5.82 21 L7.5 14.14 L2 9.27 L9.15 8.5 Z'
-        fill={
-          fill === 'full' ? 'currentColor' : fill === 'half' ? `url(#${gradientId})` : 'none'
-        }
-        stroke='currentColor'
+function Star({ fill, size }: { fill: 'full' | 'half' | 'empty'; size: number }) {
+  // lucide 的 Star 用 fill 控制实心/空心；半星用 StarHalf 自带的左半填充。
+  // 视觉与之前自定义 path + linearGradient 几乎一致，行为统一到 ui icon system。
+  const className = cn('ui-rating-star', `ui-rating-star-${fill}`);
+  if (fill === 'half') {
+    return (
+      <StarHalfIcon
+        size={size}
+        className={className}
+        fill='currentColor'
         strokeWidth={1.5}
-        strokeLinejoin='round'
+        aria-hidden='true'
       />
-    </svg>
+    );
+  }
+  return (
+    <StarIcon
+      size={size}
+      className={className}
+      fill={fill === 'full' ? 'currentColor' : 'none'}
+      strokeWidth={1.5}
+      aria-hidden='true'
+    />
   );
 }
 

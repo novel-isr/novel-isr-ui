@@ -16,6 +16,7 @@
 
 import * as RadixSelect from '@radix-ui/react-select';
 import { forwardRef, type ReactNode } from 'react';
+import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useFormControlContext } from '../FormControl/FormControl';
 
@@ -63,9 +64,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
       >
         <RadixSelect.Value placeholder={placeholder} />
         <RadixSelect.Icon className="ui-select-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="6 9 12 15 18 9" strokeWidth="2" />
-          </svg>
+          <ChevronDown size={16} strokeWidth={2} aria-hidden='true' />
         </RadixSelect.Icon>
       </RadixSelect.Trigger>
 
@@ -99,9 +98,7 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
     <RadixSelect.Item ref={ref} className={cn('ui-select-item', className)} {...rest}>
       <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
       <RadixSelect.ItemIndicator className="ui-select-item-indicator">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <polyline points="4 12 10 18 20 6" strokeWidth="3" />
-        </svg>
+        <Check size={14} strokeWidth={3} aria-hidden='true' />
       </RadixSelect.ItemIndicator>
     </RadixSelect.Item>
   );

@@ -3,6 +3,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export interface NavTreeItem {
@@ -216,17 +217,8 @@ function renderItem(options: RenderItemOptions): ReactNode {
       </span>
       {hasChildren && !collapsed && (
         <span className="ui-nav-tree-chevron" aria-hidden="true">
-          {/* 单线条 chevron-down；rotate -90 折叠 / 0 展开 —— 与 VS Code、Linear、Notion 一致 */}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+          {/* rotate -90 折叠 / 0 展开 —— 与 VS Code、Linear、Notion 一致 */}
+          <ChevronDown size={16} strokeWidth={2} />
         </span>
       )}
     </>

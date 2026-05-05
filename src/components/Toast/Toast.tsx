@@ -29,6 +29,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { AlertTriangle, CheckCircle2, Info, XCircle } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export type ToastStatus = 'info' | 'success' | 'warning' | 'danger';
@@ -57,31 +58,10 @@ interface ToastItem extends Required<Pick<ToastOptions, 'status' | 'duration'>> 
 }
 
 const ICONS: Record<ToastStatus, ReactNode> = {
-  info: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  ),
-  success: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="9 12 11 14 15 10" />
-    </svg>
-  ),
-  warning: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <path d="M12 2 L22 20 H2 Z" />
-    </svg>
-  ),
-  danger: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <circle cx="12" cy="12" r="10" />
-      <line x1="15" y1="9" x2="9" y2="15" />
-      <line x1="9" y1="9" x2="15" y2="15" />
-    </svg>
-  ),
+  info: <Info aria-hidden='true' />,
+  success: <CheckCircle2 aria-hidden='true' />,
+  warning: <AlertTriangle aria-hidden='true' />,
+  danger: <XCircle aria-hidden='true' />,
 };
 
 // ─── 全局 store（让命令式 API 在没 Provider 也能跑 + Provider 模式共享） ─────
