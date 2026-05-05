@@ -64,6 +64,14 @@ export function NavTree(props: NavTreeProps) {
   const [uncontrolledExpandedIds, setUncontrolledExpandedIds] = useState(
     () => new Set(defaultExpandedIds ?? []),
   );
+  // 用户「主动折叠」的分支。补这一格状态是因为：当 activeId 落在某个分支
+  // 子节点上时，ancestorActive 会强制展开（这是初次进入该路由的合理默认）。
+  // 但如果用户随后**点击折叠**这个分支，必须有地方记下这个意图，
+  // 否则下一次重渲会被 ancestorActive 自动撤销，看起来像「按钮失灵」。
+  // 行业惯例（VS Code / Storybook / Linear 等）都是这种 tri-state 处理。
+  const [explicitlyCollapsed, setExplicitlyCollapsed] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const activeAncestorIds = useMemo(() => {
     const ids = new Set<string>();
@@ -83,14 +91,28 @@ export function NavTree(props: NavTreeProps) {
     onExpandedChange?.(Array.from(next));
   };
 
+  const isItemExpanded = (id: string, hasAncestorActive: boolean): boolean => {
+    if (explicitlyCollapsed.has(id)) return false;
+    if (expandedSet.has(id)) return true;
+    return hasAncestorActive;
+  };
+
   const toggleItem = (item: NavTreeItem) => {
-    const next = new Set(expandedSet);
-    if (next.has(item.id)) {
-      next.delete(item.id);
+    const ancestor = activeAncestorIds.has(item.id);
+    const currentlyExpanded = isItemExpanded(item.id, ancestor);
+    const nextExpanded = new Set(expandedSet);
+    const nextCollapsed = new Set(explicitlyCollapsed);
+    if (currentlyExpanded) {
+      // 折叠：从「明确展开」拿掉，写入「明确折叠」（覆盖 ancestor 自动展开）
+      nextExpanded.delete(item.id);
+      nextCollapsed.add(item.id);
     } else {
-      next.add(item.id);
+      // 展开：从「明确折叠」拿掉，写入「明确展开」
+      nextExpanded.add(item.id);
+      nextCollapsed.delete(item.id);
     }
-    setExpanded(next);
+    setExpanded(nextExpanded);
+    setExplicitlyCollapsed(nextCollapsed);
   };
 
   return (
@@ -113,6 +135,7 @@ export function NavTree(props: NavTreeProps) {
                 collapsed,
                 depth: 0,
                 expandedSet,
+                explicitlyCollapsed,
                 onItemSelect,
                 renderLink,
                 sectionIndex,
@@ -133,6 +156,8 @@ interface RenderItemOptions {
   collapsed: boolean;
   depth: number;
   expandedSet: Set<string>;
+  /** 用户主动折叠的分支 id 集合；优先级高于 ancestor-active 自动展开 */
+  explicitlyCollapsed: Set<string>;
   sectionIndex: number;
   onItemSelect?: (item: NavTreeItem) => void;
   renderLink?: NavTreeProps['renderLink'];
@@ -147,6 +172,7 @@ function renderItem(options: RenderItemOptions): ReactNode {
     collapsed,
     depth,
     expandedSet,
+    explicitlyCollapsed,
     onItemSelect,
     renderLink,
     toggleItem,
@@ -154,7 +180,11 @@ function renderItem(options: RenderItemOptions): ReactNode {
   const hasChildren = Boolean(item.children?.length);
   const active = item.id === activeId;
   const ancestorActive = activeAncestorIds.has(item.id);
-  const expanded = hasChildren && (expandedSet.has(item.id) || ancestorActive);
+  // 折叠优先级最高 —— 用户主动折叠会盖过 ancestor-active 的隐式展开。
+  const expanded =
+    hasChildren &&
+    !explicitlyCollapsed.has(item.id) &&
+    (expandedSet.has(item.id) || ancestorActive);
   const className = cn(
     'ui-nav-tree-item',
     hasChildren ? 'ui-nav-tree-trigger' : 'ui-nav-tree-link',
