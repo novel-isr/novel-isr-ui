@@ -1,3 +1,11 @@
+/* Switch active color is driven by --ui-switch-active-color so the same
+ * track / pill rules work across colorScheme variants without duplication. */
+.ui-switch-color-brand   { --ui-switch-active-color: var(--ui-color-brand-500); }
+.ui-switch-color-success { --ui-switch-active-color: var(--ui-color-success-500); }
+.ui-switch-color-info    { --ui-switch-active-color: var(--ui-color-info-500); }
+.ui-switch-color-warning { --ui-switch-active-color: var(--ui-color-warning-500); }
+.ui-switch-color-danger  { --ui-switch-active-color: var(--ui-color-danger-500); }
+
 .ui-switch-root {
   display: inline-flex;
   align-items: center;
@@ -26,13 +34,17 @@
   padding: 0;
 
   &:focus-visible {
-    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline: var(--ui-focus-ring-width) solid var(--ui-switch-active-color, var(--ui-color-brand-500));
     outline-offset: var(--ui-focus-ring-offset);
   }
 
+  /* Active track + halo. Halo is the active color at 22% so it reads as
+   * "this thing is on" without being loud. */
   &[data-state='checked'] {
-    background-color: var(--ui-color-brand-500);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 18%, transparent);
+    background-color: var(--ui-switch-active-color, var(--ui-color-brand-500));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 30%, transparent),
+      0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 22%, transparent);
   }
 
   &:disabled { cursor: not-allowed; }
@@ -48,11 +60,11 @@
 }
 
 .ui-switch-root[data-state='checked'] .ui-switch-text {
-  color: var(--ui-color-brand-500);
+  color: var(--ui-switch-active-color, var(--ui-color-brand-500));
 }
 
-/* slider 变体的双标签：[off-label] [slider] [on-label] —— 滑块在中间，
- * 左右 label 都可点。激活那侧文字 brand 高亮，提升状态可读性。 */
+/* slider 双标签：[off-label] [slider] [on-label] —— 滑块在中间，两侧文字都可点
+ * 直接 set 状态。激活那侧文字 active-color 高亮。 */
 .ui-switch-bilateral {
   gap: var(--ui-space-3);
 }
@@ -70,19 +82,19 @@
   white-space: nowrap;
   &:hover:not(:disabled) { color: var(--ui-color-fg); }
   &:focus-visible {
-    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline: var(--ui-focus-ring-width) solid var(--ui-switch-active-color, var(--ui-color-brand-500));
     outline-offset: 1px;
   }
   &:disabled { cursor: not-allowed; }
 }
 
 .ui-switch-side-active {
-  color: var(--ui-color-brand-500);
+  color: var(--ui-switch-active-color, var(--ui-color-brand-500));
   font-weight: var(--ui-font-weight-semibold);
 }
 
-/* segmented 模式：iOS / macOS 风格 segmented control —— 两个 button 共享
- * 一个 pill 容器，激活那半有 brand 底色 + 白字。整体扁平、无歧义。 */
+/* segmented：iOS / macOS SegmentedControl —— 两个 button 共享一个 pill 容器，
+ * 激活那半有 active-color 底色 + 白字。整体扁平、无歧义。 */
 .ui-switch-segmented {
   display: inline-flex;
   background: var(--ui-color-bg-muted);
@@ -114,14 +126,14 @@
     color: var(--ui-color-fg);
   }
   &:focus-visible {
-    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline: var(--ui-focus-ring-width) solid var(--ui-switch-active-color, var(--ui-color-brand-500));
     outline-offset: 1px;
   }
   &:disabled { cursor: not-allowed; }
 }
 
 .ui-switch-segment-active {
-  background-color: var(--ui-color-brand-500);
+  background-color: var(--ui-switch-active-color, var(--ui-color-brand-500));
   color: #ffffff;
   font-weight: var(--ui-font-weight-semibold);
   box-shadow:
@@ -151,9 +163,13 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
+/* 暗色态下 active 还是用 active-color，不再硬编码 brand —— colorScheme=success
+ * 暗色下也是绿，不会被这条规则覆盖回 brand。 */
 [data-theme='dark'] .ui-switch-control[data-state='checked'] {
-  background-color: var(--ui-color-brand-500);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-brand-500) 24%, transparent);
+  background-color: var(--ui-switch-active-color, var(--ui-color-brand-500));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 40%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 28%, transparent);
 }
 
 // sizes

@@ -35,6 +35,7 @@ import { useFormControlContext } from '../FormControl/FormControl';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 export type SwitchVariant = 'slider' | 'segmented';
+export type SwitchColorScheme = 'brand' | 'success' | 'info' | 'warning' | 'danger';
 
 export interface SwitchProps extends Omit<RadixSwitch.SwitchProps, 'asChild' | 'children'> {
   size?: SwitchSize;
@@ -43,6 +44,11 @@ export interface SwitchProps extends Omit<RadixSwitch.SwitchProps, 'asChild' | '
    * segmented：iOS 风格分段控件，没有滑块，offLabel/onLabel 必填。
    */
   variant?: SwitchVariant;
+  /**
+   * 激活态颜色。默认 brand（品牌蓝）。需要 iOS 经典绿用 success；告警/危险用
+   * warning/danger；信息中立用 info。Chakra / Mantine 都是这个 API 形态。
+   */
+  colorScheme?: SwitchColorScheme;
   /** 单标签紧凑文本（右侧）。仅对 variant="slider" 有意义；和 offLabel/onLabel 互斥（双标签优先） */
   children?: ReactNode;
   /** 左侧标签（off 状态）。配合 onLabel 启用双标签 */
@@ -55,6 +61,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
   const {
     size = 'md',
     variant = 'slider',
+    colorScheme = 'brand',
     className,
     children,
     offLabel,
@@ -78,6 +85,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
         className={cn(
           'ui-switch-segmented',
           `ui-switch-segmented-size-${size}`,
+          `ui-switch-color-${colorScheme}`,
           className,
         )}
         role="group"
@@ -120,6 +128,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
       className={cn(
         'ui-switch-root',
         `ui-switch-size-${size}`,
+        `ui-switch-color-${colorScheme}`,
         hasBilateralLabels && 'ui-switch-bilateral',
         className,
       )}
