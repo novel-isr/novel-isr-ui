@@ -56,9 +56,12 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
   } = props;
   const fallbackDescriptionId = useId();
   const externalDescriptionId = rest['aria-describedby'];
-  const descriptionId = description
-    ? externalDescriptionId ?? fallbackDescriptionId
-    : externalDescriptionId;
+  /* Radix v1.1+ 强制要求 Dialog.Content 要么挂 <Dialog.Description>，要么显式
+   * aria-describedby={undefined}。React 把 undefined props 直接 strip，所以
+   * 「显式 undefined」实际并不会出现在 DOM 上，Radix 还是 warning。
+   * 解法：当 caller 没传 description 时，渲染一个 visually-hidden 的空白
+   * Description 让 Radix 找到对应节点，无障碍上不会念出无意义内容。 */
+  const descriptionId = externalDescriptionId ?? fallbackDescriptionId;
 
   return (
     <RadixDialog.Portal>
@@ -69,13 +72,15 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
         {...rest}
         aria-describedby={descriptionId}
       >
-        {description && (
+        {description ? (
           <RadixDialog.Description
             id={descriptionId}
             className="ui-modal-description"
           >
             {description}
           </RadixDialog.Description>
+        ) : (
+          <RadixDialog.Description id={descriptionId} className="ui-sr-only" />
         )}
         {children}
         {!hideCloseButton && (

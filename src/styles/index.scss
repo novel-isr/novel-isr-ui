@@ -34,3 +34,16 @@
 @use '../components/Rating/Rating.scss';
 @use '../components/Skeleton/Skeleton.scss';
 @use '../components/EmptyState/EmptyState.scss';
+
+/* visually-hidden 工具类：a11y 占位用（如 Modal 缺省 description 的 hidden 节点） */
+.ui-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}

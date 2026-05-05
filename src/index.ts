@@ -39,6 +39,7 @@ export * from './components/Select';
 // ─── 反馈 ─────────────────────────────────────────────────────────────
 export * from './components/Alert';
 export * from './components/Modal';
+export * from './components/Confirm';
 export * from './components/Drawer';
 export * from './components/Command';
 export * from './components/Tooltip';
