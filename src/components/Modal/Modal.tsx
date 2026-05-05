@@ -54,15 +54,13 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
     children,
     ...rest
   } = props;
-  const fallbackDescriptionId = useId();
-  const externalDescriptionId = rest['aria-describedby'];
-  /* Radix v1.1+ 强制要求 Dialog.Content 要么挂 <Dialog.Description>，要么显式
-   * aria-describedby={undefined}。React 把 undefined props 直接 strip，所以
-   * 「显式 undefined」实际并不会出现在 DOM 上，Radix 还是 warning。
-   * 解法：当 caller 没传 description 时，渲染一个 visually-hidden 的空白
-   * Description 让 Radix 找到对应节点，无障碍上不会念出无意义内容。 */
-  const descriptionId = externalDescriptionId ?? fallbackDescriptionId;
-
+  /* Radix Dialog.Content 内部 useDialogContext 自动给已注册的 Description 分配
+   * id 并把它写进 Content 的 aria-describedby。我们之前手动覆盖 aria-describedby
+   * 反而把这条链路打断 —— 自定义的 fallback id 跟 Radix Description 实际 id 对不上，
+   * Radix 找不到匹配节点就 warn。
+   * 现在不再手动管 id：caller 没传 description 时渲染一个 visually-hidden 的
+   * <Description>，Radix 自己写 aria-describedby 即可。caller 显式传
+   * aria-describedby（极少见，通常是直接 compound API）则尊重它。 */
   return (
     <RadixDialog.Portal>
       <RadixDialog.Overlay className="ui-modal-overlay" />
@@ -70,17 +68,13 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(functi
         ref={ref}
         className={cn('ui-modal-content', `ui-modal-size-${size}`, className)}
         {...rest}
-        aria-describedby={descriptionId}
       >
         {description ? (
-          <RadixDialog.Description
-            id={descriptionId}
-            className="ui-modal-description"
-          >
+          <RadixDialog.Description className="ui-modal-description">
             {description}
           </RadixDialog.Description>
         ) : (
-          <RadixDialog.Description id={descriptionId} className="ui-sr-only" />
+          <RadixDialog.Description className="ui-sr-only" />
         )}
         {children}
         {!hideCloseButton && (

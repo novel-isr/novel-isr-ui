@@ -56,11 +56,15 @@
 }
 
 .ui-checkbox-icon {
-  width: 70%;
-  height: 70%;
+  /* 显式 width/height 100% + 强制 stroke 白色 —— 之前 70% 在 16px 容器里只有
+   * 11px 视觉，加上 lucide 默认 stroke-width=2 在小尺寸下几乎看不到。改成 100%
+   * 配 stroke-width=3.5 让对勾在 16x16 里可读；color 写死 #fff 保证不被外部
+   * 父级 color 干扰（前端有时 color: inherit 链不到 ui-checkbox-control）。 */
+  width: 100%;
+  height: 100%;
   fill: none;
-  stroke: currentColor;
-  stroke-width: 3;
+  stroke: #ffffff;
+  stroke-width: 3.5;
 }
 
 // invalid
