@@ -1,17 +1,31 @@
 /**
  * Switch —— 开关 toggle，基于 Radix Switch primitives。
  *
- * 单标签（紧凑）：
- *   <Switch checked={dark} onCheckedChange={setDark}>深色模式</Switch>
+ * 三种使用形态：
  *
- * 双标签 / segmented（左右各一标签，整条都能点）：
- *   <Switch
- *     checked={enabled}
- *     onCheckedChange={setEnabled}
- *     offLabel="Business BFF"
- *     onLabel="Mock fixture"
- *   />
- *   ─ 高亮的是当前 active 一侧；点 label 等于 set 该侧。
+ *   1) 经典滑块（默认 variant="slider"）
+ *      <Switch checked={dark} onCheckedChange={setDark} />
+ *      <Switch checked={dark} onCheckedChange={setDark}>深色模式</Switch>
+ *
+ *   2) 滑块 + 双标签（variant="slider" 同时给 offLabel/onLabel）
+ *      <Switch
+ *        variant="slider"
+ *        checked={enabled}
+ *        onCheckedChange={setEnabled}
+ *        offLabel="Business BFF"
+ *        onLabel="Mock fixture"
+ *      />
+ *      ─ 滑块在中间，左右两个 label 都可点击直接 set 状态。
+ *
+ *   3) Segmented pill（variant="segmented"，必须给 offLabel/onLabel）
+ *      <Switch
+ *        variant="segmented"
+ *        checked={enabled}
+ *        onCheckedChange={setEnabled}
+ *        offLabel="Business BFF"
+ *        onLabel="Mock fixture"
+ *      />
+ *      ─ iOS 风格分段控件，激活半 brand 底色，无滑块。
  */
 
 import * as RadixSwitch from '@radix-ui/react-switch';
@@ -20,35 +34,47 @@ import { cn } from '../../utils/cn';
 import { useFormControlContext } from '../FormControl/FormControl';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
+export type SwitchVariant = 'slider' | 'segmented';
 
 export interface SwitchProps extends Omit<RadixSwitch.SwitchProps, 'asChild' | 'children'> {
   size?: SwitchSize;
-  /** 单标签：右侧紧凑文本，会随 checked 切换颜色 */
+  /**
+   * slider（默认）：经典滑块，可单独存在或与 offLabel/onLabel 组合用作「左标签 + 滑块 + 右标签」。
+   * segmented：iOS 风格分段控件，没有滑块，offLabel/onLabel 必填。
+   */
+  variant?: SwitchVariant;
+  /** 单标签紧凑文本（右侧）。仅对 variant="slider" 有意义；和 offLabel/onLabel 互斥（双标签优先） */
   children?: ReactNode;
-  /** 双标签的左侧（off 状态）。提供 offLabel + onLabel 时启用 segmented 模式 */
+  /** 左侧标签（off 状态）。配合 onLabel 启用双标签 */
   offLabel?: ReactNode;
-  /** 双标签的右侧（on 状态）。和 offLabel 配套用 */
+  /** 右侧标签（on 状态）。配合 offLabel 启用双标签 */
   onLabel?: ReactNode;
 }
 
 export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch(props, ref) {
-  const { size = 'md', className, children, offLabel, onLabel, ...rest } = props;
+  const {
+    size = 'md',
+    variant = 'slider',
+    className,
+    children,
+    offLabel,
+    onLabel,
+    ...rest
+  } = props;
   const fc = useFormControlContext();
   const checked = rest.checked ?? rest.defaultChecked;
   const isDisabled = rest.disabled ?? fc?.isDisabled;
-  const segmented = offLabel !== undefined && onLabel !== undefined;
+  const hasBilateralLabels = offLabel !== undefined && onLabel !== undefined;
 
-  /* segmented 模式直接渲染分段 pill —— 两半各一个 button，激活半有 brand 底色。
-   * 不再渲染 Radix Switch 的 slider thumb：当左右都是显式文本时，中间的滑块
-   * 既不传额外信息又容易跟「Switch 看上去有方向感但点了不动」的体验割裂。
-   * iOS / macOS 的 SegmentedControl 也是这个范式。
-   *
-   * 单标签（非 segmented）继续走 Radix Switch + 滑块的原版形态。
-   */
-  if (segmented) {
+  // segmented 必须双标签；缺其一时降级成 slider 经典模式（避免渲染空按钮）
+  const effectiveVariant: SwitchVariant =
+    variant === 'segmented' && hasBilateralLabels ? 'segmented' : 'slider';
+
+  if (effectiveVariant === 'segmented') {
+    /* iOS / macOS SegmentedControl 风格：单一视觉 source of truth，激活半带 brand 底。
+     * 没有滑块意味着不会出现「滑块和高亮 label 状态打架」。 */
     return (
       <span
-        ref={ref as React.Ref<HTMLSpanElement> as never}
         className={cn(
           'ui-switch-segmented',
           `ui-switch-segmented-size-${size}`,
@@ -86,16 +112,33 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
     );
   }
 
-  /* 单标签经典 Switch。<span> 而非 <label> 是因为 Radix Switch 渲染 <button>
-   * 而 HTML <label> 对 <button> 没有 implicit click 转发；且被 Tooltip 用
-   * asChild 包起来时 Radix 会把 pointerdown 挂到 <label>，部分浏览器把
-   * click 截在 label 阶段，让人误以为「点不动」。 */
+  /* slider 变体。<span> 而非 <label>：Radix Switch 渲染 <button>，HTML <label>
+   * 对 <button> 没有 implicit click 转发；且被 Tooltip 用 asChild 包起来时
+   * Radix 会把 pointerdown 挂到外层 <label>，部分浏览器把 click 截在 label 阶段。 */
   return (
     <span
-      className={cn('ui-switch-root', `ui-switch-size-${size}`, className)}
+      className={cn(
+        'ui-switch-root',
+        `ui-switch-size-${size}`,
+        hasBilateralLabels && 'ui-switch-bilateral',
+        className,
+      )}
       data-disabled={isDisabled || undefined}
       data-state={checked ? 'checked' : 'unchecked'}
     >
+      {hasBilateralLabels && (
+        <button
+          type="button"
+          className={cn(
+            'ui-switch-side ui-switch-side-off',
+            !checked && 'ui-switch-side-active',
+          )}
+          disabled={isDisabled}
+          onClick={() => rest.onCheckedChange?.(false)}
+        >
+          {offLabel}
+        </button>
+      )}
       <RadixSwitch.Root
         ref={ref}
         className="ui-switch-control"
@@ -104,7 +147,22 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
       >
         <RadixSwitch.Thumb className="ui-switch-thumb" />
       </RadixSwitch.Root>
-      {children && <span className="ui-switch-text">{children}</span>}
+      {hasBilateralLabels && (
+        <button
+          type="button"
+          className={cn(
+            'ui-switch-side ui-switch-side-on',
+            checked && 'ui-switch-side-active',
+          )}
+          disabled={isDisabled}
+          onClick={() => rest.onCheckedChange?.(true)}
+        >
+          {onLabel}
+        </button>
+      )}
+      {children && !hasBilateralLabels && (
+        <span className="ui-switch-text">{children}</span>
+      )}
     </span>
   );
 });

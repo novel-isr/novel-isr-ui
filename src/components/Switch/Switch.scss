@@ -51,6 +51,36 @@
   color: var(--ui-color-brand-500);
 }
 
+/* slider 变体的双标签：[off-label] [slider] [on-label] —— 滑块在中间，
+ * 左右 label 都可点。激活那侧文字 brand 高亮，提升状态可读性。 */
+.ui-switch-bilateral {
+  gap: var(--ui-space-3);
+}
+
+.ui-switch-side {
+  background: transparent;
+  border: none;
+  padding: 2px var(--ui-space-1);
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-fg-muted);
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition-fast);
+  white-space: nowrap;
+  &:hover:not(:disabled) { color: var(--ui-color-fg); }
+  &:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline-offset: 1px;
+  }
+  &:disabled { cursor: not-allowed; }
+}
+
+.ui-switch-side-active {
+  color: var(--ui-color-brand-500);
+  font-weight: var(--ui-font-weight-semibold);
+}
+
 /* segmented 模式：iOS / macOS 风格 segmented control —— 两个 button 共享
  * 一个 pill 容器，激活那半有 brand 底色 + 白字。整体扁平、无歧义。 */
 .ui-switch-segmented {
