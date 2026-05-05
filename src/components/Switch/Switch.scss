@@ -50,13 +50,21 @@
   &:disabled { cursor: not-allowed; }
 }
 
+/* 关键：thumb 用 absolute + left/top 锚定，不再依赖 inline-flow + transform。
+ * 之前用 transform: translateX(2px / 18px) 看似 OK，但 thumb 是 <span> 走默认 flow，
+ * 在不同 button 内部布局（line-height / 字体高度 / vertical-align）下纵向位置漂移，
+ * 横向也可能因为 baseline 多出 1-2px 误差，导致 checked 时滑块视觉「没移过去」。
+ * absolute 定位让 thumb 完全脱离 flow，仅靠 left/top 算位置，跨浏览器一致。 */
 .ui-switch-thumb {
-  display: block;
+  position: absolute;
+  top: 50%;
+  left: 2px;
   background-color: #ffffff;
   border-radius: var(--ui-radius-full);
   box-shadow: var(--ui-shadow-sm), 0 1px 3px rgba(15, 23, 42, 0.18);
-  transition: transform var(--ui-transition-base), box-shadow var(--ui-transition-base);
-  will-change: transform;
+  transition: left var(--ui-transition-base), box-shadow var(--ui-transition-base);
+  will-change: left;
+  transform: translateY(-50%);
 }
 
 .ui-switch-root[data-state='checked'] .ui-switch-text {
@@ -172,18 +180,19 @@
     0 0 0 3px color-mix(in srgb, var(--ui-switch-active-color, var(--ui-color-brand-500)) 28%, transparent);
 }
 
-// sizes
+/* 尺寸：track 高度 = thumb 高度 + 4（上下各 2px gap）。
+ * checked 时 thumb 的 left = track 宽度 - thumb 宽度 - 2（右侧 2px gap）。 */
 .ui-switch-size-sm .ui-switch-control { width: 28px; height: 16px; }
-.ui-switch-size-sm .ui-switch-thumb { width: 12px; height: 12px; transform: translateX(2px); }
-.ui-switch-size-sm .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(14px); }
+.ui-switch-size-sm .ui-switch-thumb { width: 12px; height: 12px; }
+.ui-switch-size-sm .ui-switch-control[data-state='checked'] .ui-switch-thumb { left: 14px; }
 
 .ui-switch-size-md .ui-switch-control { width: 36px; height: 20px; }
-.ui-switch-size-md .ui-switch-thumb { width: 16px; height: 16px; transform: translateX(2px); }
-.ui-switch-size-md .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(18px); }
+.ui-switch-size-md .ui-switch-thumb { width: 16px; height: 16px; }
+.ui-switch-size-md .ui-switch-control[data-state='checked'] .ui-switch-thumb { left: 18px; }
 
 .ui-switch-size-lg .ui-switch-control { width: 44px; height: 24px; }
-.ui-switch-size-lg .ui-switch-thumb { width: 20px; height: 20px; transform: translateX(2px); }
-.ui-switch-size-lg .ui-switch-control[data-state='checked'] .ui-switch-thumb { transform: translateX(22px); }
+.ui-switch-size-lg .ui-switch-thumb { width: 20px; height: 20px; }
+.ui-switch-size-lg .ui-switch-control[data-state='checked'] .ui-switch-thumb { left: 22px; }
 
 .ui-switch-size-sm { font-size: var(--ui-font-size-sm); }
 .ui-switch-size-md { font-size: var(--ui-font-size-md); }
