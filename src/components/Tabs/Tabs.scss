@@ -12,6 +12,7 @@
   display: flex;
   flex-shrink: 0;
   position: relative;
+  gap: var(--ui-space-1);
 }
 .ui-tabs-orientation-vertical .ui-tabs-list {
   flex-direction: column;
@@ -28,8 +29,14 @@
   padding: var(--ui-space-3) var(--ui-space-4);
   cursor: pointer;
   position: relative;
-  transition: color var(--ui-transition-fast);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  transition:
+    color var(--ui-transition-fast),
+    background-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast);
 
   &:hover { color: var(--ui-color-fg); }
   &:focus-visible {
@@ -40,16 +47,25 @@
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
-// variant: line（默认）—— 底部高亮线
+// variant: line（默认）—— 底部高亮线 + 选中态加柔和背景与 inset 立体感
 .ui-tabs-variant-line .ui-tabs-list {
   border-bottom: 1px solid var(--ui-color-border);
 }
 .ui-tabs-variant-line .ui-tabs-trigger {
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   margin-bottom: -1px;
+  border-radius: var(--ui-radius-sm) var(--ui-radius-sm) 0 0;
+}
+.ui-tabs-variant-line .ui-tabs-trigger:hover:not([data-state='active']) {
+  background-color: var(--ui-color-bg-muted);
 }
 .ui-tabs-variant-line .ui-tabs-trigger[data-state='active'] {
   border-bottom-color: var(--ui-color-brand-500);
+  background-color: var(--ui-color-bg);
+  box-shadow:
+    inset 0 1px 0 var(--ui-color-border),
+    inset 1px 0 0 var(--ui-color-border),
+    inset -1px 0 0 var(--ui-color-border);
 }
 
 // vertical line variant
