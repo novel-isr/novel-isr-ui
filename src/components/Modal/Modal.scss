@@ -5,7 +5,9 @@
   z-index: var(--ui-z-overlay);
   animation: ui-modal-fadein var(--ui-transition-base);
 
-  &[data-state='closed'] { animation: ui-modal-fadeout var(--ui-transition-base); }
+  &[data-state="closed"] {
+    animation: ui-modal-fadeout var(--ui-transition-base);
+  }
 }
 
 .ui-modal-content {
@@ -14,34 +16,46 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--ui-color-bg);
-  border-radius: var(--ui-radius-lg);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-xl);
   box-shadow: var(--ui-shadow-xl);
   z-index: var(--ui-z-modal);
-  width: 90vw;
-  max-width: 500px;
-  max-height: 85vh;
+  width: min(calc(100vw - 2rem), 31.25rem);
+  max-height: min(calc(100vh - 2rem), 52rem);
   display: flex;
   flex-direction: column;
   animation: ui-modal-zoomin var(--ui-transition-base);
 
-  &:focus { outline: none; }
-  &[data-state='closed'] { animation: ui-modal-zoomout var(--ui-transition-base); }
+  &:focus {
+    outline: none;
+  }
+  &[data-state="closed"] {
+    animation: ui-modal-zoomout var(--ui-transition-base);
+  }
 }
 
-.ui-modal-size-sm { max-width: 400px; }
-.ui-modal-size-md { max-width: 500px; }
-.ui-modal-size-lg { max-width: 700px; }
-.ui-modal-size-xl { max-width: 900px; }
+.ui-modal-size-sm {
+  width: min(calc(100vw - 2rem), 25rem);
+}
+.ui-modal-size-md {
+  width: min(calc(100vw - 2rem), 31.25rem);
+}
+.ui-modal-size-lg {
+  width: min(calc(100vw - 2rem), 43.75rem);
+}
+.ui-modal-size-xl {
+  width: min(calc(100vw - 2rem), 56.25rem);
+}
 .ui-modal-size-full {
   max-width: none;
-  width: 95vw;
-  height: 95vh;
-  max-height: 95vh;
+  width: calc(100vw - 2rem);
+  height: calc(100vh - 2rem);
+  max-height: calc(100vh - 2rem);
 }
 
 .ui-modal-header {
   order: 0;
-  padding: var(--ui-space-5) var(--ui-space-6) var(--ui-space-3);
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 3vw, 1.5rem) var(--ui-space-3);
   font-size: var(--ui-font-size-xl);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-fg);
@@ -51,7 +65,7 @@
 .ui-modal-description {
   order: 1;
   margin: 0;
-  padding: 0 var(--ui-space-6) var(--ui-space-2);
+  padding: 0 clamp(1rem, 3vw, 1.5rem) var(--ui-space-2);
   color: var(--ui-color-fg-muted);
   font-size: var(--ui-font-size-sm);
   line-height: var(--ui-line-height-base);
@@ -59,7 +73,7 @@
 
 .ui-modal-body {
   order: 2;
-  padding: var(--ui-space-3) var(--ui-space-6);
+  padding: var(--ui-space-3) clamp(1rem, 3vw, 1.5rem);
   flex: 1;
   overflow-y: auto;
   color: var(--ui-color-fg);
@@ -68,20 +82,21 @@
 
 .ui-modal-footer {
   order: 3;
-  padding: var(--ui-space-4) var(--ui-space-6) var(--ui-space-5);
+  padding: var(--ui-space-4) clamp(1rem, 3vw, 1.5rem) clamp(1rem, 3vw, 1.5rem);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--ui-space-2);
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .ui-modal-close {
   position: absolute;
   top: var(--ui-space-3);
   right: var(--ui-space-3);
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -92,7 +107,9 @@
   cursor: pointer;
   transition: background-color var(--ui-transition-fast);
 }
-.ui-modal-close:hover { background-color: var(--ui-color-bg-muted); }
+.ui-modal-close:hover {
+  background-color: var(--ui-color-bg-muted);
+}
 
 .ui-visually-hidden {
   position: absolute !important;
@@ -106,13 +123,39 @@
   border: 0 !important;
 }
 
-@keyframes ui-modal-fadein { from { opacity: 0; } to { opacity: 1; } }
-@keyframes ui-modal-fadeout { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ui-modal-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ui-modal-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 @keyframes ui-modal-zoomin {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 @keyframes ui-modal-zoomout {
-  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
 }
