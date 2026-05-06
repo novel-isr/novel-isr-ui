@@ -10,6 +10,7 @@
 
 .ui-card {
   display: block;
+  min-width: 0;
   border-radius: var(--ui-radius-lg);
   background-color: var(--ui-color-bg);
   color: var(--ui-color-fg);
@@ -89,6 +90,16 @@
 }
 .ui-card-padding-lg {
   padding: var(--ui-space-8);
+}
+
+@media (max-width: 48rem) {
+  .ui-card-padding-md {
+    padding: var(--ui-space-4);
+  }
+
+  .ui-card-padding-lg {
+    padding: var(--ui-space-5);
+  }
 }
 
 /* 子组件：内部段落使用容器自己的 padding，除非显式覆盖 */

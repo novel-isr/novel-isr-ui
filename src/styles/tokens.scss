@@ -6,7 +6,7 @@
  *
  * 命名规则：
  *   --ui-color-<role>-<scale>     语义色 50-900 + 几个 alias
- *   --ui-space-<n>                4px 步进，0..24（即 0px..96px）
+ *   --ui-space-<n>                rem 步进，0..24（即 0rem..6rem）
  *   --ui-radius-<size>            sm/md/lg/full
  *   --ui-shadow-<size>            sm/md/lg/xl
  *   --ui-font-size-<size>         xs..6xl
@@ -16,7 +16,7 @@
  *   --ui-transition-<speed>       fast/base/slow
  */
 
-@use 'sass:map';
+@use "sass:map";
 
 // ─── 调色板（不直接给业务用，只给 :root 变量做底色）─────────────────────────
 // 选色逻辑：
@@ -82,51 +82,52 @@ $info: (
 
 // ─── 公共 token（不区分主题）──────────────────────────────────────────────
 :root {
-  // 间距：4px 步进
+  // 间距：以 rem 表达，跟随用户字号和移动端根字号缩放
   --ui-space-0: 0;
-  --ui-space-0-5: 2px;
-  --ui-space-1: 4px;
-  --ui-space-2: 8px;
-  --ui-space-3: 12px;
-  --ui-space-4: 16px;
-  --ui-space-5: 20px;
-  --ui-space-6: 24px;
-  --ui-space-7: 28px;
-  --ui-space-8: 32px;
-  --ui-space-10: 40px;
-  --ui-space-12: 48px;
-  --ui-space-14: 56px;
-  --ui-space-16: 64px;
-  --ui-space-20: 80px;
-  --ui-space-24: 96px;
+  --ui-space-0-5: 0.125rem;
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 0.75rem;
+  --ui-space-4: 1rem;
+  --ui-space-5: 1.25rem;
+  --ui-space-6: 1.5rem;
+  --ui-space-7: 1.75rem;
+  --ui-space-8: 2rem;
+  --ui-space-10: 2.5rem;
+  --ui-space-12: 3rem;
+  --ui-space-14: 3.5rem;
+  --ui-space-16: 4rem;
+  --ui-space-20: 5rem;
+  --ui-space-24: 6rem;
 
   // 圆角
   --ui-radius-none: 0;
-  --ui-radius-sm: 4px;
-  --ui-radius-md: 6px;
-  --ui-radius-lg: 8px;
-  --ui-radius-xl: 12px;
-  --ui-radius-2xl: 16px;
+  --ui-radius-sm: 0.25rem;
+  --ui-radius-md: 0.375rem;
+  --ui-radius-lg: 0.5rem;
+  --ui-radius-xl: 0.75rem;
+  --ui-radius-2xl: 1rem;
   --ui-radius-full: 9999px;
 
   // 字体族
   --ui-font-family-sans:
-    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN', 'Source Han Sans CN', 'PingFang SC',
-    'Microsoft YaHei', sans-serif;
+    "Inter", system-ui, -apple-system, "Segoe UI", "思源黑体 CN",
+    "Source Han Sans CN", "PingFang SC", "Microsoft YaHei", sans-serif;
   --ui-font-family-mono:
-    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Courier New', monospace;
+    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Courier New",
+    monospace;
 
   // 字号
-  --ui-font-size-xs: 12px;
-  --ui-font-size-sm: 13px;
-  --ui-font-size-md: 14px; // body 默认
-  --ui-font-size-lg: 16px;
-  --ui-font-size-xl: 18px;
-  --ui-font-size-2xl: 22px;
-  --ui-font-size-3xl: 28px;
-  --ui-font-size-4xl: 36px;
-  --ui-font-size-5xl: 48px;
-  --ui-font-size-6xl: 60px;
+  --ui-font-size-xs: 0.75rem;
+  --ui-font-size-sm: 0.8125rem;
+  --ui-font-size-md: 0.875rem; // body 默认
+  --ui-font-size-lg: 1rem;
+  --ui-font-size-xl: 1.125rem;
+  --ui-font-size-2xl: 1.375rem;
+  --ui-font-size-3xl: 1.75rem;
+  --ui-font-size-4xl: 2.25rem;
+  --ui-font-size-5xl: 3rem;
+  --ui-font-size-6xl: 3.75rem;
 
   // 字重
   --ui-font-weight-regular: 400;
@@ -155,13 +156,13 @@ $info: (
   --ui-transition-slow: 360ms ease-out;
 
   // focus ring（无障碍：键盘聚焦必须有可见 ring）
-  --ui-focus-ring-width: 2px;
-  --ui-focus-ring-offset: 2px;
+  --ui-focus-ring-width: 0.125rem;
+  --ui-focus-ring-offset: 0.125rem;
 }
 
 // ─── Light 主题 ──────────────────────────────────────────────────────────
 :root,
-[data-theme='light'] {
+[data-theme="light"] {
   // brand scale
   --ui-color-brand-50: #{map.get($brand, 50)};
   --ui-color-brand-100: #{map.get($brand, 100)};
@@ -223,13 +224,18 @@ $info: (
 
   // 阴影 —— light 用半透明黑
   --ui-shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md:
+    0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg:
+    0 10px 15px -3px rgba(15, 23, 42, 0.1),
+    0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --ui-shadow-xl:
+    0 20px 25px -5px rgba(15, 23, 42, 0.12),
+    0 8px 10px -6px rgba(15, 23, 42, 0.06);
 }
 
 // ─── Dark 主题 ───────────────────────────────────────────────────────────
-[data-theme='dark'] {
+[data-theme="dark"] {
   // brand 在 dark 下整体提亮一档（视觉补偿），50/100 用作暗色低对比背景。
   --ui-color-brand-50: #071a2f;
   --ui-color-brand-100: #0b2a4a;
@@ -291,9 +297,12 @@ $info: (
 
   // 阴影 —— dark 用更深的黑（不然 elevation 看不出）
   --ui-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.45);
+  --ui-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --ui-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --ui-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.45);
 }
 
 // ─── 全局 reset（最小集，不抢业务）──────────────────────────────────────

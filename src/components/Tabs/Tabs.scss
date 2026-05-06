@@ -13,6 +13,13 @@
   flex-shrink: 0;
   position: relative;
   gap: var(--ui-space-1);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 .ui-tabs-orientation-vertical .ui-tabs-list {
   flex-direction: column;
@@ -38,13 +45,20 @@
     background-color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast);
 
-  &:hover { color: var(--ui-color-fg); }
+  &:hover {
+    color: var(--ui-color-fg);
+  }
   &:focus-visible {
     outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
     outline-offset: -2px;
   }
-  &[data-state='active'] { color: var(--ui-color-brand-500); }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &[data-state="active"] {
+    color: var(--ui-color-brand-500);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 // variant: line（默认）—— 底部高亮线 + 选中态加柔和背景与 inset 立体感
@@ -56,10 +70,10 @@
   margin-bottom: -1px;
   border-radius: var(--ui-radius-sm) var(--ui-radius-sm) 0 0;
 }
-.ui-tabs-variant-line .ui-tabs-trigger:hover:not([data-state='active']) {
+.ui-tabs-variant-line .ui-tabs-trigger:hover:not([data-state="active"]) {
   background-color: var(--ui-color-bg-muted);
 }
-.ui-tabs-variant-line .ui-tabs-trigger[data-state='active'] {
+.ui-tabs-variant-line .ui-tabs-trigger[data-state="active"] {
   border-bottom-color: var(--ui-color-brand-500);
   background-color: var(--ui-color-bg);
   box-shadow:
@@ -80,7 +94,8 @@
   margin-right: -1px;
   text-align: left;
 }
-.ui-tabs-variant-line.ui-tabs-orientation-vertical .ui-tabs-trigger[data-state='active'] {
+.ui-tabs-variant-line.ui-tabs-orientation-vertical
+  .ui-tabs-trigger[data-state="active"] {
   border-right-color: var(--ui-color-brand-500);
 }
 
@@ -89,7 +104,7 @@
   border: 1px solid transparent;
   border-radius: var(--ui-radius-md) var(--ui-radius-md) 0 0;
 }
-.ui-tabs-variant-enclosed .ui-tabs-trigger[data-state='active'] {
+.ui-tabs-variant-enclosed .ui-tabs-trigger[data-state="active"] {
   border-color: var(--ui-color-border);
   border-bottom-color: var(--ui-color-bg);
   background-color: var(--ui-color-bg);
@@ -108,7 +123,7 @@
 .ui-tabs-variant-soft .ui-tabs-trigger {
   border-radius: var(--ui-radius-sm);
 }
-.ui-tabs-variant-soft .ui-tabs-trigger[data-state='active'] {
+.ui-tabs-variant-soft .ui-tabs-trigger[data-state="active"] {
   background-color: var(--ui-color-bg);
   color: var(--ui-color-fg);
   box-shadow: var(--ui-shadow-sm);
