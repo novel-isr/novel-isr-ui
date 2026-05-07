@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--ui-space-2);
+  max-width: 100%;
   min-width: 0;
   font-family: var(--ui-font-family-sans);
   font-weight: var(--ui-font-weight-medium);
@@ -48,6 +49,19 @@
     cursor: not-allowed;
     pointer-events: none;
   }
+}
+
+.ui-button-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.ui-button-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ui-button-size-xs {

@@ -22,7 +22,13 @@ export type ButtonColorScheme =
   | 'success'
   | 'warning'
   | 'gray';
-export type ButtonIntent = 'primary' | 'secondary' | 'confirm' | 'danger' | 'warning' | 'neutral';
+export type ButtonIntent =
+  | 'primary'
+  | 'secondary'
+  | 'confirm'
+  | 'danger'
+  | 'warning'
+  | 'neutral';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -37,62 +43,89 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(props, ref) {
-  const {
-    variant = 'solid',
-    size = 'md',
-    intent,
-    colorScheme,
-    isLoading = false,
-    loadingText,
-    leftIcon,
-    rightIcon,
-    fullWidth = false,
-    disabled,
-    className,
-    children,
-    type = 'button',
-    ...rest
-  } = props;
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(props, ref) {
+    const {
+      variant = 'solid',
+      size = 'md',
+      intent,
+      colorScheme,
+      isLoading = false,
+      loadingText,
+      leftIcon,
+      rightIcon,
+      fullWidth = false,
+      disabled,
+      className,
+      children,
+      type = 'button',
+      ...rest
+    } = props;
 
-  const spinnerSize = size === 'xs' || size === 'sm' ? 'xs' : 'sm';
-  const resolvedColorScheme = colorScheme ?? colorSchemeFromIntent(intent);
+    const spinnerSize = size === 'xs' || size === 'sm' ? 'xs' : 'sm';
+    const resolvedColorScheme = colorScheme ?? colorSchemeFromIntent(intent);
 
-  return (
-    <button
-      ref={ref}
-      type={type}
-      disabled={disabled || isLoading}
-      className={cn(
-        'ui-button',
-        `ui-button-variant-${variant}`,
-        `ui-button-size-${size}`,
-        `ui-button-color-${resolvedColorScheme}`,
-        intent && `ui-button-intent-${intent}`,
-        fullWidth && 'ui-button-fullwidth',
-        isLoading && 'ui-button-loading',
-        className
-      )}
-      data-loading={isLoading || undefined}
-      {...rest}
-    >
-      {isLoading && (
-        <span className="ui-button-spinner">
-          <Spinner size={spinnerSize} colorScheme="current" />
-        </span>
-      )}
-      {isLoading && loadingText ? (
-        <span>{loadingText}</span>
-      ) : (
-        <>
-          {leftIcon && <span className={cn(isLoading && 'ui-button-hidden')}>{leftIcon}</span>}
-          <span className={cn(isLoading && !loadingText && 'ui-button-hidden')}>{children}</span>
-          {rightIcon && <span className={cn(isLoading && 'ui-button-hidden')}>{rightIcon}</span>}
-        </>
-      )}
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={disabled || isLoading}
+        className={cn(
+          'ui-button',
+          `ui-button-variant-${variant}`,
+          `ui-button-size-${size}`,
+          `ui-button-color-${resolvedColorScheme}`,
+          intent && `ui-button-intent-${intent}`,
+          fullWidth && 'ui-button-fullwidth',
+          isLoading && 'ui-button-loading',
+          className
+        )}
+        data-loading={isLoading || undefined}
+        {...rest}
+      >
+        {isLoading && (
+          <span className="ui-button-spinner">
+            <Spinner size={spinnerSize} colorScheme="current" />
+          </span>
+        )}
+        {isLoading && loadingText ? (
+          <span>{loadingText}</span>
+        ) : (
+          <>
+            {leftIcon && (
+              <span
+                className={cn(
+                  'ui-button-icon',
+                  isLoading && 'ui-button-hidden'
+                )}
+              >
+                {leftIcon}
+              </span>
+            )}
+            <span
+              className={cn(
+                'ui-button-label',
+                isLoading && !loadingText && 'ui-button-hidden'
+              )}
+            >
+              {children}
+            </span>
+            {rightIcon && (
+              <span
+                className={cn(
+                  'ui-button-icon',
+                  isLoading && 'ui-button-hidden'
+                )}
+              >
+                {rightIcon}
+              </span>
+            )}
+          </>
+        )}
+      </button>
+    );
+  }
+);
 
 function colorSchemeFromIntent(intent?: ButtonIntent): ButtonColorScheme {
   if (intent === 'danger') return 'danger';

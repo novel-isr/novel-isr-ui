@@ -80,7 +80,8 @@ export function CommandDialog(props: CommandDialogProps) {
 
   useEffect(() => {
     if (!shortcut) return;
-    const shortcuts = Array.isArray(shortcut) ? shortcut : [shortcut];
+    const shortcuts = normalizeShortcuts(shortcut);
+    if (shortcuts.length === 0) return;
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if (!shortcuts.some(value => matchesShortcut(event, value))) return;
       event.preventDefault();
@@ -184,10 +185,27 @@ function normalize(value: string): string {
   return value.trim().toLowerCase();
 }
 
-function matchesShortcut(event: globalThis.KeyboardEvent, shortcut: string): boolean {
-  const parts = shortcut.toLowerCase().split('+');
+export function normalizeShortcuts(shortcut: CommandDialogProps['shortcut']): string[] {
+  const values = Array.isArray(shortcut) ? shortcut : [shortcut];
+  return values.filter((value): value is string => typeof value === 'string' && value.trim() !== '');
+}
+
+export function matchesShortcut(
+  event: Pick<
+    globalThis.KeyboardEvent,
+    'key' | 'metaKey' | 'ctrlKey' | 'shiftKey' | 'altKey'
+  >,
+  shortcut: unknown,
+): boolean {
+  if (typeof shortcut !== 'string') return false;
+  const parts = shortcut
+    .trim()
+    .toLowerCase()
+    .split('+')
+    .map(part => part.trim())
+    .filter(Boolean);
   const key = parts.at(-1);
-  if (!key || event.key.toLowerCase() !== key) return false;
+  if (!key || String(event.key ?? '').toLowerCase() !== key) return false;
   const needsMod = parts.includes('mod');
   const needsCtrl = parts.includes('ctrl');
   const needsMeta = parts.includes('meta') || parts.includes('cmd');

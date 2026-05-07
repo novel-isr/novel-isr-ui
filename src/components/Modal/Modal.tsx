@@ -22,7 +22,7 @@
  */
 
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -34,7 +34,8 @@ export const ModalRoot = RadixDialog.Root;
 export const ModalTrigger = RadixDialog.Trigger;
 export const ModalClose = RadixDialog.Close;
 
-export interface ModalContentProps extends Omit<RadixDialog.DialogContentProps, 'asChild'> {
+export interface ModalContentProps
+  extends Omit<RadixDialog.DialogContentProps, 'asChild'> {
   size?: ModalSize;
   /** 不渲染右上角 × 关闭按钮 */
   hideCloseButton?: boolean;
@@ -42,83 +43,87 @@ export interface ModalContentProps extends Omit<RadixDialog.DialogContentProps, 
   description?: ReactNode;
 }
 
-export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(function ModalContent(
-  props,
-  ref
-) {
-  const {
-    size = 'md',
-    hideCloseButton = false,
-    description,
-    className,
-    children,
-    ...rest
-  } = props;
-  /* Radix Dialog.Content 内部 useDialogContext 自动给已注册的 Description 分配
-   * id 并把它写进 Content 的 aria-describedby。我们之前手动覆盖 aria-describedby
-   * 反而把这条链路打断 —— 自定义的 fallback id 跟 Radix Description 实际 id 对不上，
-   * Radix 找不到匹配节点就 warn。
-   * 现在不再手动管 id：caller 没传 description 时渲染一个 visually-hidden 的
-   * <Description>，Radix 自己写 aria-describedby 即可。caller 显式传
-   * aria-describedby（极少见，通常是直接 compound API）则尊重它。 */
-  return (
-    <RadixDialog.Portal>
-      <RadixDialog.Overlay className="ui-modal-overlay" />
-      <RadixDialog.Content
-        ref={ref}
-        className={cn('ui-modal-content', `ui-modal-size-${size}`, className)}
-        {...rest}
-      >
-        {description ? (
-          <RadixDialog.Description className="ui-modal-description">
-            {description}
-          </RadixDialog.Description>
-        ) : (
-          <RadixDialog.Description className="ui-sr-only" />
-        )}
-        {children}
-        {!hideCloseButton && (
-          <RadixDialog.Close className="ui-modal-close" aria-label="关闭">
-            <X size={16} strokeWidth={2} aria-hidden='true' />
-          </RadixDialog.Close>
-        )}
-      </RadixDialog.Content>
-    </RadixDialog.Portal>
-  );
-});
+export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
+  function ModalContent(props, ref) {
+    const {
+      size = 'md',
+      hideCloseButton = false,
+      description,
+      className,
+      children,
+      ...rest
+    } = props;
+    /* Radix Dialog.Content 内部 useDialogContext 自动给已注册的 Description 分配
+     * id 并把它写进 Content 的 aria-describedby。我们之前手动覆盖 aria-describedby
+     * 反而把这条链路打断 —— 自定义的 fallback id 跟 Radix Description 实际 id 对不上，
+     * Radix 找不到匹配节点就 warn。
+     * 现在不再手动管 id：caller 没传 description 时渲染一个 visually-hidden 的
+     * <Description>，Radix 自己写 aria-describedby 即可。caller 显式传
+     * aria-describedby（极少见，通常是直接 compound API）则尊重它。 */
+    return (
+      <RadixDialog.Portal>
+        <RadixDialog.Overlay className="ui-modal-overlay" />
+        <RadixDialog.Content
+          ref={ref}
+          className={cn(
+            'ui-modal-content',
+            `ui-modal-size-${size}`,
+            className
+          )}
+          {...rest}
+        >
+          {description ? (
+            <RadixDialog.Description className="ui-modal-description">
+              {description}
+            </RadixDialog.Description>
+          ) : (
+            <RadixDialog.Description className="ui-visually-hidden" />
+          )}
+          {children}
+          {!hideCloseButton && (
+            <RadixDialog.Close className="ui-modal-close" aria-label="关闭">
+              <X size={16} strokeWidth={2} aria-hidden="true" />
+            </RadixDialog.Close>
+          )}
+        </RadixDialog.Content>
+      </RadixDialog.Portal>
+    );
+  }
+);
 
 export interface ModalHeaderProps extends HTMLAttributes<HTMLDivElement> {}
-export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(function ModalHeader(
-  props,
-  ref
-) {
-  const { className, children, ...rest } = props;
-  return (
-    <RadixDialog.Title asChild>
-      <div ref={ref} className={cn('ui-modal-header', className)} {...rest}>
-        {children}
-      </div>
-    </RadixDialog.Title>
-  );
-});
+export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
+  function ModalHeader(props, ref) {
+    const { className, children, ...rest } = props;
+    return (
+      <RadixDialog.Title asChild>
+        <div ref={ref} className={cn('ui-modal-header', className)} {...rest}>
+          {children}
+        </div>
+      </RadixDialog.Title>
+    );
+  }
+);
 
 export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {}
-export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(function ModalBody(
-  props,
-  ref
-) {
-  const { className, ...rest } = props;
-  return <div ref={ref} className={cn('ui-modal-body', className)} {...rest} />;
-});
+export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
+  function ModalBody(props, ref) {
+    const { className, ...rest } = props;
+    return (
+      <div ref={ref} className={cn('ui-modal-body', className)} {...rest} />
+    );
+  }
+);
 
 export interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {}
-export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(function ModalFooter(
-  props,
-  ref
-) {
-  const { className, ...rest } = props;
-  return <div ref={ref} className={cn('ui-modal-footer', className)} {...rest} />;
-});
+export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
+  function ModalFooter(props, ref) {
+    const { className, ...rest } = props;
+    return (
+      <div ref={ref} className={cn('ui-modal-footer', className)} {...rest} />
+    );
+  }
+);
 
 // ─── 简易 API（推荐：覆盖 80% 场景）────────────────────────────────────────
 
@@ -133,10 +138,15 @@ export interface ModalProps {
 }
 
 export function Modal(props: ModalProps) {
-  const { isOpen, onClose, title, description, size, hideCloseButton, children } = props;
+  const { isOpen, onClose, title, description, size, hideCloseButton, children } =
+    props;
   return (
-    <ModalRoot open={isOpen} onOpenChange={open => !open && onClose()}>
-      <ModalContent size={size} hideCloseButton={hideCloseButton} description={description}>
+    <ModalRoot open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <ModalContent
+        size={size}
+        hideCloseButton={hideCloseButton}
+        description={description}
+      >
         {title && <ModalHeader>{title}</ModalHeader>}
         {children}
       </ModalContent>
