@@ -15,7 +15,11 @@
 
 .ui-input-root {
   --ui-input-border: var(--ui-color-border);
-  --ui-input-focus-ring: rgba(22, 119, 255, 0.18);
+  /* focus halo 收紧：从 4px 0.18 alpha 改成 3px 0.14 alpha，
+   * 跟 Stripe (3px@0.4) / Linear (2px) / Vercel (2px) 现代 input 看齐；
+   * 4px 的圈在暗模式下会显得过亮，特别是密码输入这种聚焦时间长的场景 */
+  --ui-input-focus-ring: rgba(22, 119, 255, 0.14);
+  --ui-input-focus-ring-width: 3px;
 
   position: relative;
   display: inline-flex;
@@ -39,13 +43,14 @@
     --ui-input-border: var(--ui-color-brand-500);
     box-shadow:
       inset 0 0 0 1px var(--ui-input-border),
-      0 0 0 4px var(--ui-input-focus-ring);
+      0 0 0 var(--ui-input-focus-ring-width) var(--ui-input-focus-ring);
   }
 }
 
 [data-theme="dark"] .ui-input-root {
   --ui-input-border: var(--ui-color-border-strong);
-  --ui-input-focus-ring: rgba(64, 169, 255, 0.22);
+  /* dark 模式下蓝光在深色背景上更显眼，alpha 再降一档 */
+  --ui-input-focus-ring: rgba(64, 169, 255, 0.16);
 
   background-color: var(--ui-color-bg-subtle);
 
@@ -105,7 +110,7 @@
     --ui-input-border: var(--ui-color-danger-500);
     box-shadow:
       inset 0 0 0 1px var(--ui-input-border),
-      0 0 0 4px var(--ui-color-danger-50);
+      0 0 0 var(--ui-input-focus-ring-width) var(--ui-color-danger-50);
   }
 }
 
