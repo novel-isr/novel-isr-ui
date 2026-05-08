@@ -1,7 +1,20 @@
+/**
+ * Input 边界策略：所有"线"都走 box-shadow（inset 1px 当 border + 外层柔光当 focus halo），
+ * 而不是 `border` 属性。
+ *
+ * 为什么不用 border:
+ *   `border: 1px solid` 的 1px 走的是 CSS 边框光栅化路径，跟 box-shadow 是两条
+ *   不同的渲染管线。两者在圆角处的子像素插值会错位，1x DPR 下尤其明显——表现是
+ *   4 个圆角处出现 1px 切口 / 锯齿。Stripe / Linear / Vercel / GitHub 现代输入
+ *   全部统一到「box-shadow 当边框」这条路：所有线由同一渲染路径产出，圆角必对齐。
+ *
+ * 也不再用 `inset` 高光（之前那条 `0 1px 0 ... inset`）：
+ *   它在圆角顶部会被 border-radius 截断，留下可见的 1px 短线段，正是用户截图里的
+ *   "切口"。modern input 不靠这种 fake bevel 提质感，靠 focus halo 就够。
+ */
+
 .ui-input-root {
-  /* focus 用 4px 柔光（半透明无锐边），不是 2px 硬色环。
-   * 硬环跟 input 内边框的曲率在 1x DPR 下不完全重合，4 个角会出现「分段」
-   * 视觉锯齿；柔光没有锐边，对齐错位看不出。 */
+  --ui-input-border: var(--ui-color-border);
   --ui-input-focus-ring: rgba(22, 119, 255, 0.18);
 
   position: relative;
@@ -9,42 +22,36 @@
   align-items: center;
   width: 100%;
   background-color: var(--ui-color-bg);
-  border: 1px solid var(--ui-color-border);
-  /* radius-md → radius-lg：8px 比 6px 更现代、不那么紧促；同时让圆角更显眼，
-   * focus ring 跟内边框的对齐误差被「真圆角」压下去，不再像角上有切口。 */
+  /* 关键：用透明 1px border 占住盒模型的 1px 边距（保证内容区跟原版一致），
+   * 真正可见的"边框"由 box-shadow 画。 */
+  border: 1px solid transparent;
   border-radius: var(--ui-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--ui-input-border);
   transition:
-    border-color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast),
     background-color var(--ui-transition-fast);
 
   &:hover:not(.ui-input-disabled) {
-    border-color: var(--ui-color-brand-500);
+    --ui-input-border: var(--ui-color-brand-500);
   }
 
   &:focus-within {
-    border-color: var(--ui-color-brand-500);
+    --ui-input-border: var(--ui-color-brand-500);
     box-shadow:
-      0 0 0 4px var(--ui-input-focus-ring),
-      0 1px 0 rgba(15, 23, 42, 0.04) inset;
+      inset 0 0 0 1px var(--ui-input-border),
+      0 0 0 4px var(--ui-input-focus-ring);
   }
 }
 
 [data-theme="dark"] .ui-input-root {
+  --ui-input-border: var(--ui-color-border-strong);
   --ui-input-focus-ring: rgba(64, 169, 255, 0.22);
 
   background-color: var(--ui-color-bg-subtle);
-  border-color: var(--ui-color-border-strong);
 
   &:hover:not(.ui-input-disabled) {
-    border-color: var(--ui-color-brand-500);
+    --ui-input-border: var(--ui-color-brand-500);
     background-color: var(--ui-color-bg-muted);
-  }
-
-  &:focus-within {
-    box-shadow:
-      0 0 0 4px var(--ui-input-focus-ring),
-      0 1px 0 rgba(255, 255, 255, 0.04) inset;
   }
 }
 
@@ -68,34 +75,37 @@
   /* base 已是 outline */
 }
 .ui-input-variant-filled {
+  /* 填色款无可见边框，把 inset shadow 设成透明即可，不要再叠 background。 */
+  --ui-input-border: transparent;
   background-color: var(--ui-color-bg-muted);
-  border-color: transparent;
 
   &:focus-within {
     background-color: var(--ui-color-bg);
   }
 }
 .ui-input-variant-unstyled {
-  border-color: transparent;
+  /* 完全无装饰：透明 var + 主 shadow 直接归零；focus 也不再加任何 halo。 */
+  --ui-input-border: transparent;
   background: transparent;
   box-shadow: none;
 
   &:focus-within {
-    border-color: transparent;
     box-shadow: none;
   }
 }
 
 .ui-input-error {
-  border-color: var(--ui-color-danger-500);
+  --ui-input-border: var(--ui-color-danger-500);
 
   &:hover:not(.ui-input-disabled) {
-    border-color: var(--ui-color-danger-500);
+    --ui-input-border: var(--ui-color-danger-500);
   }
 
   &:focus-within {
-    border-color: var(--ui-color-danger-500);
-    box-shadow: 0 0 0 2px var(--ui-color-danger-50);
+    --ui-input-border: var(--ui-color-danger-500);
+    box-shadow:
+      inset 0 0 0 1px var(--ui-input-border),
+      0 0 0 4px var(--ui-color-danger-50);
   }
 }
 
