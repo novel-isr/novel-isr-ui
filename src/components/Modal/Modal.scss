@@ -28,6 +28,27 @@
    * 也才能真正接管滚动。不加这行，子内容会画到容器外面去。 */
   overflow: hidden;
   animation: ui-modal-zoomin var(--ui-transition-base);
+}
+
+/**
+ * 让 <form>（最常见的 modal 包裹方式）以 flex 容器的形式传递 layout。
+ *
+ * 没有这条，用户写 <Modal><form><ModalBody/><ModalFooter/></form></Modal> 时：
+ *   - form 是 .ui-modal-content 的 flex item，但它本身 display: block
+ *   - body / footer 在 form 内部，不再是 .ui-modal-content 的直接子级
+ *   - 因此 body 的 `flex:1 / min-height:0 / overflow-y:auto` 全部失效
+ *   - 结果：body 被自身 content 撑开，把 modal 顶破，content 溢出白色容器
+ *
+ * 同样支持 <fieldset>（少见但语义合法）。除此之外还嵌别的 wrapper（<div>, etc.）
+ * 就需要业务端自己保证 flex 链路；那是边缘场景。
+ */
+.ui-modal-content > form,
+.ui-modal-content > fieldset {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  /* fieldset 默认带边框 / padding，业务侧自己取消；这里只管 layout */
 
   &:focus {
     outline: none;
