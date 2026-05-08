@@ -1,5 +1,8 @@
 .ui-input-root {
-  --ui-input-focus-ring: var(--ui-color-brand-100);
+  /* focus 用 4px 柔光（半透明无锐边），不是 2px 硬色环。
+   * 硬环跟 input 内边框的曲率在 1x DPR 下不完全重合，4 个角会出现「分段」
+   * 视觉锯齿；柔光没有锐边，对齐错位看不出。 */
+  --ui-input-focus-ring: rgba(22, 119, 255, 0.18);
 
   position: relative;
   display: inline-flex;
@@ -7,7 +10,9 @@
   width: 100%;
   background-color: var(--ui-color-bg);
   border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
+  /* radius-md → radius-lg：8px 比 6px 更现代、不那么紧促；同时让圆角更显眼，
+   * focus ring 跟内边框的对齐误差被「真圆角」压下去，不再像角上有切口。 */
+  border-radius: var(--ui-radius-lg);
   transition:
     border-color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast),
@@ -19,7 +24,9 @@
 
   &:focus-within {
     border-color: var(--ui-color-brand-500);
-    box-shadow: 0 0 0 2px var(--ui-input-focus-ring);
+    box-shadow:
+      0 0 0 4px var(--ui-input-focus-ring),
+      0 1px 0 rgba(15, 23, 42, 0.04) inset;
   }
 }
 
@@ -32,6 +39,12 @@
   &:hover:not(.ui-input-disabled) {
     border-color: var(--ui-color-brand-500);
     background-color: var(--ui-color-bg-muted);
+  }
+
+  &:focus-within {
+    box-shadow:
+      0 0 0 4px var(--ui-input-focus-ring),
+      0 1px 0 rgba(255, 255, 255, 0.04) inset;
   }
 }
 
