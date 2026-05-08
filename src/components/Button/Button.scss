@@ -27,12 +27,15 @@
     box-shadow var(--ui-transition-fast),
     transform var(--ui-transition-fast);
 
-  /* 焦点光环：用 box-shadow 做柔光圈而不是 outline。
-   * outline 是硬实心矩形，在圆角按钮上视觉割裂；box-shadow 跟着 border-radius 走，
-   * Stripe / Linear / Vercel 都是这套。alpha 0.22 在亮 / 暗主题下都能看见。 */
+  /* 焦点光环：用 outline，原因是它跟 box-shadow 是不同渲染管线，可以叠加 ——
+   * solid 按钮自带 drop shadow + inset 高光（box-shadow），focus 用 outline 才不会
+   * 把它们覆盖掉、避免"focus 后按钮反而变扁"的视觉 bug。
+   * 现代浏览器（Chrome 94+ / Firefox 88+ / Safari 16.4+）outline 已经跟着
+   * border-radius 走，跟 box-shadow halo 体感一致。
+   * Stripe / GitHub / Vercel 的 button focus 都是 outline 路径。 */
   &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.22);
+    outline: 2px solid var(--ui-color-brand-500);
+    outline-offset: 2px;
   }
 
   /* 按下：轻微下沉 + 减弱阴影（如果有），手感跟现实按钮一致 */
