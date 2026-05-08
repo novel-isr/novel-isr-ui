@@ -24,6 +24,9 @@
   max-height: min(calc(100vh - 2rem), 52rem);
   display: flex;
   flex-direction: column;
+  /* 超长 body 时把内容夹住；border-radius 才能继续生效，body 的 overflow-y:auto
+   * 也才能真正接管滚动。不加这行，子内容会画到容器外面去。 */
+  overflow: hidden;
   animation: ui-modal-zoomin var(--ui-transition-base);
 
   &:focus {
@@ -75,6 +78,9 @@
   order: 2;
   padding: var(--ui-space-3) clamp(1rem, 3vw, 1.5rem);
   flex: 1;
+  /* min-height:0 是 flex+overflow 的标配 —— flex 子元素默认 min-height:auto
+   * 不会真按 overflow 收缩，body 反而会被内容撑高把整个 modal 顶破。 */
+  min-height: 0;
   overflow-y: auto;
   color: var(--ui-color-fg);
   line-height: var(--ui-line-height-base);
