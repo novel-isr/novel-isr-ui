@@ -6,11 +6,12 @@ export {
   TableRow,
   TableHeader,
   TableCell,
-} from './Table';
+} from "./Table";
 export type {
   TableProps,
   TableRootProps,
   TableColumn,
   TableSize,
   TableVariant,
-} from './Table';
+  TableScrollConfig,
+} from "./Table";
