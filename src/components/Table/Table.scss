@@ -13,48 +13,34 @@
 }
 
 .ui-table {
+  // 默认 table-layout: auto —— antd / arco / mantine 同款，开箱即出"内容驱动列宽
+  // + 容器溢出时自动横滚"的体验。业务不需要在每张表上设 scroll prop。
+  // 实现：每个 <th> 上把 column.width 同时写到 width 和 min-width，浏览器在 auto 模式
+  // 下把 min-width 当作硬下限。所有 column 的 min-width 之和 > wrapper 宽度时，
+  // table 自然变宽，wrapper 的 overflow-x: auto 就出横向滚动条。
   width: 100%;
   border-collapse: collapse;
   font-family: var(--ui-font-family-sans);
   color: var(--ui-color-fg);
   font-size: var(--ui-font-size-md);
-  // table-layout: fixed 让列宽完全由 <colgroup><col width=...> 决定，不被
-  // 个别行的长内容挤压。配合下面 td word-break + flex 子级 wrap 兜底，
-  // 列宽稳定，超宽内容自动换行而不是溢出隐藏（用户截图里 badge 被剪掉的
-  // 根因就是 auto 布局 + 子级 nowrap，列宽没有真值源所以以最长行为准）。
-  table-layout: fixed;
 }
 
 .ui-table th,
 .ui-table td {
-  min-width: 0;
   text-align: left;
   padding: var(--ui-space-3) var(--ui-space-4);
   vertical-align: middle;
   line-height: var(--ui-line-height-base);
-  // 长 token（URL / BCP 47 code 串 / 不带空格的中文）也能换行，不至于撑爆固定列宽
-  word-break: break-word;
-  overflow-wrap: anywhere;
 }
 
-// flex 容器 children 默认拒绝缩小到 min-content 以下；遇到固定列宽时
-// 父 td 的 max-width 不能传染下去，导致 HStack/VStack 整体溢出。这里强制
-// flex 子级在窄列里自动换行 —— 业务侧无需为每个 cell 单独 wrap。
-.ui-table td > .ui-stack-row {
-  flex-wrap: wrap;
-}
-
-// ─── scroll-x 模式（antd / arco / mantine 同款）──────────────────────────
-// 给 table 设了 min-width（来自 props.scroll.x），wrapper 已经是 overflow-x: auto，
-// 容器比 min-width 窄时直接出滚动条 —— 数据密集大宽表的标准做法。
-// table-layout: auto 让列按内容自然展开（colgroup width 在 auto 模式下变成
-// "建议值"），不再被 fixed 模式强制压缩成 colgroup 宽。
+// ─── scroll-x 模式（显式声明）─────────────────────────────────────────
+// scroll={{ x: 1500 }} 时 React 在 <table> 上 inline 写 min-width: 1500px。
+// 跟 column.width 的 min-width 不冲突 —— 取较大者。常见用法：列没单独 width，
+// 但你想强制总宽度 ≥ 某个值。
 .ui-table-scroll-x {
+  // 跟默认 auto 行为一致；这条 class 主要是给业务扩展样式留 hook
   table-layout: auto;
 }
-// 注：scroll-x 模式下 td 仍然保留 word-break + flex 子级自动换行 —— 跟默认模式
-// 行为一致：列宽不够时优先 wrap 而不是溢出，业务用 column.ellipsis 显式声明
-// 单行截断的需求。这样不需要为两个模式维护两套 cell 内部布局逻辑。
 
 // ─── scroll-y 模式 —— sticky thead ────────────────────────────────────
 // wrapper maxHeight + overflow-y: auto 在 React 端 inline 写好了；这里只

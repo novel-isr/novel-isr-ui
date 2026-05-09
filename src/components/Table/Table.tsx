@@ -192,39 +192,35 @@ export function Table<T>(props: TableProps<T>) {
     ...rootProps
   } = props;
 
-  // 用 <colgroup> 统一掌权列宽 —— 之前只把 width 写到 <th> 上，浏览器
-  // table-layout: auto 会综合所有 cell 的内容计算列宽，<th> 的 width 经常被
-  // 长内容（这里是 4 个 BCP 47 badge 一行）挤宽 / 挤丢；<col> 在 colgroup 里
-  // 是浏览器列宽布局的真值入口，配合 td 的 min-width: 0 + overflow 由内容决定。
-  const hasAnyWidth = columns.some((col) => col.width !== undefined);
+  // 列宽策略 —— 跟 antd / arco / mantine 一致：
+  //
+  //   col.width 同时写到 <th> 的 width 和 min-width 上。
+  //
+  // 在 table-layout: auto（默认）下：
+  //   - width 是"首选宽度"：行有空间就用它
+  //   - min-width 是"硬下限"：浏览器不能把列压到比这窄。
+  //
+  // 所有列 min-width 之和 > wrapper 宽时，table 自然超宽，
+  // wrapper 的 overflow-x: auto 就出横向滚动条 —— 这是开箱即用的横滚，
+  // 业务不需要 scroll={{ x }} 显式声明就能在窄屏幕里看到所有列。
+  //
+  // 不再用 <colgroup> —— colgroup 的 <col> 不可靠地支持 min-width，
+  // 把约束写到每列的 <th> 上更跨浏览器稳定（th 的 width/min-width 在 CSS 表布局
+  // 算法里直接进入 column min/max-content 计算）。
+  const widthStyle = (col: TableColumn<T>) => {
+    if (col.width === undefined) return undefined;
+    const w = typeof col.width === "number" ? `${col.width}px` : col.width;
+    return { width: w, minWidth: w };
+  };
 
   return (
     <TableRoot {...rootProps}>
-      {hasAnyWidth && (
-        <colgroup>
-          {columns.map((col) => (
-            <col
-              key={col.key}
-              style={
-                col.width !== undefined
-                  ? {
-                      width:
-                        typeof col.width === "number"
-                          ? `${col.width}px`
-                          : col.width,
-                    }
-                  : undefined
-              }
-            />
-          ))}
-        </colgroup>
-      )}
       <TableHead>
         <TableRow>
           {columns.map((col) => (
             <TableHeader
               key={col.key}
-              style={{ textAlign: col.align }}
+              style={{ textAlign: col.align, ...widthStyle(col) }}
               data-ellipsis={col.ellipsis ? "true" : undefined}
             >
               {col.header}
