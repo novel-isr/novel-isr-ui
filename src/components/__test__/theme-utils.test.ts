@@ -1,21 +1,20 @@
 /**
- * theme-utils —— ThemeProvider 跟 SSR 框架共享的纯函数行为锁定。
+ * theme-utils —— ThemeProvider 跟 SSR 框架共享的纯函数 + 常量行为锁定。
  *
  * 关键不变量：
  *   - parseThemeCookie 只接受 'light' / 'dark' / 'system'，其它一律回退到 system
- *   - resolveServerTheme 把 'light' 映射到 'light'，'dark' 跟 'system' 都到 'dark'
- *     （server 看不到 prefers-color-scheme，'system' 必须有兜底；选 dark 跟
- *     next-themes / shadcn 默认行为一致）
+ *   - THEME_INIT_SCRIPT 是常量字符串（server / client 必须输出完全一致，否则 React
+ *     hydration 会报 mismatch），且必须正确处理 cookie 缺失 / 非法值 / system 三种 case
  *
- * 这两个函数是 client + server 跨 lib 共用，行为漂移会直接造成 hydration mismatch
+ * theme-utils 是 client + server 跨 lib 共用，行为漂移会直接造成 hydration mismatch
  * 或 FOUC，必须锁死。
  */
 import { describe, expect, it } from 'vitest';
 import {
   THEME_COOKIE_MAX_AGE,
   THEME_COOKIE_NAME,
+  THEME_INIT_SCRIPT,
   parseThemeCookie,
-  resolveServerTheme,
 } from '../theme-utils';
 
 describe('parseThemeCookie', () => {
@@ -37,17 +36,54 @@ describe('parseThemeCookie', () => {
   });
 });
 
-describe('resolveServerTheme', () => {
-  it('light → light', () => {
-    expect(resolveServerTheme('light')).toBe('light');
+describe('THEME_INIT_SCRIPT', () => {
+  it('包含 cookie 名（跟 THEME_COOKIE_NAME 联动，单一真值）', () => {
+    expect(THEME_INIT_SCRIPT).toContain(`${THEME_COOKIE_NAME}=`);
   });
 
-  it('dark → dark', () => {
-    expect(resolveServerTheme('dark')).toBe('dark');
+  it('包含 prefers-color-scheme 兜底（system 模式必须）', () => {
+    expect(THEME_INIT_SCRIPT).toContain('prefers-color-scheme: dark');
   });
 
-  it('system 在 server 端兜底为 dark（next-themes / shadcn 同款）', () => {
-    expect(resolveServerTheme('system')).toBe('dark');
+  it('包含三种合法值的白名单（防 cookie 注入异常值）', () => {
+    expect(THEME_INIT_SCRIPT).toContain("'light'");
+    expect(THEME_INIT_SCRIPT).toContain("'dark'");
+    expect(THEME_INIT_SCRIPT).toContain("'system'");
+  });
+
+  it('try/catch 包裹 —— 浏览器禁用 cookie / matchMedia 时不 throw', () => {
+    expect(THEME_INIT_SCRIPT).toMatch(/try\s*\{/);
+    expect(THEME_INIT_SCRIPT).toMatch(/catch\s*\(/);
+  });
+
+  it('实际执行 cookie=light → documentElement.dataset.theme=light', () => {
+    const stub = stubDom({ cookie: `${THEME_COOKIE_NAME}=light` });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('light');
+  });
+
+  it('实际执行 cookie=system + 系统是 dark → dark', () => {
+    const stub = stubDom({
+      cookie: `${THEME_COOKIE_NAME}=system`,
+      prefersDark: true,
+    });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('dark');
+  });
+
+  it('实际执行 cookie=system + 系统是 light → light', () => {
+    const stub = stubDom({
+      cookie: `${THEME_COOKIE_NAME}=system`,
+      prefersDark: false,
+    });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('light');
+  });
+
+  it('实际执行 cookie 不存在 + 系统是 light → light（默认走 system）', () => {
+    const stub = stubDom({ cookie: '', prefersDark: false });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('light');
   });
 });
 
@@ -60,3 +96,33 @@ describe('cookie 常量', () => {
     expect(THEME_COOKIE_MAX_AGE).toBe(60 * 60 * 24 * 365);
   });
 });
+
+interface StubDom {
+  documentElementDataset: { theme?: string };
+  document: { cookie: string; documentElement: { dataset: Record<string, string> } };
+  window: {
+    matchMedia: (q: string) => { matches: boolean };
+  };
+}
+
+function stubDom(opts: { cookie: string; prefersDark?: boolean }): StubDom {
+  const dataset: Record<string, string> = {};
+  const stub = {
+    documentElementDataset: dataset,
+    document: {
+      cookie: opts.cookie,
+      documentElement: { dataset },
+    },
+    window: {
+      matchMedia: (q: string) => ({
+        matches: q.includes('dark') && opts.prefersDark === true,
+      }),
+    },
+  };
+  // inline script 用 `document.cookie` / `window.matchMedia` / `document.documentElement` —— 走 globalThis
+  Object.assign(globalThis, {
+    document: stub.document,
+    window: stub.window,
+  });
+  return stub;
+}
