@@ -11,16 +11,10 @@
 
 // ─── Provider / hooks ─────────────────────────────────────────────────
 export { ThemeProvider, useTheme } from './components/ThemeProvider';
-// theme-utils 是单一真值源：cookie 名 / 类型 / 解析规则只在这里定义。
-// SSR 框架（业务侧 Layout）import 这些纯函数读 cookie 渲染 data-theme。
-export {
-  THEME_COOKIE_NAME,
-  THEME_COOKIE_MAX_AGE,
-  parseThemeCookie,
-  resolveServerTheme,
-  type Theme,
-  type ResolvedTheme,
-} from './components/theme-utils';
+// theme-utils（cookie 名 / 类型 / 纯函数）走独立 sub-entry：@novel-isr/ui/theme-utils
+// 不放主入口的原因：主入口被 'use client' banner 染色，server component import 主入口的
+// 纯函数会被当成 client reference，运行时报 "client reference called on server"。
+// 业界标准做法（Radix UI / Vercel SDK）：server-safe utility 单独 sub-entry，no banner。
 export * from './components/ThemeToggle';
 
 export { useDisclosure } from './hooks/useDisclosure';

@@ -21,6 +21,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./theme-utils": {
+      "types": "./dist/components/theme-utils.d.ts",
+      "import": "./dist/theme-utils.js"
+    },
     "./styles.css": "./dist/styles.css"
   },
   "files": [
