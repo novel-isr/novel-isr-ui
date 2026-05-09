@@ -72,6 +72,7 @@ class ToastStore {
   private toasts: ToastItem[] = [];
   private listeners = new Set<Listener>();
   private idCounter = 0;
+  private timers = new Map<string | number, ReturnType<typeof setTimeout>>();
 
   subscribe(fn: Listener): () => void {
     this.listeners.add(fn);
@@ -83,9 +84,23 @@ class ToastStore {
     for (const fn of this.listeners) fn(this.toasts);
   }
 
+  private scheduleDismiss(id: string | number, duration: number): void {
+    const prev = this.timers.get(id);
+    if (prev) clearTimeout(prev);
+    if (duration > 0) {
+      this.timers.set(
+        id,
+        setTimeout(() => this.dismiss(id), duration)
+      );
+    }
+  }
+
+  // 同 id 复用：业务侧（admin-api 用错误 message 作为 id 做轮询去重）期望 sonner
+  // 风格的 "同 id 替换" 语义。如果 push 直接 append，并发失败会塞两条相同 id 的
+  // toast，React 立刻报 duplicate key warning。
   push(opts: ToastOptions): string | number {
     const id = opts.id ?? ++this.idCounter;
-    const toast: ToastItem = {
+    const next: ToastItem = {
       id,
       status: opts.status ?? 'info',
       title: opts.title,
@@ -93,27 +108,49 @@ class ToastStore {
       duration: opts.duration ?? 4000,
       state: 'open',
     };
-    this.toasts = [...this.toasts, toast];
-    this.emit();
-
-    if (toast.duration > 0) {
-      setTimeout(() => this.dismiss(id), toast.duration);
+    const existingIdx = this.toasts.findIndex(t => t.id === id);
+    if (existingIdx >= 0) {
+      const updated = this.toasts.slice();
+      updated[existingIdx] = next;
+      this.toasts = updated;
+    } else {
+      this.toasts = [...this.toasts, next];
     }
+    this.emit();
+    this.scheduleDismiss(id, next.duration);
     return id;
   }
 
   dismiss(id: string | number): void {
+    const timer = this.timers.get(id);
+    if (timer) {
+      clearTimeout(timer);
+      this.timers.delete(id);
+    }
     this.toasts = this.toasts.map(t => (t.id === id ? { ...t, state: 'closing' } : t));
     this.emit();
-    // 等动画结束再真删
     setTimeout(() => {
       this.toasts = this.toasts.filter(t => t.id !== id);
       this.emit();
     }, 200);
   }
+
+  // 测试用：直接读当前列表，避免暴露整套 mutation API。
+  peek(): readonly ToastItem[] {
+    return this.toasts;
+  }
+
+  // 测试用：清空状态，避免单测之间相互污染。
+  reset(): void {
+    for (const timer of this.timers.values()) clearTimeout(timer);
+    this.timers.clear();
+    this.toasts = [];
+    this.emit();
+  }
 }
 
 const store = new ToastStore();
+export const __toastStoreForTesting = store;
 
 // ─── 命令式 API ───────────────────────────────────────────────────────────
 

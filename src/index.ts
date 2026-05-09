@@ -11,7 +11,16 @@
 
 // ─── Provider / hooks ─────────────────────────────────────────────────
 export { ThemeProvider, useTheme } from './components/ThemeProvider';
-export type { Theme, ResolvedTheme } from './components/ThemeProvider';
+// theme-utils 是单一真值源：cookie 名 / 类型 / 解析规则只在这里定义。
+// SSR 框架（业务侧 Layout）import 这些纯函数读 cookie 渲染 data-theme。
+export {
+  THEME_COOKIE_NAME,
+  THEME_COOKIE_MAX_AGE,
+  parseThemeCookie,
+  resolveServerTheme,
+  type Theme,
+  type ResolvedTheme,
+} from './components/theme-utils';
 export * from './components/ThemeToggle';
 
 export { useDisclosure } from './hooks/useDisclosure';

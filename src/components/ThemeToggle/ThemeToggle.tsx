@@ -8,7 +8,8 @@
 
 import { type HTMLAttributes } from 'react';
 import { cn } from '../../utils/cn';
-import { type Theme, useTheme } from '../ThemeProvider';
+import { useTheme } from '../ThemeProvider';
+import { type Theme } from '../theme-utils';
 
 export interface ThemeToggleProps extends HTMLAttributes<HTMLDivElement> {
   showSystem?: boolean;
