@@ -16,6 +16,7 @@
 
 import {
   forwardRef,
+  type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
   type TableHTMLAttributes,
@@ -28,6 +29,23 @@ import { Skeleton } from "../Skeleton/Skeleton";
 export type TableSize = "sm" | "md" | "lg";
 export type TableVariant = "simple" | "striped" | "bordered";
 
+/**
+ * scroll 配置 —— 跟 antd / arco / mantine 一致：
+ *
+ *   x?: number | string   触发横向 scroll 的 table 最小宽度。给值后切换到
+ *                         "scroll-x 模式"：table-layout: auto + min-width
+ *                         = scroll.x，wrapper 已经是 overflow-x: auto，
+ *                         容器比 scroll.x 窄时自然出滚动条。列按内容自然
+ *                         展开（不再受 colgroup 强约束 / 不再 wrap）。
+ *                         适合宽表 / 数据密集表。
+ *   y?: number | string   table body 最大可见高度。开启后 wrapper 设 maxHeight
+ *                         + overflow-y: auto；<thead> sticky，行滚头不滚。
+ */
+export interface TableScrollConfig {
+  x?: number | string;
+  y?: number | string;
+}
+
 // ─── compound parts ──────────────────────────────────────────────────────
 
 export interface TableRootProps extends Omit<
@@ -37,6 +55,12 @@ export interface TableRootProps extends Omit<
   size?: TableSize;
   variant?: TableVariant;
   hoverable?: boolean;
+  scroll?: TableScrollConfig;
+}
+
+function resolveLength(v: number | string | undefined): string | undefined {
+  if (v === undefined) return undefined;
+  return typeof v === "number" ? `${v}px` : v;
 }
 
 export const TableRoot = forwardRef<HTMLTableElement, TableRootProps>(
@@ -45,15 +69,31 @@ export const TableRoot = forwardRef<HTMLTableElement, TableRootProps>(
       size = "md",
       variant = "simple",
       hoverable = false,
+      scroll,
       className,
+      style,
       ...rest
     } = props;
+
+    const scrollX = resolveLength(scroll?.x);
+    const scrollY = resolveLength(scroll?.y);
+    const wrapperStyle: CSSProperties = scrollY
+      ? { maxHeight: scrollY, overflowY: "auto" }
+      : {};
+    const tableStyle: CSSProperties = {
+      ...(scrollX ? { minWidth: scrollX } : {}),
+      ...style,
+    };
+
     return (
       <div
         className={cn(
           "ui-table-wrapper",
           variant === "bordered" && "ui-table-variant-bordered",
+          scrollX && "ui-table-wrapper-scroll-x",
+          scrollY && "ui-table-wrapper-scroll-y",
         )}
+        style={wrapperStyle}
       >
         <table
           ref={ref}
@@ -62,8 +102,10 @@ export const TableRoot = forwardRef<HTMLTableElement, TableRootProps>(
             `ui-table-size-${size}`,
             `ui-table-variant-${variant}`,
             hoverable && "ui-table-hoverable",
+            scrollX && "ui-table-scroll-x",
             className,
           )}
+          style={tableStyle}
           {...rest}
         />
       </div>
@@ -117,6 +159,13 @@ export interface TableColumn<T> {
   width?: string | number;
   /** 单元格对齐 */
   align?: "left" | "center" | "right";
+  /**
+   * 单行截断 + ellipsis —— 跟 antd 同名 prop。开启后：
+   *   white-space: nowrap; overflow: hidden; text-overflow: ellipsis
+   * 适合长 URL / 用户备注 / 标题这类不重要换行的场景。
+   * 完整内容请自己包 Tooltip（cell 内容是 ReactNode，库不能假设是 string）。
+   */
+  ellipsis?: boolean;
 }
 
 export interface TableProps<T> extends Omit<TableRootProps, "children"> {
@@ -175,9 +224,8 @@ export function Table<T>(props: TableProps<T>) {
           {columns.map((col) => (
             <TableHeader
               key={col.key}
-              style={{
-                textAlign: col.align,
-              }}
+              style={{ textAlign: col.align }}
+              data-ellipsis={col.ellipsis ? "true" : undefined}
             >
               {col.header}
             </TableHeader>
@@ -209,7 +257,11 @@ export function Table<T>(props: TableProps<T>) {
                   ? col.render(row, i)
                   : ((row as Record<string, unknown>)[col.key] as ReactNode);
                 return (
-                  <TableCell key={col.key} style={{ textAlign: col.align }}>
+                  <TableCell
+                    key={col.key}
+                    style={{ textAlign: col.align }}
+                    data-ellipsis={col.ellipsis ? "true" : undefined}
+                  >
                     {v}
                   </TableCell>
                 );

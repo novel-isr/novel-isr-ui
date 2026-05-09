@@ -44,6 +44,45 @@
   flex-wrap: wrap;
 }
 
+// ─── scroll-x 模式（antd / arco / mantine 同款）──────────────────────────
+// 给 table 设了 min-width（来自 props.scroll.x），列按内容自然展开，
+// 不再受 colgroup 强约束 / 不强制 wrap。wrapper 已经是 overflow-x: auto，
+// 容器比 min-width 窄时直接出滚动条 —— 数据密集大宽表的标准做法。
+.ui-table-scroll-x {
+  table-layout: auto;
+  // 横滚模式下重新打开 cell 单行（业务用 ellipsis 列才会真截断；
+  // 不开 ellipsis 的列依然自动换行 —— 这是 nowrap 默认行为下 word-break 的细节）
+  word-break: normal;
+  overflow-wrap: normal;
+}
+.ui-table-scroll-x td > .ui-stack-row {
+  flex-wrap: nowrap;
+}
+
+// ─── scroll-y 模式 —— sticky thead ────────────────────────────────────
+// wrapper maxHeight + overflow-y: auto 在 React 端 inline 写好了；这里只
+// 负责让表头粘在 wrapper 顶上，body 滚动时表头可见。
+.ui-table-wrapper-scroll-y .ui-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  // 滚动时背景必须不透明，否则下面的行会从背后透出来；用与 thead 同色变量
+  background-color: var(--ui-color-bg-muted);
+}
+
+// ─── ellipsis 列（per-column）──────────────────────────────────────────
+// 单行 + 截断 + 省略号。跟 antd column.ellipsis 一致：
+// scroll-x 场景下用得最多，长文本不撑列宽，超长部分用 …。
+.ui-table th[data-ellipsis="true"],
+.ui-table td[data-ellipsis="true"] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // word-break / overflow-wrap 配合 nowrap 会冲突，统一关掉
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
 .ui-table thead th {
   background-color: var(--ui-color-bg-muted);
   color: var(--ui-color-fg-secondary);
