@@ -18,6 +18,11 @@
   font-family: var(--ui-font-family-sans);
   color: var(--ui-color-fg);
   font-size: var(--ui-font-size-md);
+  // table-layout: fixed 让列宽完全由 <colgroup><col width=...> 决定，不被
+  // 个别行的长内容挤压。配合下面 td word-break + flex 子级 wrap 兜底，
+  // 列宽稳定，超宽内容自动换行而不是溢出隐藏（用户截图里 badge 被剪掉的
+  // 根因就是 auto 布局 + 子级 nowrap，列宽没有真值源所以以最长行为准）。
+  table-layout: fixed;
 }
 
 .ui-table th,
@@ -27,6 +32,16 @@
   padding: var(--ui-space-3) var(--ui-space-4);
   vertical-align: middle;
   line-height: var(--ui-line-height-base);
+  // 长 token（URL / BCP 47 code 串 / 不带空格的中文）也能换行，不至于撑爆固定列宽
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+// flex 容器 children 默认拒绝缩小到 min-content 以下；遇到固定列宽时
+// 父 td 的 max-width 不能传染下去，导致 HStack/VStack 整体溢出。这里强制
+// flex 子级在窄列里自动换行 —— 业务侧无需为每个 cell 单独 wrap。
+.ui-table td > .ui-stack-row {
+  flex-wrap: wrap;
 }
 
 .ui-table thead th {
