@@ -215,9 +215,22 @@ function ToastViewport() {
 
   if (!mounted) return null;
 
+  // Render-time dedupe —— defense in depth：store.push 已经做 sonner-style 同 id 替换，
+  // 但 dev server cache 残留 / 老版本 lib 同时被加载等场景仍可能让 list 出现同 id
+  // 元素。这里 UI 层兜底过滤，**永远**保证 React `key={item.id}` 不撞 —— 跟"ui 开箱
+  // 即用、业务零样板"原则一致。重复 id 取最后一条（最新 push 优先）。
+  const seen = new Set<ToastItem['id']>();
+  const uniqueItems: ToastItem[] = [];
+  for (let i = items.length - 1; i >= 0; i--) {
+    const item = items[i]!;
+    if (seen.has(item.id)) continue;
+    seen.add(item.id);
+    uniqueItems.unshift(item);
+  }
+
   return createPortal(
     <div className="ui-toast-viewport" data-position={position} role="region" aria-label="通知">
-      {items.map(item => (
+      {uniqueItems.map(item => (
         <ToastItemComponent key={item.id} item={item} />
       ))}
     </div>,
