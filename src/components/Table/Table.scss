@@ -66,6 +66,57 @@
   overflow-wrap: normal;
 }
 
+// ─── sticky 列（fixed: 'left' | 'right'）─────────────────────────────
+// position: sticky 让列在水平滚动时贴在 wrapper 边。left/right 偏移由 React 端
+// 按 column.width 累加后写到 inline style 上。z-index 比正常单元格高一层，
+// 但低于 sticky thead（防遮住表头）。背景必须不透明，否则中间列会从背后透出。
+.ui-table th[data-fixed],
+.ui-table td[data-fixed] {
+  position: sticky;
+  // body 列 z-index: 2 比正常 cell 高，能盖在水平滚走的中间列上
+  z-index: 2;
+  background-color: var(--ui-color-bg);
+}
+[data-theme="dark"] .ui-table th[data-fixed],
+[data-theme="dark"] .ui-table td[data-fixed] {
+  background-color: var(--ui-color-bg-subtle);
+}
+// 跟 striped 行配合：奇数行的 fixed 单元格继承条纹色（避免破坏视觉条纹）
+.ui-table-variant-striped tbody tr:nth-child(odd) td[data-fixed] {
+  background-color: var(--ui-color-bg-subtle);
+}
+[data-theme="light"]
+  .ui-table-variant-striped
+  tbody
+  tr:nth-child(odd)
+  td[data-fixed] {
+  background-color: var(--ui-color-bg-subtle);
+}
+// thead 里的 fixed 单元格 z-index 抬高，跟 sticky 表头叠加
+.ui-table thead th[data-fixed] {
+  z-index: 3;
+}
+.ui-table-wrapper-scroll-y .ui-table thead th[data-fixed] {
+  z-index: 4;
+}
+// 边界阴影 —— 左固定区右边一道，右固定区左边一道，水平滚时直观看到"我在固定区"
+.ui-table th[data-fixed-edge="left"],
+.ui-table td[data-fixed-edge="left"] {
+  box-shadow: 4px 0 4px -2px rgba(0, 0, 0, 0.08);
+}
+.ui-table th[data-fixed-edge="right"],
+.ui-table td[data-fixed-edge="right"] {
+  box-shadow: -4px 0 4px -2px rgba(0, 0, 0, 0.08);
+}
+[data-theme="dark"] .ui-table th[data-fixed-edge="left"],
+[data-theme="dark"] .ui-table td[data-fixed-edge="left"] {
+  box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .ui-table th[data-fixed-edge="right"],
+[data-theme="dark"] .ui-table td[data-fixed-edge="right"] {
+  box-shadow: -4px 0 6px -2px rgba(0, 0, 0, 0.4);
+}
+
 .ui-table thead th {
   background-color: var(--ui-color-bg-muted);
   color: var(--ui-color-fg-secondary);
