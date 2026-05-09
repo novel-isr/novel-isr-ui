@@ -45,19 +45,16 @@
 }
 
 // ─── scroll-x 模式（antd / arco / mantine 同款）──────────────────────────
-// 给 table 设了 min-width（来自 props.scroll.x），列按内容自然展开，
-// 不再受 colgroup 强约束 / 不强制 wrap。wrapper 已经是 overflow-x: auto，
+// 给 table 设了 min-width（来自 props.scroll.x），wrapper 已经是 overflow-x: auto，
 // 容器比 min-width 窄时直接出滚动条 —— 数据密集大宽表的标准做法。
+// table-layout: auto 让列按内容自然展开（colgroup width 在 auto 模式下变成
+// "建议值"），不再被 fixed 模式强制压缩成 colgroup 宽。
 .ui-table-scroll-x {
   table-layout: auto;
-  // 横滚模式下重新打开 cell 单行（业务用 ellipsis 列才会真截断；
-  // 不开 ellipsis 的列依然自动换行 —— 这是 nowrap 默认行为下 word-break 的细节）
-  word-break: normal;
-  overflow-wrap: normal;
 }
-.ui-table-scroll-x td > .ui-stack-row {
-  flex-wrap: nowrap;
-}
+// 注：scroll-x 模式下 td 仍然保留 word-break + flex 子级自动换行 —— 跟默认模式
+// 行为一致：列宽不够时优先 wrap 而不是溢出，业务用 column.ellipsis 显式声明
+// 单行截断的需求。这样不需要为两个模式维护两套 cell 内部布局逻辑。
 
 // ─── scroll-y 模式 —— sticky thead ────────────────────────────────────
 // wrapper maxHeight + overflow-y: auto 在 React 端 inline 写好了；这里只
