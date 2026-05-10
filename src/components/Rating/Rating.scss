@@ -1,6 +1,10 @@
 /* Rating —— 评分组件
  *
- * 颜色：用 warning（金色）色阶，社区站惯例
+ * 颜色：用 accent（editorial 砖红 / tech 品牌蓝）。
+ *   原本 warning 金色（社区站惯例），但 editorial palette 下整页是暖白纸本 +
+ *   墨蓝 + 砖红的三色循环，再插一个金色就杂了。改 accent 让 ★ 跟 CTA / 热门
+ *   标签 / 编辑精选 走同一品牌信号。tech palette 下 accent alias 到 brand，
+ *   星变品牌蓝同样和谐。
  * 交互：hover 整体高亮，点击星左半 → 0.5；右半 → 1
  */
 
@@ -8,7 +12,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ui-space-2);
-  color: var(--ui-color-warning-500);
+  color: var(--ui-color-accent-500);
   font-family: var(--ui-font-family-sans);
 }
 

@@ -18,6 +18,7 @@ export type ButtonColorScheme =
   | 'secondary'
   | 'neutral'
   | 'brand'
+  | 'accent'
   | 'danger'
   | 'success'
   | 'warning'

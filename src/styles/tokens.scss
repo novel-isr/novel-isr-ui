@@ -88,6 +88,32 @@
   --ui-transition-base: 200ms ease-out;
   --ui-transition-slow: 360ms ease-out;
 
+  // 缓动曲线 —— 给 hover / entrance / exit 三套语义
+  // standard exit 用 1-cubic-bezier(0.22,1,0.36,1)（Linear / Vercel 同款 "easeOutExpo-ish"）
+  --ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  // 弹性 hover：略弹但不夸张，replace 默认 ease-out 的"硬到底"
+  --ui-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  // standard in / 退出动效（卡片淡出 / popover 关）
+  --ui-ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+
+  // Section 节奏 —— 给跨 section / block 的语义间距，统一全站节奏
+  // clamp 在小屏自动收紧；section ≈ 章节切分；block ≈ 段落切分；tight ≈ 紧凑相邻
+  --ui-rhythm-section: clamp(3rem, 6vw, 5rem);
+  --ui-rhythm-block: clamp(1.5rem, 3vw, 2.5rem);
+  --ui-rhythm-tight: 0.75rem;
+
+  // Elevation 语义 —— 把"卡片 = shadow + bg + border" 三件套拆成 4 档
+  // flat / subtle 是默认，浮动卡只在 hover / 选中时升 raised
+  // 之前所有 panel 直接 shadow-lg = 0 1.5rem 4rem，过度漂浮，AI slop hint
+  --ui-elevation-flat: none;
+  --ui-elevation-subtle: 0 1px 2px 0 rgba(28, 25, 23, 0.04);
+  --ui-elevation-raised:
+    0 4px 12px -2px rgba(28, 25, 23, 0.08),
+    0 2px 4px -2px rgba(28, 25, 23, 0.04);
+  --ui-elevation-floating:
+    0 12px 32px -8px rgba(28, 25, 23, 0.16),
+    0 4px 8px -4px rgba(28, 25, 23, 0.08);
+
   // 焦点环
   --ui-focus-ring-width: 0.125rem;
   --ui-focus-ring-offset: 0.125rem;
@@ -125,15 +151,17 @@
   --ui-color-brand-800: #0a1d33;
   --ui-color-brand-900: #061425;
 
-  // accent: 赭石（clay/ochre）—— editorial 独占，给 chip/CTA/hero 暖
-  --ui-color-accent-50: #faf3e8;
-  --ui-color-accent-100: #f0dfbf;
-  --ui-color-accent-200: #e0bf85;
-  --ui-color-accent-300: #cb9a52;
-  --ui-color-accent-400: #b3823b;
-  --ui-color-accent-500: #a8763e;
-  --ui-color-accent-600: #8c5e2c;
-  --ui-color-accent-700: #6f4920;
+  // accent: 砖红 (terracotta) —— editorial 独占，给 CTA / 评分 ★ / 热门标签
+  // 灵感：Penguin classic 橙 + Letterboxd 红 dot 的现代版。比赭石黄棕更有
+  // 视觉重量，跟暖白纸本对比度也更明确（先前 #a8763e 偏 mute，CTA 不够主张）。
+  --ui-color-accent-50: #fbeae3;
+  --ui-color-accent-100: #f5cfb9;
+  --ui-color-accent-200: #eaa180;
+  --ui-color-accent-300: #d97c52;
+  --ui-color-accent-400: #c5613a;
+  --ui-color-accent-500: #b04e2b;
+  --ui-color-accent-600: #913e22;
+  --ui-color-accent-700: #6f2e19;
 
   // gray scale: warm gray（stone）
   --ui-color-gray-50: #faf8f5;
@@ -208,14 +236,15 @@
   --ui-color-brand-800: #d8e3ee;
   --ui-color-brand-900: #eef3f8;
 
-  --ui-color-accent-50: #6f4920;
-  --ui-color-accent-100: #8c5e2c;
-  --ui-color-accent-200: #a8763e;
-  --ui-color-accent-300: #c89762;
-  --ui-color-accent-400: #d4a06b;
-  --ui-color-accent-500: #dfb585;
-  --ui-color-accent-600: #ebcca5;
-  --ui-color-accent-700: #f5e2c5;
+  // editorial dark · 砖红 reverse scale —— 暗底下整体提亮一档保对比
+  --ui-color-accent-50: #6f2e19;
+  --ui-color-accent-100: #913e22;
+  --ui-color-accent-200: #b04e2b;
+  --ui-color-accent-300: #c5613a;
+  --ui-color-accent-400: #d97c52;
+  --ui-color-accent-500: #eaa180;
+  --ui-color-accent-600: #f5cfb9;
+  --ui-color-accent-700: #fbeae3;
 
   --ui-color-gray-50: #1c1917;
   --ui-color-gray-100: #292524;

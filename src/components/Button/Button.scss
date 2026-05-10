@@ -104,6 +104,24 @@
   --button-link-fg: var(--ui-color-brand-500);
   --button-link-fg-hover: var(--ui-color-brand-700);
 }
+.ui-button-color-accent {
+  // editorial 砖红 / tech alias 到 brand —— 用于站点唯一 CTA
+  // （注册 / 立即创建 / 开始阅读 等行动明确的入口）。让 CTA 跟 ★ 评分 +
+  // 热门标签共用同一品牌信号，而不是 brand 蓝抢戏。
+  --button-solid-bg: var(--ui-color-accent-500);
+  --button-solid-bg-hover: var(--ui-color-accent-600);
+  --button-solid-bg-active: var(--ui-color-accent-700);
+  --button-solid-fg: #ffffff;
+  --button-outline-fg: var(--ui-color-accent-500);
+  --button-outline-fg-hover: var(--ui-color-accent-600);
+  --button-outline-border: var(--ui-color-accent-500);
+  --button-outline-bg-hover: var(--ui-color-accent-50);
+  --button-ghost-fg: var(--ui-color-accent-500);
+  --button-ghost-fg-hover: var(--ui-color-accent-600);
+  --button-ghost-bg-hover: var(--ui-color-accent-50);
+  --button-link-fg: var(--ui-color-accent-500);
+  --button-link-fg-hover: var(--ui-color-accent-700);
+}
 .ui-button-color-primary {
   --button-solid-bg: var(--ui-color-brand-500);
   --button-solid-bg-hover: var(--ui-color-brand-600);
