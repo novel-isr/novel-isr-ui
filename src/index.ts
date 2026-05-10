@@ -34,6 +34,7 @@ export * from './components/EmptyState';
 // ─── 表单 ─────────────────────────────────────────────────────────────
 export * from './components/FormControl';
 export * from './components/Input';
+export * from './components/Autocomplete';
 export * from './components/NumberInput';
 export * from './components/Textarea';
 export * from './components/JsonField';
