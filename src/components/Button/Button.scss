@@ -39,9 +39,13 @@
     outline-offset: 2px;
   }
 
-  /* 按下：轻微下沉 + 减弱阴影（如果有），手感跟现实按钮一致 */
+  /* 按下：scale 微缩 0.98，跟 iOS / 现代 web 触觉一致。
+   * 用 ease-spring 比 ease-out 更弹一点，触感更"实"。
+   * (design.md Phase 4 §6.2 规范) */
   &:not(:disabled):active {
-    transform: translateY(0.0625rem);
+    transform: scale(0.98);
+    transition-duration: 60ms;
+    transition-timing-function: var(--ui-ease-spring, ease-out);
   }
 
   &:disabled {

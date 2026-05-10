@@ -496,3 +496,62 @@ textarea {
   outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
   outline-offset: var(--ui-focus-ring-offset);
 }
+
+// ─── Motion 动效（design.md Phase 4）────────────────────────────────────
+//
+// 全站可用的 entrance 动效 + utility class。设计原则：
+//   - 入场不抢戏：8px translateY + 360ms duration + ease-out
+//   - 列表项 stagger：父元素挂 .ui-stagger，子元素自动按 nth-child 接 delay
+//   - prefers-reduced-motion 下全部动画禁用，符合 a11y 规范
+@keyframes ui-enter-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes ui-enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// 直接挂在元素上 → 360ms 淡入上推；first-paint 触发一次
+.ui-enter-up {
+  animation: ui-enter-up 360ms var(--ui-ease-out, ease-out) both;
+}
+
+.ui-enter-fade {
+  animation: ui-enter-fade 240ms var(--ui-ease-out, ease-out) both;
+}
+
+// stagger：父级挂 .ui-stagger，所有直接子元素按 nth-child 累加 40ms delay
+// 业务侧用法：<ul class="ui-stagger">；首屏 12 项以内体验最好
+.ui-stagger > * {
+  animation: ui-enter-up 360ms var(--ui-ease-out, ease-out) both;
+}
+
+@for $i from 1 through 24 {
+  .ui-stagger > *:nth-child(#{$i}) {
+    animation-delay: calc((#{$i} - 1) * 35ms);
+  }
+}
+
+// a11y —— 用户偏好减少动画时全局禁用
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
