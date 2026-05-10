@@ -39,5 +39,5 @@
 }
 
 [data-theme='dark'] .ui-theme-toggle-item[data-active='true'] {
-  background: #182235;
+  background: var(--ui-color-bg-subtle);
 }

@@ -16,6 +16,7 @@ export { ThemeProvider, useTheme } from './components/ThemeProvider';
 // 纯函数会被当成 client reference，运行时报 "client reference called on server"。
 // 业界标准做法（Radix UI / Vercel SDK）：server-safe utility 单独 sub-entry，no banner。
 export * from './components/ThemeToggle';
+export * from './components/PaletteToggle';
 
 export { useDisclosure } from './hooks/useDisclosure';
 export type { UseDisclosureProps, UseDisclosureReturn } from './hooks/useDisclosure';
