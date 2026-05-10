@@ -203,6 +203,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           <input
             ref={ref}
             className="ui-input-field"
+            suppressHydrationWarning
             type="search"
             role="combobox"
             aria-label={ariaLabel}

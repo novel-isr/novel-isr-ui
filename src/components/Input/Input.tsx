@@ -47,7 +47,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(pro
       data-disabled={isDisabled || undefined}
     >
       {prefix && <span className="ui-input-addon ui-input-addon-start">{prefix}</span>}
-      <input ref={ref} className="ui-input-field" {...fc} />
+      <input ref={ref} className="ui-input-field" suppressHydrationWarning {...fc} />
       {suffix && <span className="ui-input-addon ui-input-addon-end">{suffix}</span>}
     </div>
   );
