@@ -61,25 +61,21 @@
   }
 }
 
-// variant: line（默认）—— 底部高亮线 + 选中态加柔和背景与 inset 立体感
+// variant: line（默认）—— 仅下划线指示器，no bg / no inset shadow / no radius
+// Phase 5 de-card：editorial 风格，hover 仅文本上色，active 仅 2px 下划线
 .ui-tabs-variant-line .ui-tabs-list {
   border-bottom: 1px solid var(--ui-color-border);
 }
 .ui-tabs-variant-line .ui-tabs-trigger {
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  border-radius: var(--ui-radius-sm) var(--ui-radius-sm) 0 0;
-}
-.ui-tabs-variant-line .ui-tabs-trigger:hover:not([data-state="active"]) {
-  background-color: var(--ui-color-bg-muted);
+  padding-inline: var(--ui-space-2);
+  transition:
+    color var(--ui-transition-fast),
+    border-color var(--ui-transition-fast);
 }
 .ui-tabs-variant-line .ui-tabs-trigger[data-state="active"] {
   border-bottom-color: var(--ui-color-brand-500);
-  background-color: var(--ui-color-bg);
-  box-shadow:
-    inset 0 1px 0 var(--ui-color-border),
-    inset 1px 0 0 var(--ui-color-border),
-    inset -1px 0 0 var(--ui-color-border);
 }
 
 // vertical line variant
@@ -92,6 +88,7 @@
   border-right: 2px solid transparent;
   margin-bottom: 0;
   margin-right: -1px;
+  padding-inline: var(--ui-space-3);
   text-align: left;
 }
 .ui-tabs-variant-line.ui-tabs-orientation-vertical
