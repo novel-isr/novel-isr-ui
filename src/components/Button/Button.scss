@@ -232,6 +232,37 @@
   --button-link-fg-hover: var(--ui-color-brand-500);
 }
 
+/* Dark mode 反向色阶兼容：
+ * dark editorial / dark tech 都把 <color>-500 调到 “暗底上仍可见的浅色”
+ * （editorial brand-500=#7a9bc4 浅蓝、tech brand-500=#5c8ee6 浅蓝...），
+ * 而 solid Button fg 写死 #ffffff —— 浅 bg + 白字对比度 ~2.8:1，WCAG AA 失败。
+ *
+ * 解：dark mode 下用同色族的 -50（dark mode 反向后 -50 是最深值）当文字色，
+ * 走 <color>-50 on <color>-500 模式 —— 全色族实测 4.5:1 - 8:1 区间，全部过 AA。
+ * gray / neutral 不受影响（其灰阶在 dark mode 也按 50=深 / 700=浅排，已对）。
+ */
+[data-theme='dark'] {
+  .ui-button-color-brand,
+  .ui-button-color-primary {
+    --button-solid-fg: var(--ui-color-brand-50);
+  }
+  .ui-button-color-accent {
+    --button-solid-fg: var(--ui-color-accent-50);
+  }
+  .ui-button-color-secondary {
+    --button-solid-fg: var(--ui-color-info-50);
+  }
+  .ui-button-color-success {
+    --button-solid-fg: var(--ui-color-success-50);
+  }
+  .ui-button-color-warning {
+    --button-solid-fg: var(--ui-color-warning-50);
+  }
+  .ui-button-color-danger {
+    --button-solid-fg: var(--ui-color-danger-50);
+  }
+}
+
 /* solid 按钮：
  * - 1px 透明 border 占位；真正的"边框"由阴影顶层画
  * - 阴影做两层：底部 1-2px 落地阴影 + 内顶 1px 高光（像物理按钮的圆角倒角）
