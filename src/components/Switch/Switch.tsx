@@ -13,7 +13,7 @@
  *        checked={enabled}
  *        onCheckedChange={setEnabled}
  *        offLabel="Business BFF"
- *        onLabel="Mock fixture"
+ *        onLabel="Mock response"
  *      />
  *      ─ 滑块在中间，左右两个 label 都可点击直接 set 状态。
  *
@@ -23,7 +23,7 @@
  *        checked={enabled}
  *        onCheckedChange={setEnabled}
  *        offLabel="Business BFF"
- *        onLabel="Mock fixture"
+ *        onLabel="Mock response"
  *      />
  *      ─ iOS 风格分段控件，激活半 brand 底色，无滑块。
  */
