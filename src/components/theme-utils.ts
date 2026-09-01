@@ -6,7 +6,7 @@
  *
  * 主题维度（正交）：
  *   theme    light / dark / system     模式（浅深 / 跟随系统）
- *   palette  editorial / tech          色身（文学暖白 / 科技冷调）
+ *   palette  editorial / tech / graphite / cool
  *
  * SSR Layout 用法：
  *
@@ -28,7 +28,8 @@
 export type Theme = 'light' | 'dark' | 'system';
 export type ResolvedTheme = 'light' | 'dark';
 
-export type Palette = 'editorial' | 'tech';
+export const PALETTES = ['editorial', 'tech', 'graphite', 'cool'] as const;
+export type Palette = (typeof PALETTES)[number];
 
 /** Cookie 名 —— 切换时写、inline script 启动时读，跨 client / server 单一真值。 */
 export const THEME_COOKIE_NAME = 'theme';
@@ -47,7 +48,7 @@ export function parseThemeCookie(value: string | undefined): Theme {
 
 /** Cookie 原始字符串 → 合法 Palette；非法值 / undefined 统一回退到 default。 */
 export function parsePaletteCookie(value: string | undefined): Palette {
-  return value === 'editorial' || value === 'tech' ? value : DEFAULT_PALETTE;
+  return PALETTES.includes(value as Palette) ? (value as Palette) : DEFAULT_PALETTE;
 }
 
 /**
@@ -63,4 +64,4 @@ export function parsePaletteCookie(value: string | undefined): Palette {
  *
  * cookie 名跟 *_COOKIE_NAME 联动 —— 单一真值。
  */
-export const THEME_INIT_SCRIPT = `(function(){try{var d=document.documentElement,c=document.cookie;var tm=c.match(/(?:^|; )${THEME_COOKIE_NAME}=([^;]+)/);var t=tm?tm[1]:'system';if(t!=='light'&&t!=='dark'&&t!=='system')t='system';if(t==='system')t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t;var pm=c.match(/(?:^|; )${PALETTE_COOKIE_NAME}=([^;]+)/);var p=pm?pm[1]:'${DEFAULT_PALETTE}';if(p!=='editorial'&&p!=='tech')p='${DEFAULT_PALETTE}';d.dataset.palette=p;}catch(e){}})();`;
+export const THEME_INIT_SCRIPT = `(function(){try{var d=document.documentElement,c=document.cookie;var tm=c.match(/(?:^|; )${THEME_COOKIE_NAME}=([^;]+)/);var t=tm?tm[1]:'system';if(t!=='light'&&t!=='dark'&&t!=='system')t='system';if(t==='system')t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';d.dataset.theme=t;var pm=c.match(/(?:^|; )${PALETTE_COOKIE_NAME}=([^;]+)/);var p=pm?pm[1]:'${DEFAULT_PALETTE}';if(p!=='editorial'&&p!=='tech'&&p!=='graphite'&&p!=='cool')p='${DEFAULT_PALETTE}';d.dataset.palette=p;}catch(e){}})();`;

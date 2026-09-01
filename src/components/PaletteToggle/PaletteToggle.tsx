@@ -15,17 +15,21 @@ import { type Palette } from '../theme-utils';
 
 export interface PaletteToggleProps extends HTMLAttributes<HTMLDivElement> {
   labels?: Partial<Record<Palette, string>>;
+  palettes?: Palette[];
 }
 
-const ITEMS: Palette[] = ['editorial', 'tech'];
+const DEFAULT_ITEMS: Palette[] = ['editorial', 'tech'];
 
 const DEFAULT_LABELS: Record<Palette, string> = {
   editorial: '文学',
   tech: '科技',
+  graphite: '石墨灰',
+  cool: '冷灰蓝',
 };
 
 export function PaletteToggle({
   labels,
+  palettes = DEFAULT_ITEMS,
   className,
   ...rest
 }: PaletteToggleProps) {
@@ -38,7 +42,7 @@ export function PaletteToggle({
       aria-label={`当前色身 ${palette}`}
       {...rest}
     >
-      {ITEMS.map(item => (
+      {palettes.map(item => (
         <button
           key={item}
           className="ui-theme-toggle-item"

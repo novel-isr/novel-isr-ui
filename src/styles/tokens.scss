@@ -117,6 +117,17 @@
   // 焦点环
   --ui-focus-ring-width: 0.125rem;
   --ui-focus-ring-offset: 0.125rem;
+
+  // 应用壳层语义。默认通过现有 alias 自动跟随 palette；需要更细层级的
+  // palette 可以在各自 light/dark block 中覆盖。
+  --ui-color-canvas: var(--ui-color-bg-subtle);
+  --ui-color-surface: var(--ui-color-bg);
+  --ui-color-surface-raised: var(--ui-color-bg-muted);
+  --ui-color-control: var(--ui-color-bg-subtle);
+  --ui-color-hover: var(--ui-color-bg-muted);
+  --ui-color-selected: color-mix(in srgb, var(--ui-color-brand-500) 14%, var(--ui-color-bg));
+  --ui-color-divider: var(--ui-color-border);
+  --ui-color-focus-ring: var(--ui-color-brand-500);
 }
 
 // ─── EDITORIAL · 文学派（默认）─────────────────────────────────────────────
@@ -471,6 +482,334 @@
   --ui-shadow-xl:
     0 20px 25px -5px rgba(0, 0, 0, 0.6),
     0 8px 10px -6px rgba(0, 0, 0, 0.45);
+}
+
+// ─── GRAPHITE · neutral operations light ──────────────────────────────────
+[data-palette='graphite'][data-theme='light'],
+[data-palette='graphite']:not([data-theme='dark']) {
+  --ui-font-family-sans:
+    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN',
+    'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ui-font-family-display: var(--ui-font-family-sans);
+  --ui-font-family-mono:
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --ui-color-brand-50: #eef3ff;
+  --ui-color-brand-100: #dbe5ff;
+  --ui-color-brand-200: #bdceff;
+  --ui-color-brand-300: #95adf5;
+  --ui-color-brand-400: #6486e3;
+  --ui-color-brand-500: #315fce;
+  --ui-color-brand-600: #294eaa;
+  --ui-color-brand-700: #223f87;
+  --ui-color-brand-800: #1b326b;
+  --ui-color-brand-900: #16295a;
+
+  --ui-color-accent-50: var(--ui-color-brand-50);
+  --ui-color-accent-100: var(--ui-color-brand-100);
+  --ui-color-accent-200: var(--ui-color-brand-200);
+  --ui-color-accent-300: var(--ui-color-brand-300);
+  --ui-color-accent-400: var(--ui-color-brand-400);
+  --ui-color-accent-500: var(--ui-color-brand-500);
+  --ui-color-accent-600: var(--ui-color-brand-600);
+  --ui-color-accent-700: var(--ui-color-brand-700);
+
+  --ui-color-gray-50: #f7f7f8;
+  --ui-color-gray-100: #eff0f2;
+  --ui-color-gray-200: #dfe1e5;
+  --ui-color-gray-300: #c6c9cf;
+  --ui-color-gray-400: #9ca1aa;
+  --ui-color-gray-500: #6f7680;
+  --ui-color-gray-600: #505761;
+  --ui-color-gray-700: #3b4149;
+  --ui-color-gray-800: #292d32;
+  --ui-color-gray-900: #1f2328;
+
+  --ui-color-success-50: #edf8f1;
+  --ui-color-success-500: #25865a;
+  --ui-color-success-600: #1e704b;
+  --ui-color-success-700: #195a3e;
+  --ui-color-warning-50: #fff7e6;
+  --ui-color-warning-500: #a86618;
+  --ui-color-warning-600: #8b5313;
+  --ui-color-warning-700: #70420f;
+  --ui-color-danger-50: #fff0f0;
+  --ui-color-danger-500: #c24141;
+  --ui-color-danger-600: #a63333;
+  --ui-color-danger-700: #852828;
+  --ui-color-info-50: #edf6fb;
+  --ui-color-info-500: #327da3;
+  --ui-color-info-600: #286687;
+  --ui-color-info-700: #20516c;
+
+  --ui-color-bg: #ffffff;
+  --ui-color-bg-subtle: #f5f6f7;
+  --ui-color-bg-muted: #eceef1;
+  --ui-color-bg-emphasis: #1f2328;
+  --ui-color-fg: #1f2328;
+  --ui-color-fg-secondary: #3b4149;
+  --ui-color-fg-muted: #606873;
+  --ui-color-fg-disabled: #9ca1aa;
+  --ui-color-fg-inverse: #ffffff;
+  --ui-color-border: #dfe2e6;
+  --ui-color-border-strong: #b7bdc5;
+  --ui-color-overlay: rgba(31, 35, 40, 0.52);
+
+  --ui-color-canvas: #f5f6f7;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-control: #f0f1f3;
+  --ui-color-hover: #e8eaed;
+  --ui-color-selected: #e5ecff;
+  --ui-color-divider: #e3e5e8;
+  --ui-color-focus-ring: #315fce;
+
+  --ui-shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.06);
+  --ui-shadow-md: 0 4px 12px rgba(31, 35, 40, 0.09);
+  --ui-shadow-lg: 0 12px 28px rgba(31, 35, 40, 0.12);
+  --ui-shadow-xl: 0 20px 42px rgba(31, 35, 40, 0.16);
+}
+
+// ─── GRAPHITE · neutral operations dark ───────────────────────────────────
+[data-palette='graphite'][data-theme='dark'] {
+  --ui-color-brand-50: #17213a;
+  --ui-color-brand-100: #202e50;
+  --ui-color-brand-200: #2d4270;
+  --ui-color-brand-300: #3f5e9e;
+  --ui-color-brand-400: #587bd2;
+  --ui-color-brand-500: #7b9cff;
+  --ui-color-brand-600: #99b2ff;
+  --ui-color-brand-700: #b7c8ff;
+  --ui-color-brand-800: #d5deff;
+  --ui-color-brand-900: #eef2ff;
+
+  --ui-color-accent-50: var(--ui-color-brand-50);
+  --ui-color-accent-100: var(--ui-color-brand-100);
+  --ui-color-accent-200: var(--ui-color-brand-200);
+  --ui-color-accent-300: var(--ui-color-brand-300);
+  --ui-color-accent-400: var(--ui-color-brand-400);
+  --ui-color-accent-500: var(--ui-color-brand-500);
+  --ui-color-accent-600: var(--ui-color-brand-600);
+  --ui-color-accent-700: var(--ui-color-brand-700);
+
+  --ui-color-gray-50: #17181b;
+  --ui-color-gray-100: #1e2024;
+  --ui-color-gray-200: #25282d;
+  --ui-color-gray-300: #34383f;
+  --ui-color-gray-400: #494f59;
+  --ui-color-gray-500: #6f7680;
+  --ui-color-gray-600: #a7adb7;
+  --ui-color-gray-700: #c7ccd3;
+  --ui-color-gray-800: #e0e3e8;
+  --ui-color-gray-900: #f2f4f7;
+
+  --ui-color-success-50: #183126;
+  --ui-color-success-500: #65c18c;
+  --ui-color-success-600: #83d3a3;
+  --ui-color-success-700: #a7e2bc;
+  --ui-color-warning-50: #382b18;
+  --ui-color-warning-500: #e4ad5f;
+  --ui-color-warning-600: #efc27f;
+  --ui-color-warning-700: #f4d39f;
+  --ui-color-danger-50: #3a2022;
+  --ui-color-danger-500: #e47b7b;
+  --ui-color-danger-600: #ee9999;
+  --ui-color-danger-700: #f4b8b8;
+  --ui-color-info-50: #1b2e38;
+  --ui-color-info-500: #6cb6d9;
+  --ui-color-info-600: #8bc8e3;
+  --ui-color-info-700: #add9eb;
+
+  --ui-color-bg: #1e2024;
+  --ui-color-bg-subtle: #17181b;
+  --ui-color-bg-muted: #25282d;
+  --ui-color-bg-emphasis: #f2f4f7;
+  --ui-color-fg: #f2f4f7;
+  --ui-color-fg-secondary: #c7ccd3;
+  --ui-color-fg-muted: #a7adb7;
+  --ui-color-fg-disabled: #6f7680;
+  --ui-color-fg-inverse: #17181b;
+  --ui-color-border: #34383f;
+  --ui-color-border-strong: #494f59;
+  --ui-color-overlay: rgba(10, 11, 13, 0.7);
+
+  --ui-color-canvas: #17181b;
+  --ui-color-surface: #1e2024;
+  --ui-color-surface-raised: #25282d;
+  --ui-color-control: #292d33;
+  --ui-color-hover: #30343a;
+  --ui-color-selected: #29334d;
+  --ui-color-divider: #2c3036;
+  --ui-color-focus-ring: #7b9cff;
+
+  --ui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --ui-shadow-md: 0 5px 16px rgba(0, 0, 0, 0.28);
+  --ui-shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.34);
+  --ui-shadow-xl: 0 24px 52px rgba(0, 0, 0, 0.4);
+}
+
+// ─── COOL · gray-blue operations light ───────────────────────────────────
+[data-palette='cool'][data-theme='light'],
+[data-palette='cool']:not([data-theme='dark']) {
+  --ui-font-family-sans:
+    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN',
+    'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ui-font-family-display: var(--ui-font-family-sans);
+  --ui-font-family-mono:
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --ui-color-brand-50: #edf4ff;
+  --ui-color-brand-100: #d9e8ff;
+  --ui-color-brand-200: #b6d1ff;
+  --ui-color-brand-300: #88b2f3;
+  --ui-color-brand-400: #568cde;
+  --ui-color-brand-500: #2864c7;
+  --ui-color-brand-600: #2253a6;
+  --ui-color-brand-700: #1c4385;
+  --ui-color-brand-800: #17366b;
+  --ui-color-brand-900: #122b56;
+
+  --ui-color-accent-50: var(--ui-color-brand-50);
+  --ui-color-accent-100: var(--ui-color-brand-100);
+  --ui-color-accent-200: var(--ui-color-brand-200);
+  --ui-color-accent-300: var(--ui-color-brand-300);
+  --ui-color-accent-400: var(--ui-color-brand-400);
+  --ui-color-accent-500: var(--ui-color-brand-500);
+  --ui-color-accent-600: var(--ui-color-brand-600);
+  --ui-color-accent-700: var(--ui-color-brand-700);
+
+  --ui-color-gray-50: #f5f8fb;
+  --ui-color-gray-100: #eaf0f5;
+  --ui-color-gray-200: #d6e0e9;
+  --ui-color-gray-300: #b8c6d3;
+  --ui-color-gray-400: #8fa0b0;
+  --ui-color-gray-500: #647687;
+  --ui-color-gray-600: #485a6b;
+  --ui-color-gray-700: #344554;
+  --ui-color-gray-800: #24323f;
+  --ui-color-gray-900: #17202b;
+
+  --ui-color-success-50: #edf9f3;
+  --ui-color-success-500: #23845a;
+  --ui-color-success-600: #1d6e4b;
+  --ui-color-success-700: #17583d;
+  --ui-color-warning-50: #fff7e8;
+  --ui-color-warning-500: #a76717;
+  --ui-color-warning-600: #8b5413;
+  --ui-color-warning-700: #70420f;
+  --ui-color-danger-50: #fff0f1;
+  --ui-color-danger-500: #c43f4e;
+  --ui-color-danger-600: #a6313f;
+  --ui-color-danger-700: #862732;
+  --ui-color-info-50: #eaf7fb;
+  --ui-color-info-500: #287f9e;
+  --ui-color-info-600: #216883;
+  --ui-color-info-700: #1a5369;
+
+  --ui-color-bg: #ffffff;
+  --ui-color-bg-subtle: #f3f6f9;
+  --ui-color-bg-muted: #e8eef4;
+  --ui-color-bg-emphasis: #17202b;
+  --ui-color-fg: #17202b;
+  --ui-color-fg-secondary: #344554;
+  --ui-color-fg-muted: #5e7081;
+  --ui-color-fg-disabled: #8fa0b0;
+  --ui-color-fg-inverse: #ffffff;
+  --ui-color-border: #d8e1e9;
+  --ui-color-border-strong: #afbdca;
+  --ui-color-overlay: rgba(23, 32, 43, 0.54);
+
+  --ui-color-canvas: #f3f6f9;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-control: #edf2f6;
+  --ui-color-hover: #e3eaf1;
+  --ui-color-selected: #dfebff;
+  --ui-color-divider: #dce4eb;
+  --ui-color-focus-ring: #2864c7;
+
+  --ui-shadow-sm: 0 1px 2px rgba(23, 32, 43, 0.06);
+  --ui-shadow-md: 0 4px 12px rgba(23, 32, 43, 0.09);
+  --ui-shadow-lg: 0 12px 28px rgba(23, 32, 43, 0.13);
+  --ui-shadow-xl: 0 20px 42px rgba(23, 32, 43, 0.17);
+}
+
+// ─── COOL · gray-blue operations dark ────────────────────────────────────
+[data-palette='cool'][data-theme='dark'] {
+  --ui-color-brand-50: #172943;
+  --ui-color-brand-100: #1d3557;
+  --ui-color-brand-200: #294a75;
+  --ui-color-brand-300: #3b659a;
+  --ui-color-brand-400: #5483c3;
+  --ui-color-brand-500: #79a9ff;
+  --ui-color-brand-600: #98bcff;
+  --ui-color-brand-700: #b7d0ff;
+  --ui-color-brand-800: #d4e2ff;
+  --ui-color-brand-900: #edf4ff;
+
+  --ui-color-accent-50: var(--ui-color-brand-50);
+  --ui-color-accent-100: var(--ui-color-brand-100);
+  --ui-color-accent-200: var(--ui-color-brand-200);
+  --ui-color-accent-300: var(--ui-color-brand-300);
+  --ui-color-accent-400: var(--ui-color-brand-400);
+  --ui-color-accent-500: var(--ui-color-brand-500);
+  --ui-color-accent-600: var(--ui-color-brand-600);
+  --ui-color-accent-700: var(--ui-color-brand-700);
+
+  --ui-color-gray-50: #151a21;
+  --ui-color-gray-100: #1b222c;
+  --ui-color-gray-200: #222c38;
+  --ui-color-gray-300: #344354;
+  --ui-color-gray-400: #4a5d72;
+  --ui-color-gray-500: #708397;
+  --ui-color-gray-600: #a2afbd;
+  --ui-color-gray-700: #c5ced7;
+  --ui-color-gray-800: #dce4eb;
+  --ui-color-gray-900: #eef3f8;
+
+  --ui-color-success-50: #183328;
+  --ui-color-success-500: #62c28e;
+  --ui-color-success-600: #81d4a5;
+  --ui-color-success-700: #a5e3bd;
+  --ui-color-warning-50: #392c19;
+  --ui-color-warning-500: #e4ad5e;
+  --ui-color-warning-600: #efc17d;
+  --ui-color-warning-700: #f5d39e;
+  --ui-color-danger-50: #3b2026;
+  --ui-color-danger-500: #e37b88;
+  --ui-color-danger-600: #ed9aa4;
+  --ui-color-danger-700: #f4b9c0;
+  --ui-color-info-50: #17313c;
+  --ui-color-info-500: #65bad5;
+  --ui-color-info-600: #85cce1;
+  --ui-color-info-700: #a8ddeb;
+
+  --ui-color-bg: #1b222c;
+  --ui-color-bg-subtle: #151a21;
+  --ui-color-bg-muted: #222c38;
+  --ui-color-bg-emphasis: #eef3f8;
+  --ui-color-fg: #eef3f8;
+  --ui-color-fg-secondary: #c5ced7;
+  --ui-color-fg-muted: #a2afbd;
+  --ui-color-fg-disabled: #708397;
+  --ui-color-fg-inverse: #151a21;
+  --ui-color-border: #344354;
+  --ui-color-border-strong: #4a5d72;
+  --ui-color-overlay: rgba(7, 11, 16, 0.72);
+
+  --ui-color-canvas: #151a21;
+  --ui-color-surface: #1b222c;
+  --ui-color-surface-raised: #222c38;
+  --ui-color-control: #273341;
+  --ui-color-hover: #2e3c4c;
+  --ui-color-selected: #263a57;
+  --ui-color-divider: #2d3947;
+  --ui-color-focus-ring: #79a9ff;
+
+  --ui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --ui-shadow-md: 0 5px 16px rgba(0, 0, 0, 0.3);
+  --ui-shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.36);
+  --ui-shadow-xl: 0 24px 52px rgba(0, 0, 0, 0.42);
 }
 
 // ─── 全局 reset（最小集）─────────────────────────────────────────────────

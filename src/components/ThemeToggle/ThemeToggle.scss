@@ -3,8 +3,8 @@
   gap: 2px;
   padding: 3px;
   border-radius: var(--ui-radius-lg);
-  background: var(--ui-color-bg-subtle);
-  box-shadow: 0 0 0 1px var(--ui-color-border);
+  background: var(--ui-color-control);
+  box-shadow: 0 0 0 1px var(--ui-color-divider);
 }
 
 .ui-theme-toggle-item {
@@ -25,19 +25,12 @@
 }
 
 .ui-theme-toggle-item:hover {
+  background: var(--ui-color-hover);
   color: var(--ui-color-fg);
 }
 
 .ui-theme-toggle-item[data-active='true'] {
-  background: var(--ui-color-bg-muted);
+  background: var(--ui-color-surface-raised);
   color: var(--ui-color-fg);
   box-shadow: 0 0 0 1px var(--ui-color-border);
-}
-
-[data-theme='dark'] .ui-theme-toggle {
-  background: var(--ui-color-bg-muted);
-}
-
-[data-theme='dark'] .ui-theme-toggle-item[data-active='true'] {
-  background: var(--ui-color-bg-subtle);
 }

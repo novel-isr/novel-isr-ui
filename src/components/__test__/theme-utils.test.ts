@@ -3,7 +3,7 @@
  *
  * 关键不变量：
  *   - parseThemeCookie 只接受 'light' / 'dark' / 'system'，其它一律回退到 system
- *   - parsePaletteCookie 只接受 'editorial' / 'tech'，其它一律回退到 default
+ *   - parsePaletteCookie 只接受共享 palette，其他值一律回退到 default
  *   - THEME_INIT_SCRIPT 是常量字符串（server / client 必须输出完全一致），且必须正确处理
  *     theme 的 cookie 缺失 / 非法值 / system + palette 的 cookie 缺失 / 非法值
  *
@@ -44,6 +44,8 @@ describe('parsePaletteCookie', () => {
   it('合法值原样返回', () => {
     expect(parsePaletteCookie('editorial')).toBe('editorial');
     expect(parsePaletteCookie('tech')).toBe('tech');
+    expect(parsePaletteCookie('graphite')).toBe('graphite');
+    expect(parsePaletteCookie('cool')).toBe('cool');
   });
 
   it('undefined → DEFAULT_PALETTE 兜底', () => {
@@ -73,9 +75,11 @@ describe('THEME_INIT_SCRIPT', () => {
     expect(THEME_INIT_SCRIPT).toContain("'system'");
   });
 
-  it('包含 palette 两种合法值的白名单', () => {
+  it('包含全部 palette 合法值的白名单', () => {
     expect(THEME_INIT_SCRIPT).toContain("'editorial'");
     expect(THEME_INIT_SCRIPT).toContain("'tech'");
+    expect(THEME_INIT_SCRIPT).toContain("'graphite'");
+    expect(THEME_INIT_SCRIPT).toContain("'cool'");
   });
 
   it('try/catch 包裹 —— 浏览器禁用 cookie / matchMedia 时不 throw', () => {
@@ -90,6 +94,24 @@ describe('THEME_INIT_SCRIPT', () => {
     new Function(THEME_INIT_SCRIPT).call(stub);
     expect(stub.documentElementDataset.theme).toBe('light');
     expect(stub.documentElementDataset.palette).toBe('tech');
+  });
+
+  it('cookie=dark + palette=graphite → 首屏应用 graphite dark', () => {
+    const stub = stubDom({
+      cookie: `${THEME_COOKIE_NAME}=dark; ${PALETTE_COOKIE_NAME}=graphite`,
+    });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('dark');
+    expect(stub.documentElementDataset.palette).toBe('graphite');
+  });
+
+  it('cookie=light + palette=cool → 首屏应用 cool light', () => {
+    const stub = stubDom({
+      cookie: `${THEME_COOKIE_NAME}=light; ${PALETTE_COOKIE_NAME}=cool`,
+    });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('light');
+    expect(stub.documentElementDataset.palette).toBe('cool');
   });
 
   it('cookie=system + 系统 dark → theme=dark；palette 缺失 → DEFAULT', () => {
