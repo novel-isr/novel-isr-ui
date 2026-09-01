@@ -131,6 +131,13 @@ describe('THEME_INIT_SCRIPT', () => {
     expect(stub.documentElementDataset.palette).toBe(DEFAULT_PALETTE);
   });
 
+  it('palette cookie 缺失时保留宿主 html 声明的合法 palette', () => {
+    const stub = stubDom({ cookie: '', prefersDark: true, initialPalette: 'graphite' });
+    new Function(THEME_INIT_SCRIPT).call(stub);
+    expect(stub.documentElementDataset.theme).toBe('dark');
+    expect(stub.documentElementDataset.palette).toBe('graphite');
+  });
+
   it('palette 非法值（"classic"）→ DEFAULT 兜底', () => {
     const stub = stubDom({
       cookie: `${THEME_COOKIE_NAME}=light; ${PALETTE_COOKIE_NAME}=classic`,
@@ -166,8 +173,8 @@ interface StubDom {
   };
 }
 
-function stubDom(opts: { cookie: string; prefersDark?: boolean }): StubDom {
-  const dataset: Record<string, string> = {};
+function stubDom(opts: { cookie: string; prefersDark?: boolean; initialPalette?: string }): StubDom {
+  const dataset: Record<string, string> = opts.initialPalette ? { palette: opts.initialPalette } : {};
   const stub = {
     documentElementDataset: dataset,
     document: {
