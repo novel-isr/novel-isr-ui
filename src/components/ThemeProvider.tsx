@@ -109,6 +109,7 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(defaultTheme);
   const [palette, setPaletteState] = useState<Palette>(defaultPalette);
+  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
 
   // hydrate 后从 cookie 读最新值。如果 server 已经从 cookie 读到正确值传进来作为
   // default*，这一步是 no-op（值相同 setState 不触发重渲染）。仅在 cookie
@@ -124,21 +125,24 @@ export function ThemeProvider({
   }, [disableStorage]);
 
   const resolvedTheme: ResolvedTheme = useMemo(() => {
-    if (theme === 'system') return getSystemTheme();
+    if (theme === 'system') return systemTheme;
     return theme;
-  }, [theme]);
+  }, [systemTheme, theme]);
 
-  // 应用 data-theme + 监听 system 变化
+  // 始终跟踪系统偏好，显式主题切回 system 时可立即使用最新值。
   useEffect(() => {
-    applyTheme(resolvedTheme);
-    if (theme !== 'system') return;
     if (typeof window === 'undefined' || !window.matchMedia) return;
 
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    const onChange = () => applyTheme(getSystemTheme());
+    const onChange = (event: MediaQueryListEvent) => setSystemTheme(event.matches ? 'dark' : 'light');
+    setSystemTheme(mql.matches ? 'dark' : 'light');
     mql.addEventListener('change', onChange);
     return () => mql.removeEventListener('change', onChange);
-  }, [theme, resolvedTheme]);
+  }, []);
+
+  useEffect(() => {
+    applyTheme(resolvedTheme);
+  }, [resolvedTheme]);
 
   // 应用 data-palette
   useEffect(() => {
