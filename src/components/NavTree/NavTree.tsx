@@ -12,6 +12,7 @@ export interface NavTreeItem {
   description?: string;
   href?: string;
   icon?: ReactNode;
+  endContent?: ReactNode;
   disabled?: boolean;
   children?: NavTreeItem[];
 }
@@ -215,10 +216,15 @@ function renderItem(options: RenderItemOptions): ReactNode {
           <small className="ui-nav-tree-description">{item.description}</small>
         )}
       </span>
-      {hasChildren && !collapsed && (
-        <span className="ui-nav-tree-chevron" aria-hidden="true">
-          {/* rotate -90 折叠 / 0 展开 —— 与 VS Code、Linear、Notion 一致 */}
-          <ChevronDown size={16} strokeWidth={2} />
+      {!collapsed && (item.endContent || hasChildren) && (
+        <span className="ui-nav-tree-trailing">
+          {item.endContent && <span className="ui-nav-tree-end">{item.endContent}</span>}
+          {hasChildren && (
+            <span className="ui-nav-tree-chevron" aria-hidden="true">
+              {/* rotate -90 折叠 / 0 展开 —— 与 VS Code、Linear、Notion 一致 */}
+              <ChevronDown size={16} strokeWidth={2} />
+            </span>
+          )}
         </span>
       )}
     </>

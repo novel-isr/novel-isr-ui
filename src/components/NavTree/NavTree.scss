@@ -81,9 +81,11 @@
 }
 
 .ui-nav-tree-item-active {
-  background: color-mix(in srgb, var(--ui-color-brand-500) 16%, var(--ui-color-bg));
+  background: var(--ui-color-selected);
   color: var(--ui-color-fg);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-color-brand-500) 28%, transparent);
+  box-shadow:
+    inset 3px 0 0 var(--ui-color-brand-500),
+    inset 0 0 0 1px color-mix(in srgb, var(--ui-color-brand-500) 24%, transparent);
 }
 
 .ui-nav-tree-item-disabled {
@@ -107,7 +109,7 @@
 
 .ui-nav-tree-item-active .ui-nav-tree-icon {
   background: color-mix(in srgb, var(--ui-color-brand-500) 14%, transparent);
-  color: var(--ui-color-info-500);
+  color: var(--ui-color-brand-500);
 }
 
 .ui-nav-tree-copy {
@@ -135,7 +137,21 @@
 }
 
 .ui-nav-tree-item-active .ui-nav-tree-description {
-  color: var(--ui-color-info-500);
+  color: var(--ui-color-fg-secondary);
+}
+
+.ui-nav-tree-trailing {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-space-1);
+}
+
+.ui-nav-tree-end {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
 }
 
 /* 分支项 chevron —— SVG 实现，统一 stroke 而非依赖系统字体的 Unicode 三角。
@@ -208,6 +224,7 @@
 
 .ui-nav-tree-collapsed .ui-nav-tree-section-title,
 .ui-nav-tree-collapsed .ui-nav-tree-copy,
+.ui-nav-tree-collapsed .ui-nav-tree-trailing,
 .ui-nav-tree-collapsed .ui-nav-tree-chevron,
 .ui-nav-tree-collapsed .ui-nav-tree-children {
   display: none;
