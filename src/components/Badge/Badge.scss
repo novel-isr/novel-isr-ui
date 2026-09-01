@@ -19,7 +19,7 @@
 }
 .ui-badge-variant-solid.ui-badge-color-brand {
   background-color: var(--ui-color-brand-500);
-  color: #ffffff;
+  color: var(--ui-color-fg-inverse);
 }
 .ui-badge-variant-outline.ui-badge-color-brand {
   border-color: var(--ui-color-brand-500);
@@ -32,7 +32,7 @@
 }
 .ui-badge-variant-solid.ui-badge-color-gray {
   background-color: var(--ui-color-gray-700);
-  color: #ffffff;
+  color: var(--ui-color-fg-inverse);
 }
 .ui-badge-variant-outline.ui-badge-color-gray {
   border-color: var(--ui-color-border-strong);
@@ -45,7 +45,7 @@
 }
 .ui-badge-variant-solid.ui-badge-color-success {
   background-color: var(--ui-color-success-500);
-  color: #ffffff;
+  color: var(--ui-color-fg-inverse);
 }
 
 .ui-badge-variant-subtle.ui-badge-color-warning {
@@ -54,7 +54,7 @@
 }
 .ui-badge-variant-solid.ui-badge-color-warning {
   background-color: var(--ui-color-warning-500);
-  color: #ffffff;
+  color: var(--ui-color-fg-inverse);
 }
 
 .ui-badge-variant-subtle.ui-badge-color-danger {
@@ -63,5 +63,5 @@
 }
 .ui-badge-variant-solid.ui-badge-color-danger {
   background-color: var(--ui-color-danger-500);
-  color: #ffffff;
+  color: var(--ui-color-fg-inverse);
 }

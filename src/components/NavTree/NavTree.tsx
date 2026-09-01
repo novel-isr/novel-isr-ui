@@ -94,8 +94,8 @@ export function NavTree(props: NavTreeProps) {
   };
 
   const isItemExpanded = (id: string, hasAncestorActive: boolean): boolean => {
-    if (explicitlyCollapsed.has(id)) return false;
     if (expandedSet.has(id)) return true;
+    if (explicitlyCollapsed.has(id)) return false;
     return hasAncestorActive;
   };
 
@@ -115,6 +115,7 @@ export function NavTree(props: NavTreeProps) {
     }
     setExpanded(nextExpanded);
     setExplicitlyCollapsed(nextCollapsed);
+    onItemSelect?.(item);
   };
 
   return (
@@ -185,8 +186,8 @@ function renderItem(options: RenderItemOptions): ReactNode {
   // 折叠优先级最高 —— 用户主动折叠会盖过 ancestor-active 的隐式展开。
   const expanded =
     hasChildren &&
-    !explicitlyCollapsed.has(item.id) &&
-    (expandedSet.has(item.id) || ancestorActive);
+    (expandedSet.has(item.id) ||
+      (!explicitlyCollapsed.has(item.id) && ancestorActive));
   const className = cn(
     'ui-nav-tree-item',
     hasChildren ? 'ui-nav-tree-trigger' : 'ui-nav-tree-link',
