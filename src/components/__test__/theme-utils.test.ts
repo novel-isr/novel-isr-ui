@@ -103,6 +103,7 @@ describe('THEME_INIT_SCRIPT', () => {
     new Function(THEME_INIT_SCRIPT).call(stub);
     expect(stub.documentElementDataset.theme).toBe('dark');
     expect(stub.documentElementDataset.palette).toBe('graphite');
+    expect(stub.documentElementStyle.colorScheme).toBe('dark');
   });
 
   it('cookie=light + palette=cool → 首屏应用 cool light', () => {
@@ -167,7 +168,11 @@ describe('cookie 常量', () => {
 
 interface StubDom {
   documentElementDataset: { theme?: string; palette?: string };
-  document: { cookie: string; documentElement: { dataset: Record<string, string> } };
+  documentElementStyle: { colorScheme?: string };
+  document: {
+    cookie: string;
+    documentElement: { dataset: Record<string, string>; style: { colorScheme?: string } };
+  };
   window: {
     matchMedia: (q: string) => { matches: boolean };
   };
@@ -175,11 +180,13 @@ interface StubDom {
 
 function stubDom(opts: { cookie: string; prefersDark?: boolean; initialPalette?: string }): StubDom {
   const dataset: Record<string, string> = opts.initialPalette ? { palette: opts.initialPalette } : {};
+  const style: { colorScheme?: string } = {};
   const stub = {
     documentElementDataset: dataset,
+    documentElementStyle: style,
     document: {
       cookie: opts.cookie,
-      documentElement: { dataset },
+      documentElement: { dataset, style },
     },
     window: {
       matchMedia: (q: string) => ({

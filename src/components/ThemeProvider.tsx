@@ -76,6 +76,7 @@ function writeCookie(name: string, value: string): void {
 function applyTheme(resolved: ResolvedTheme): void {
   if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('data-theme', resolved);
+  document.documentElement.style.colorScheme = resolved;
 }
 
 function applyPalette(palette: Palette): void {
