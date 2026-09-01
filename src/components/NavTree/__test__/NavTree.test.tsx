@@ -57,6 +57,7 @@ describe('NavTree', () => {
     );
     expect(css).toMatch(/\.ui-nav-tree-item-active:hover/);
     expect(css).toMatch(/\.ui-nav-tree-item-active:focus-visible/);
+    expect(css).not.toMatch(/inset\s+3px\s+0\s+0/);
   });
 
   it('notifies consumers when a collapsed branch is selected', () => {
