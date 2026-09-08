@@ -15,3 +15,4 @@ export type {
   TableVariant,
   TableScrollConfig,
 } from "./Table";
+export * from './DataTable';

@@ -484,16 +484,20 @@
     0 8px 10px -6px rgba(0, 0, 0, 0.45);
 }
 
-// ─── GRAPHITE · neutral operations light ──────────────────────────────────
-[data-palette='graphite'][data-theme='light'],
-[data-palette='graphite']:not([data-theme='dark']) {
+// Operations typography is independent of the color mode.
+[data-palette='graphite'],
+[data-palette='cool'] {
   --ui-font-family-sans:
-    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN',
-    'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif;
   --ui-font-family-display: var(--ui-font-family-sans);
   --ui-font-family-mono:
     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
 
+// ─── GRAPHITE · neutral operations light ──────────────────────────────────
+[data-palette='graphite'][data-theme='light'],
+[data-palette='graphite']:not([data-theme='dark']) {
   --ui-color-brand-50: #eef3ff;
   --ui-color-brand-100: #dbe5ff;
   --ui-color-brand-200: #bdceff;
@@ -651,13 +655,6 @@
 // ─── COOL · gray-blue operations light ───────────────────────────────────
 [data-palette='cool'][data-theme='light'],
 [data-palette='cool']:not([data-theme='dark']) {
-  --ui-font-family-sans:
-    'Inter', system-ui, -apple-system, 'Segoe UI', '思源黑体 CN',
-    'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --ui-font-family-display: var(--ui-font-family-sans);
-  --ui-font-family-mono:
-    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-
   --ui-color-brand-50: #edf4ff;
   --ui-color-brand-100: #d9e8ff;
   --ui-color-brand-200: #b6d1ff;

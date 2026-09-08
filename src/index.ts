@@ -30,6 +30,8 @@ export * from './components/Divider';
 export * from './components/Card';
 export * from './components/Skeleton';
 export * from './components/EmptyState';
+export * from './components/Page';
+export * from './components/Menu';
 
 // ─── 表单 ─────────────────────────────────────────────────────────────
 export * from './components/FormControl';

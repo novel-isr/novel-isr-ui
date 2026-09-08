@@ -342,3 +342,20 @@
 .ui-button-hidden {
   visibility: hidden;
 }
+
+.ui-icon-button {
+  --icon-button-size: 2.5rem;
+  width: var(--icon-button-size);
+  height: var(--icon-button-size);
+  min-height: var(--icon-button-size);
+  padding: 0;
+  flex: 0 0 var(--icon-button-size);
+  position: relative;
+  .ui-button-label, .ui-button-label > span { display: inline-flex; align-items: center; justify-content: center; }
+  svg { width: 1.125rem; height: 1.125rem; }
+  .ui-button-spinner { position: absolute; }
+  &.ui-button-size-xs { --icon-button-size: 1.5rem; }
+  &.ui-button-size-sm { --icon-button-size: 2rem; }
+  &.ui-button-size-lg { --icon-button-size: 3rem; }
+  &[aria-pressed='true'] { background: var(--ui-color-selected); color: var(--ui-color-fg); }
+}

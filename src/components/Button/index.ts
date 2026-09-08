@@ -6,3 +6,4 @@ export type {
   ButtonColorScheme,
   ButtonIntent,
 } from './Button';
+export * from './IconButton';

@@ -7,6 +7,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.ui-data-table {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-4);
+  > .ui-pagination { flex-wrap: wrap; }
+}
+
 [data-theme="dark"] .ui-table-wrapper {
   background-color: var(--ui-color-bg-subtle);
   border-color: var(--ui-color-border);
