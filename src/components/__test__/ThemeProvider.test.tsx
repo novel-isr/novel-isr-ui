@@ -18,6 +18,23 @@ function ThemeHarness() {
 }
 
 describe('ThemeProvider', () => {
+  it.each([undefined, 'obsolete'])('retains application defaults for cookie %s', value => {
+    const container = document.createElement('div');
+    const root = createRoot(container);
+    document.cookie = 'theme=; max-age=0; path=/';
+    document.cookie = 'palette=; max-age=0; path=/';
+    if (value) {
+      document.cookie = `theme=${value}; path=/`;
+      document.cookie = `palette=${value}; path=/`;
+    }
+    act(() => root.render(<ThemeProvider defaultTheme="dark" defaultPalette="graphite"><ThemeHarness /></ThemeProvider>));
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(document.documentElement.dataset.palette).toBe('graphite');
+    act(() => root.unmount());
+    document.cookie = 'theme=; max-age=0; path=/';
+    document.cookie = 'palette=; max-age=0; path=/';
+  });
+
   it('keeps native browser controls in sync with the resolved theme', () => {
     const container = document.createElement('div');
     const root = createRoot(container);

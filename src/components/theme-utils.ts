@@ -42,13 +42,13 @@ export const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const DEFAULT_PALETTE: Palette = 'editorial';
 
 /** Cookie 原始字符串 → 合法 Theme；非法值 / undefined 统一回退到 system。 */
-export function parseThemeCookie(value: string | undefined): Theme {
-  return value === 'light' || value === 'dark' || value === 'system' ? value : 'system';
+export function parseThemeCookie(value: string | undefined, fallback: Theme = 'system'): Theme {
+  return value === 'light' || value === 'dark' || value === 'system' ? value : fallback;
 }
 
 /** Cookie 原始字符串 → 合法 Palette；非法值 / undefined 统一回退到 default。 */
-export function parsePaletteCookie(value: string | undefined): Palette {
-  return PALETTES.includes(value as Palette) ? (value as Palette) : DEFAULT_PALETTE;
+export function parsePaletteCookie(value: string | undefined, fallback: Palette = DEFAULT_PALETTE): Palette {
+  return PALETTES.includes(value as Palette) ? (value as Palette) : fallback;
 }
 
 /**

@@ -64,6 +64,7 @@
   min-width: 0;
   > * { max-width: 100%; min-width: 0; }
   > .ui-input-root { flex: 1 1 16rem; }
+  > .ui-select-trigger { width: auto; flex: 0 1 12rem; }
 }
 .ui-stat-card {
   display: flex;

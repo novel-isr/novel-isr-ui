@@ -116,8 +116,8 @@ export function ThemeProvider({
   // 跟 default* 不一致时（dev 手改 cookie / 多 tab 切换）才同步。
   useEffect(() => {
     if (disableStorage) return;
-    const storedTheme = parseThemeCookie(readCookie(THEME_COOKIE_NAME));
-    const storedPalette = parsePaletteCookie(readCookie(PALETTE_COOKIE_NAME));
+    const storedTheme = parseThemeCookie(readCookie(THEME_COOKIE_NAME), defaultTheme);
+    const storedPalette = parsePaletteCookie(readCookie(PALETTE_COOKIE_NAME), defaultPalette);
     if (storedTheme !== theme) setThemeState(storedTheme);
     if (storedPalette !== palette) setPaletteState(storedPalette);
     // 初始化一次，default* 是 init value 不进依赖
