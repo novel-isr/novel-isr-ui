@@ -63,6 +63,8 @@ export * from './components/Badge';
 export * from './components/Tag';
 export * from './components/Table';
 export * from './components/Rating';
+export * from './components/MonthCalendar';
+export * from './components/HtmlPreview';
 
 // ─── 导航 ─────────────────────────────────────────────────────────────
 export * from './components/NavTree';

@@ -1,0 +1,67 @@
+.ui-month-calendar {
+  width: 100%;
+  min-width: 0;
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-sm);
+}
+
+.ui-month-calendar-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2);
+  margin-bottom: var(--ui-space-3);
+
+  h2 { margin: 0; font-size: var(--ui-font-size-md); font-weight: var(--ui-font-weight-semibold); }
+}
+
+.ui-month-calendar-navigation { display: flex; align-items: center; gap: var(--ui-space-1); }
+.ui-month-calendar-grid { width: 100%; min-width: 0; }
+.ui-month-calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--ui-space-1);
+  margin-bottom: var(--ui-space-1);
+
+  [role='columnheader'] { padding-block: var(--ui-space-2); text-align: center; color: var(--ui-color-fg-muted); }
+  [role='gridcell'] { min-width: 0; }
+}
+
+.ui-month-calendar-day.ui-button {
+  width: 100%;
+  height: 4rem;
+  padding: var(--ui-space-1);
+  border-radius: var(--ui-radius-sm);
+  font-variant-numeric: tabular-nums;
+
+  .ui-button-label { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-1); }
+  &[data-outside] { color: var(--ui-color-fg-muted); }
+  &[aria-current='date'] { border-color: var(--ui-color-brand-500); }
+  &[aria-pressed='true'] { background: var(--ui-color-selected); color: var(--ui-color-fg); }
+  &:focus-visible { outline-offset: -2px; }
+}
+.ui-month-calendar-count {
+  height: 1rem;
+  line-height: 1rem;
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-fg-muted);
+}
+.ui-month-calendar-events {
+  margin-top: var(--ui-space-3);
+  padding-top: var(--ui-space-3);
+  border-top: 1px solid var(--ui-color-border);
+  overflow-wrap: anywhere;
+
+  h3 { margin: 0 0 var(--ui-space-2); font-size: var(--ui-font-size-sm); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { padding-block: var(--ui-space-1); }
+  p { margin: 0; color: var(--ui-color-fg-muted); }
+  .ui-button { width: 100%; justify-content: flex-start; text-align: left; }
+  .ui-button-label { white-space: normal; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 32rem) {
+  .ui-month-calendar-day.ui-button { height: 3.25rem; }
+}

@@ -41,6 +41,9 @@
 @use '../components/Menu/Menu.scss';
 @use '../components/Upload/Upload.scss';
 @use '../components/Steps/Steps.scss';
+@use '../components/MonthCalendar/MonthCalendar.scss';
+@use '../components/HtmlPreview/HtmlPreview.scss';
+@use '../components/MonacoCodeEditor/MonacoCodeEditor.scss';
 
 /* visually-hidden 工具类：a11y 占位用（如 Modal 缺省 description 的 hidden 节点） */
 .ui-sr-only {

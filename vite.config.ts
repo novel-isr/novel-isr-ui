@@ -24,6 +24,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         'theme-utils': resolve(__dirname, 'src/components/theme-utils.ts'),
+        monaco: resolve(__dirname, 'src/monaco.ts'),
       },
       formats: ['es'],
     },
@@ -33,12 +34,14 @@ export default defineConfig({
         'react-dom',
         'react/jsx-runtime',
         'react-dom/client',
+        '@monaco-editor/react',
+        /^monaco-editor(?:\/|$)/,
         /^@radix-ui\/.*/,
       ],
       output: {
         entryFileNames: '[name].js',
         // 只给 client chunk 加 banner；theme-utils 是 server-safe 纯函数。
-        banner: chunk => (chunk.name === 'theme-utils' ? '' : "'use client';"),
+        banner: chunk => (chunk.name === 'index' || chunk.name === 'monaco' ? "'use client';" : ''),
       },
     },
     sourcemap: true,

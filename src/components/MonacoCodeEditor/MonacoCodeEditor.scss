@@ -1,0 +1,46 @@
+.ui-monaco-code-editor {
+  width: 100%;
+  min-width: 0;
+  font-family: var(--ui-font-family-sans);
+  color: var(--ui-color-fg);
+  font-size: var(--ui-font-size-sm);
+}
+.ui-monaco-code-editor-label {
+  margin-bottom: var(--ui-space-2);
+  font-weight: var(--ui-font-weight-medium);
+  overflow-wrap: anywhere;
+}
+.ui-monaco-code-editor-surface {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ui-color-border);
+  background: var(--ui-color-bg);
+}
+.ui-monaco-code-editor-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.ui-monaco-code-editor-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  padding: var(--ui-space-2);
+  color: var(--ui-color-fg-muted);
+  overflow-wrap: anywhere;
+  .ui-alert { flex: 1; min-width: 0; padding: var(--ui-space-2); }
+}
+.ui-monaco-code-editor-fallback.ui-textarea {
+  flex: 1;
+  min-height: 0;
+  font-family: var(--ui-font-family-mono);
+  border: 0;
+  border-radius: 0;
+  &:focus-visible { outline-offset: -2px; }
+}
