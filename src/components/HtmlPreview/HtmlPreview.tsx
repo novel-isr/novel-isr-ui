@@ -15,7 +15,8 @@ export function HtmlPreview({ html, title, viewport = 'desktop', mobileWidth = 3
 
   return (
     <div className={cn('ui-html-preview', className)} data-viewport={viewport}>
-      <iframe title={title} sandbox="" referrerPolicy="no-referrer" srcDoc={document}
+      {/* Replace the browsing context so an initial empty srcdoc cannot finish after the real document. */}
+      <iframe key={document} title={title} sandbox="" referrerPolicy="no-referrer" srcDoc={document}
         className="ui-html-preview-frame" style={{ width: viewport === 'mobile' ? width : '100%', height: frameHeight }} />
     </div>
   );

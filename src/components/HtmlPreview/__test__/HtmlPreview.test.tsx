@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act } from 'react';
+import { act, useLayoutEffect } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -18,6 +18,20 @@ function content() {
 }
 
 describe('HtmlPreview', () => {
+  it('replaces the initial empty browsing context before showing the first non-empty document', () => {
+    let initialFrame: HTMLIFrameElement | null = null;
+    function FirstCommit() {
+      useLayoutEffect(() => { initialFrame = container.querySelector('iframe'); }, []);
+      return <HtmlPreview title="Email" html="<h1>First document</h1>" />;
+    }
+    act(() => root.render(<FirstCommit />));
+    const frame = container.querySelector('iframe')!;
+    expect(initialFrame).not.toBeNull();
+    expect(frame).not.toBe(initialFrame);
+    expect(content().querySelector('h1')!.textContent).toBe('First document');
+    expect(frame.getAttribute('sandbox')).toBe('');
+  });
+
   it('locks isolation and CSP even when untyped callers try to override iframe props', () => {
     const overrides = { sandbox: 'allow-scripts allow-same-origin', srcDoc: '<script>bad()</script>',
       src: 'https://example.com', referrerPolicy: 'unsafe-url', allow: 'camera *' };
