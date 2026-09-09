@@ -1,0 +1,11 @@
+.ui-steps { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0; padding: 0; list-style: none; font: 14px var(--ui-font-family-sans); }
+.ui-step {
+  min-width: 0;
+  button { display: flex; align-items: center; gap: 8px; padding: 6px 0; max-width: 100%; overflow-wrap: anywhere; border: 0; background: transparent; color: var(--ui-color-fg-muted); font: inherit; cursor: pointer; }
+  button:disabled { cursor: default; }
+  button:focus-visible { outline: 2px solid var(--ui-color-brand-500); outline-offset: 3px; border-radius: 4px; }
+  &.is-current button { color: var(--ui-color-fg); font-weight: 600; }
+  &.is-current .ui-step-number { background: var(--ui-color-brand-50); color: var(--ui-color-brand-700); border-color: var(--ui-color-brand-500); }
+  &.is-complete .ui-step-number { border-color: var(--ui-color-brand-500); color: var(--ui-color-brand-500); }
+}
+.ui-step-number { display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 24px; border: 1px solid var(--ui-color-border); border-radius: 50%; font-size: 12px; }

@@ -1,0 +1,23 @@
+.ui-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-sans);
+  font-size: 14px;
+}
+.ui-upload-label { font-weight: 500; }
+.ui-upload-dropzone {
+  padding: 16px;
+  border: 1px dashed var(--ui-color-border);
+  border-radius: 6px;
+  background: var(--ui-color-surface);
+  &.is-dragging { border-color: var(--ui-color-brand-500); }
+}
+.ui-upload-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ui-upload-item { display: flex; align-items: center; gap: 12px; min-width: 0; padding-block: 8px; border-bottom: 1px solid var(--ui-color-border); }
+.ui-upload-preview { width: 72px; height: 48px; flex: 0 0 72px; object-fit: cover; border-radius: 4px; }
+.ui-upload-info { flex: 1; min-width: 0; display: grid; gap: 4px; overflow-wrap: anywhere; }
+.ui-upload-status { color: var(--ui-color-fg-muted); font-size: 12px; &.is-error { color: var(--ui-color-danger-500); } }
+.ui-upload-actions { display: flex; flex: 0 0 auto; }

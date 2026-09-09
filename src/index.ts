@@ -32,6 +32,8 @@ export * from './components/Skeleton';
 export * from './components/EmptyState';
 export * from './components/Page';
 export * from './components/Menu';
+export * from './components/Upload';
+export * from './components/Steps';
 
 // ─── 表单 ─────────────────────────────────────────────────────────────
 export * from './components/FormControl';
