@@ -12,6 +12,20 @@
   border: 1px solid transparent;
 }
 
+.ui-badge-variant-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ui-color-brand-500);
+  &.ui-badge-color-gray { background: var(--ui-color-fg-muted); }
+  &.ui-badge-color-success { background: var(--ui-color-success-500); }
+  &.ui-badge-color-warning { background: var(--ui-color-warning-500); }
+  &.ui-badge-color-danger { background: var(--ui-color-danger-500); }
+}
+
 // variant × colorScheme
 .ui-badge-variant-subtle.ui-badge-color-brand {
   background-color: var(--ui-color-brand-50);

@@ -8,7 +8,7 @@
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../../utils/cn';
 
-export type BadgeVariant = 'subtle' | 'solid' | 'outline';
+export type BadgeVariant = 'subtle' | 'solid' | 'outline' | 'dot';
 export type BadgeColorScheme = 'brand' | 'gray' | 'success' | 'warning' | 'danger';
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

@@ -64,6 +64,7 @@ export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Tag';
 export * from './components/TagInput/TagInput';
+export * from './components/AppShell/AppShell';
 export * from './components/Table';
 export * from './components/Rating';
 export * from './components/MonthCalendar';

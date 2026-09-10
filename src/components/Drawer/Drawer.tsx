@@ -8,7 +8,7 @@
  */
 
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -23,6 +23,7 @@ export interface DrawerContentProps extends Omit<RadixDialog.DialogContentProps,
   side?: DrawerSide;
   size?: DrawerSize;
   hideCloseButton?: boolean;
+  closeLabel?: string;
   /** a11y 描述；不传时会渲染 visually-hidden 描述，避免 Radix warning。 */
   description?: ReactNode;
 }
@@ -35,13 +36,12 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
     side = 'right',
     size = 'md',
     hideCloseButton = false,
+    closeLabel = '关闭',
     description,
     className,
     children,
     ...rest
   } = props;
-  const fallbackDescriptionId = useId();
-  const describedBy = rest['aria-describedby'] ?? fallbackDescriptionId;
 
   return (
     <RadixDialog.Portal>
@@ -55,17 +55,15 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
           className
         )}
         {...rest}
-        aria-describedby={describedBy}
       >
         <RadixDialog.Description
-          id={fallbackDescriptionId}
           className={description ? 'ui-drawer-description' : 'ui-visually-hidden'}
         >
           {description ?? 'Drawer content'}
         </RadixDialog.Description>
         {children}
         {!hideCloseButton && (
-          <RadixDialog.Close className="ui-drawer-close" aria-label="关闭">
+          <RadixDialog.Close className="ui-drawer-close" aria-label={closeLabel}>
             <X size={16} strokeWidth={2} aria-hidden='true' />
           </RadixDialog.Close>
         )}
