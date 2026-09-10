@@ -73,6 +73,14 @@
   flex-wrap: nowrap;
   > .ui-select-trigger { width: 12rem; }
 }
+.ui-toolbar-compact {
+  gap: var(--ui-space-1);
+  > .ui-divider-vertical {
+    height: var(--ui-space-5);
+    align-self: center;
+    flex: 0 0 auto;
+  }
+}
 .ui-stat-card {
   display: flex;
   align-items: flex-start;

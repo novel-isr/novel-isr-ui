@@ -1,4 +1,5 @@
 import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../../utils/cn';
 
 export interface PageProps extends HTMLAttributes<HTMLDivElement> {
@@ -55,12 +56,19 @@ export const PageSection = forwardRef<HTMLElement, PageSectionProps>(function Pa
 
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
   wrap?: boolean;
+  density?: 'default' | 'compact';
+  asChild?: boolean;
 }
 export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar(
-  { className, wrap = true, ...props }, ref,
+  { className, wrap = true, density = 'default', asChild = false, ...props }, ref,
 ) {
+  const Component = asChild ? Slot : 'div';
   // This is a wrapping form/action group, not an ARIA toolbar requiring roving focus.
-  return <div ref={ref} role="group" className={cn('ui-toolbar', !wrap && 'ui-toolbar-nowrap', className)} {...props} />;
+  return (
+    <Component ref={ref} role="group"
+      className={cn('ui-toolbar', density === 'compact' && 'ui-toolbar-compact', !wrap && 'ui-toolbar-nowrap', className)}
+      {...props} />
+  );
 });
 
 export interface StatCardProps extends HTMLAttributes<HTMLDivElement> {
