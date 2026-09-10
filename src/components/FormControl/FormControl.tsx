@@ -21,6 +21,7 @@ import {
   useId,
   useMemo,
   type HTMLAttributes,
+  type AriaAttributes,
   type LabelHTMLAttributes,
   type ReactNode,
 } from 'react';
@@ -48,7 +49,7 @@ export function useFormControlProps<P extends { id?: string; disabled?: boolean 
   props: P
 ): P & {
   'aria-describedby'?: string;
-  'aria-invalid'?: true;
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
   'aria-required'?: true;
   'aria-readonly'?: true;
 } {
@@ -56,6 +57,7 @@ export function useFormControlProps<P extends { id?: string; disabled?: boolean 
   if (!ctx) return props;
 
   const incomingDescribedBy = (props as P & { 'aria-describedby'?: string })['aria-describedby'];
+  const incomingInvalid = (props as P & AriaAttributes)['aria-invalid'];
   const describedBy = [ctx.isInvalid ? ctx.errorId : null, ctx.helperId, incomingDescribedBy]
     .filter(Boolean)
     .join(' ');
@@ -64,7 +66,7 @@ export function useFormControlProps<P extends { id?: string; disabled?: boolean 
     ...props,
     id: props.id ?? ctx.id,
     'aria-describedby': describedBy || undefined,
-    'aria-invalid': (ctx.isInvalid || undefined) as true | undefined,
+    'aria-invalid': ctx.isInvalid ? true : incomingInvalid === 'false' ? false : incomingInvalid,
     'aria-required': (ctx.isRequired || undefined) as true | undefined,
     'aria-readonly': (ctx.isReadOnly || undefined) as true | undefined,
     disabled: ctx.isDisabled || props.disabled,

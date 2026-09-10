@@ -1,5 +1,7 @@
 .ui-alert {
   display: flex;
+  min-width: 0;
+  overflow-wrap: anywhere;
   align-items: flex-start;
   gap: var(--ui-space-3);
   padding: var(--ui-space-3) var(--ui-space-4);

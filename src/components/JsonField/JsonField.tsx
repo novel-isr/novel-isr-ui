@@ -1,142 +1,93 @@
-/**
- * JsonField —— JSON 编辑文本域，自带格式化按钮 + 实时校验。
- *
- *   <JsonField value={text} onChange={setText} rows={8} />
- *
- * 行为：
- *   - 编辑期间不强制合法 JSON（让用户中途敲半截 JSON 不会被打断）
- *   - 失焦时尝试 JSON.parse，合法则显示 ✓ valid，不合法显示 ⚠ + 错误信息
- *   - 「格式化」按钮：合法时 prettify（2 空格缩进），不合法时弹错误提示
- *   - 不引入 Monaco / Codemirror（避免重 dep），等以后真需要再升级
- */
-import { forwardRef, useMemo, useState, type ChangeEvent } from 'react';
+import { forwardRef, useId, useMemo, useState } from 'react';
+import { applyEdits, createScanner, format } from 'jsonc-parser';
+import { CircleAlert, CircleCheck, Braces } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { Textarea } from '../Textarea/Textarea';
+import { IconButton } from '../Button/IconButton';
+import { useFormControlContext } from '../FormControl/FormControl';
+import { HStack, VStack } from '../Stack/Stack';
+import { Textarea, type TextareaProps } from '../Textarea/Textarea';
 
-export interface JsonFieldProps {
+export interface JsonFieldProps extends Omit<TextareaProps, 'value' | 'defaultValue' | 'onChange'> {
   value: string;
   onChange: (value: string) => void;
-  /** 行数 */
-  rows?: number;
-  placeholder?: string;
-  /** 隐藏顶部工具条（格式化按钮 + 状态指示） */
+  /** Hides formatting controls, but syntax feedback remains accessible. */
   hideToolbar?: boolean;
-  className?: string;
-  id?: string;
-  'aria-label'?: string;
-  /** 缩进空格，默认 2 */
+  /** Spaces per indentation level, 0 to 10. Zero produces compact JSON. */
   indent?: number;
+  formatLabel?: string;
+  validLabel?: string;
+  invalidLabel?: string;
 }
 
-interface ValidationState {
-  status: 'empty' | 'valid' | 'invalid';
-  error?: string;
-}
+type Validation = { status: 'empty' | 'valid' } | { status: 'invalid'; error: string };
 
-function validate(text: string): ValidationState {
-  const trimmed = text.trim();
-  if (!trimmed) return { status: 'empty' };
+function validate(value: string): Validation {
+  if (!value.trim()) return { status: 'empty' };
   try {
-    JSON.parse(trimmed);
+    JSON.parse(value);
     return { status: 'valid' };
-  } catch (e) {
-    return { status: 'invalid', error: e instanceof Error ? e.message : String(e) };
+  } catch (error) {
+    return { status: 'invalid', error: error instanceof Error ? error.message : String(error) };
   }
 }
 
-export const JsonField = forwardRef<HTMLTextAreaElement, JsonFieldProps>(
-  function JsonField(props, ref) {
-    const {
-      value,
-      onChange,
-      rows = 8,
-      placeholder,
-      hideToolbar = false,
-      className,
-      id,
-      indent = 2,
-      ...attrs
-    } = props;
-    const [validation, setValidation] = useState<ValidationState>(() => validate(value));
+function formatJson(value: string, indent: number): string {
+  const spaces = Math.min(10, Math.max(0, Math.trunc(indent) || 0));
+  if (spaces > 0) {
+    return applyEdits(value, format(value, undefined, { tabSize: spaces, insertSpaces: true, eol: '\n' }));
+  }
+  // Keep numeric lexemes and escaped strings intact, including in compact mode.
+  const scanner = createScanner(value, true);
+  const tokens: string[] = [];
+  while (scanner.getPosition() < value.length) {
+    scanner.scan();
+    tokens.push(value.slice(scanner.getTokenOffset(), scanner.getTokenOffset() + scanner.getTokenLength()));
+  }
+  return tokens.join('');
+}
 
-    const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      onChange(e.target.value);
-    };
+export const JsonField = forwardRef<HTMLTextAreaElement, JsonFieldProps>(function JsonField({
+  value, onChange, rows = 8, hideToolbar = false, indent = 2, className,
+  formatLabel = '格式化 JSON', validLabel = 'JSON 语法正确', invalidLabel = 'JSON 语法错误',
+  disabled: disabledProp, readOnly: readOnlyProp, required: requiredProp,
+  onFocus, onBlur, isInvalid, 'aria-describedby': describedBy, 'aria-invalid': ariaInvalid,
+  spellCheck = false, ...rest
+}, ref) {
+  const field = useFormControlContext();
+  const disabled = Boolean(disabledProp || field?.isDisabled);
+  const readOnly = Boolean(readOnlyProp || field?.isReadOnly);
+  const required = Boolean(requiredProp || field?.isRequired);
+  const statusId = `json-status-${useId()}`;
+  const [focused, setFocused] = useState(false);
+  const validation = useMemo<Validation>(() => focused ? { status: 'empty' } : validate(value), [value, focused]);
+  const invalid = validation.status === 'invalid';
 
-    const onBlurValidate = () => setValidation(validate(value));
+  const formatNow = () => {
+    if (disabled || readOnly || validate(value).status !== 'valid') return;
+    const formatted = formatJson(value, indent);
+    if (formatted !== value) onChange(formatted);
+  };
 
-    const formatNow = () => {
-      const trimmed = value.trim();
-      if (!trimmed) {
-        setValidation({ status: 'empty' });
-        return;
-      }
-      try {
-        const parsed = JSON.parse(trimmed);
-        const formatted = JSON.stringify(parsed, null, indent);
-        onChange(formatted);
-        setValidation({ status: 'valid' });
-      } catch (e) {
-        setValidation({
-          status: 'invalid',
-          error: e instanceof Error ? e.message : String(e),
-        });
-      }
-    };
-
-    const indicator = useMemo(() => {
-      switch (validation.status) {
-        case 'valid':
-          return { label: '✓ JSON 合法', tone: 'success' as const };
-        case 'invalid':
-          return {
-            label: `⚠ ${validation.error?.slice(0, 80) ?? 'JSON 格式错误'}`,
-            tone: 'danger' as const,
-          };
-        default:
-          return null;
-      }
-    }, [validation]);
-
-    return (
-      <div className={cn('ui-json-field', className)}>
-        {!hideToolbar && (
-          <div className="ui-json-field-toolbar">
-            <button
-              type="button"
-              className="ui-json-field-format"
-              onClick={formatNow}
-              disabled={!value.trim()}
-              tabIndex={-1}
-            >
-              格式化
-            </button>
-            {indicator && (
-              <span
-                className={cn(
-                  'ui-json-field-status',
-                  `ui-json-field-status-${indicator.tone}`,
-                )}
-                title={validation.error}
-              >
-                {indicator.label}
-              </span>
-            )}
-          </div>
-        )}
-        <Textarea
-          ref={ref}
-          id={id}
-          rows={rows}
-          value={value}
-          placeholder={placeholder}
-          onChange={onTextChange}
-          onBlur={onBlurValidate}
-          className="ui-json-field-textarea"
-          spellCheck={false}
-          aria-label={attrs['aria-label']}
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <VStack gap={2} className={cn('ui-json-field', className)}>
+      {!hideToolbar && <HStack justify="end">
+        <IconButton label={formatLabel} size="sm" disabled={disabled || readOnly || !value.trim()} onClick={formatNow}>
+          <Braces size={18} />
+        </IconButton>
+      </HStack>}
+      <Textarea {...rest} ref={ref} rows={rows} value={value} disabled={disabled} readOnly={readOnly}
+        required={required} spellCheck={spellCheck} className="ui-json-field-textarea"
+        aria-invalid={invalid || isInvalid ? true : ariaInvalid === 'false' ? false : ariaInvalid}
+        aria-describedby={[describedBy, invalid ? statusId : undefined].filter(Boolean).join(' ') || undefined}
+        onChange={event => { if (!disabled && !readOnly) onChange(event.target.value); }}
+        onFocus={event => { setFocused(true); onFocus?.(event); }}
+        onBlur={event => { setFocused(false); onBlur?.(event); }}
+      />
+      <HStack id={statusId} role="status" aria-live="polite" align="start" gap={2}
+        className={cn('ui-json-field-status', invalid && 'ui-json-field-status-invalid')}>
+        {validation.status === 'valid' && <><CircleCheck size={16} aria-hidden="true" /><span>{validLabel}</span></>}
+        {validation.status === 'invalid' && <><CircleAlert size={16} aria-hidden="true" /><span>{invalidLabel}: {validation.error}</span></>}
+      </HStack>
+    </VStack>
+  );
+});
