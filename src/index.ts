@@ -27,6 +27,7 @@ export * from './components/Spinner';
 export * from './components/Box';
 export * from './components/Stack';
 export * from './components/ResponsiveGrid/ResponsiveGrid';
+export * from './components/ResponsiveGrid/GridItem';
 export * from './components/CodeBlock/CodeBlock';
 export * from './components/Divider';
 export * from './components/Card';
@@ -41,6 +42,7 @@ export * from './components/Steps';
 
 // ─── 表单 ─────────────────────────────────────────────────────────────
 export * from './components/FormControl';
+export * from './components/FormLayout/FormLayout';
 export * from './components/Input';
 export * from './components/Autocomplete';
 export * from './components/NumberInput';

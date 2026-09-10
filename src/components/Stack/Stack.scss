@@ -1,4 +1,4 @@
-.ui-stack { display: flex; }
+.ui-stack { display: flex; min-width: 0; }
 
 .ui-stack-row { flex-direction: row; }
 .ui-stack-column { flex-direction: column; }

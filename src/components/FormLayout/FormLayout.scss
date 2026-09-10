@@ -1,0 +1,12 @@
+.ui-form-layout {
+  width: 100%;
+  min-width: 0;
+}
+
+.ui-grid-item {
+  min-width: 0;
+}
+
+.ui-grid-item-full-width {
+  grid-column: 1 / -1;
+}
