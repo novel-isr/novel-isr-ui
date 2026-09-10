@@ -63,6 +63,7 @@ export * from './components/Toast';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Tag';
+export * from './components/TagInput/TagInput';
 export * from './components/Table';
 export * from './components/Rating';
 export * from './components/MonthCalendar';

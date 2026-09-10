@@ -1,0 +1,25 @@
+.ui-tag-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  min-width: 0;
+  width: 100%;
+  font-family: var(--ui-font-family-sans);
+  letter-spacing: 0;
+}
+.ui-tag-input-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  min-width: 0;
+  .ui-tag { height: auto; min-height: 32px; max-width: 100%; white-space: normal; }
+}
+.ui-tag-input-label { min-width: 0; overflow-wrap: anywhere; padding-block: var(--ui-space-1); }
+.ui-tag-input-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  min-width: 0;
+  > .ui-autocomplete-root { flex: 1; min-width: 0; }
+  > .ui-icon-button { flex-shrink: 0; }
+}

@@ -33,15 +33,19 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type InputHTMLAttributes,
   type ReactNode,
 } from 'react';
 import { cn } from '../../utils/cn';
+import { useFormControlContext, useFormControlProps } from '../FormControl/FormControl';
 
 export interface AutocompleteOption {
   /** 选项稳定 id —— 业务侧可用于跳转目标（如 bookId） */
   id: string;
   /** 主文案 */
   label: string;
+  /** Search text when the display label is a localized command. */
+  filterValue?: string;
   /** 副文案（如作者 / 描述） */
   hint?: string;
   /** 分组标签：相邻同 group 的项渲染在一起，组首插入分组标题 */
@@ -79,6 +83,13 @@ export interface AutocompleteProps {
   name?: string;
   /** 禁用 */
   disabled?: boolean;
+  readOnly?: boolean;
+  id?: string;
+  'aria-describedby'?: string;
+  onBlur?: InputHTMLAttributes<HTMLInputElement>['onBlur'];
+  onKeyDown?: InputHTMLAttributes<HTMLInputElement>['onKeyDown'];
+  onCompositionStart?: InputHTMLAttributes<HTMLInputElement>['onCompositionStart'];
+  onCompositionEnd?: InputHTMLAttributes<HTMLInputElement>['onCompositionEnd'];
 }
 
 const SIZE_CLASS: Record<AutocompleteSize, string> = {
@@ -91,7 +102,7 @@ function filterOptions(options: AutocompleteOption[], q: string): AutocompleteOp
   const trimmed = q.trim().toLowerCase();
   if (!trimmed) return options;
   return options.filter((opt) => {
-    if (opt.label.toLowerCase().includes(trimmed)) return true;
+    if ((opt.filterValue ?? opt.label).toLowerCase().includes(trimmed)) return true;
     if (opt.hint && opt.hint.toLowerCase().includes(trimmed)) return true;
     return false;
   });
@@ -114,13 +125,23 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       className,
       onOpenChange,
       name,
-      disabled = false,
+      onBlur,
+      onKeyDown,
+      onCompositionStart,
+      onCompositionEnd,
     } = props;
+    const context = useFormControlContext();
+    const field = useFormControlProps({ id: props.id, disabled: props.disabled, 'aria-describedby': props['aria-describedby'] });
+    const disabled = Boolean(field.disabled);
+    const readOnly = Boolean(props.readOnly || context?.isReadOnly);
+    const composing = useRef(false);
 
-    const [open, setOpen] = useState(false);
+    const [requestedOpen, setOpen] = useState(false);
+    const open = requestedOpen && !disabled && !readOnly;
     const [highlight, setHighlight] = useState(0);
     const rootRef = useRef<HTMLDivElement | null>(null);
     const listId = useId();
+    useEffect(() => { if (disabled || readOnly) setOpen(false); }, [disabled, readOnly]);
 
     const filtered = useMemo(() => filterOptions(options, value), [options, value]);
 
@@ -147,6 +168,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     }, [open]);
 
     const selectAt = (index: number) => {
+      if (disabled || readOnly || composing.current) return;
       const opt = filtered[index];
       if (!opt) return;
       onSelect?.(opt);
@@ -154,6 +176,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     };
 
     const handleKey = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (disabled || readOnly || composing.current || e.nativeEvent.isComposing || e.keyCode === 229) return;
+      onKeyDown?.(e);
+      if (e.defaultPrevented) return;
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         if (!open) setOpenSafely(true);
@@ -196,11 +221,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         data-open={open || undefined}
       >
         <div
-          className={cn('ui-input-root', 'ui-input-variant-outline', SIZE_CLASS[size])}
+          className={cn('ui-input-root', 'ui-input-variant-outline', SIZE_CLASS[size], disabled && 'ui-input-disabled', field['aria-invalid'] && 'ui-input-error')}
+          data-invalid={field['aria-invalid'] || undefined}
           data-disabled={disabled || undefined}
         >
           {prefix && <span className="ui-input-addon ui-input-addon-start">{prefix}</span>}
           <input
+            {...field}
             ref={ref}
             className="ui-input-field"
             suppressHydrationWarning
@@ -218,12 +245,17 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             placeholder={placeholder}
             value={value}
             disabled={disabled}
+            readOnly={readOnly}
             name={name}
             onChange={(e) => {
+              if (disabled || readOnly) return;
               onValueChange(e.target.value);
               if (!open) setOpenSafely(true);
             }}
-            onFocus={() => setOpenSafely(true)}
+            onFocus={() => { if (!disabled && !readOnly) setOpenSafely(true); }}
+            onBlur={(event) => { setOpenSafely(false); onBlur?.(event); }}
+            onCompositionStart={(event) => { composing.current = true; onCompositionStart?.(event); }}
+            onCompositionEnd={(event) => { composing.current = false; onCompositionEnd?.(event); }}
             onKeyDown={handleKey}
           />
         </div>

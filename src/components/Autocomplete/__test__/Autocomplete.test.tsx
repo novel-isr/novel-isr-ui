@@ -7,7 +7,7 @@
  *   - 鼠标：mousedown 选中（早于 input blur）
  *   - 空选项 + Enter → onSubmit
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Autocomplete, type AutocompleteOption } from '../Autocomplete';
@@ -29,6 +29,7 @@ beforeEach(() => {
   document.body.appendChild(container);
   root = createRoot(container);
 });
+afterEach(() => { act(() => root.unmount()); container.remove(); });
 
 function render(jsx: React.ReactElement) {
   act(() => {
@@ -47,6 +48,27 @@ function getOptions(): HTMLLIElement[] {
 }
 
 describe('Autocomplete', () => {
+  it('ignores IME confirmation and closes on keyboard focus leaving the input', () => {
+    const onSelect = vi.fn();
+    render(<Autocomplete value="" onValueChange={vi.fn()} options={OPTIONS} onSelect={onSelect} />);
+    act(() => getInput().focus());
+    act(() => getInput().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true })));
+    expect(onSelect).not.toHaveBeenCalled();
+    act(() => getInput().blur());
+    expect(getOptions()).toHaveLength(0);
+  });
+
+  it('does not retain an interactive popup when disabled or read-only', () => {
+    const props = { value: '', onValueChange: vi.fn(), options: OPTIONS };
+    render(<Autocomplete {...props} />);
+    act(() => getInput().focus());
+    render(<Autocomplete {...props} disabled />);
+    expect(getOptions()).toHaveLength(0);
+    render(<Autocomplete {...props} readOnly />);
+    expect(getInput().readOnly).toBe(true);
+    act(() => getInput().focus());
+    expect(getOptions()).toHaveLength(0);
+  });
   it('聚焦后渲染所有选项', () => {
     const onValueChange = vi.fn();
     render(
