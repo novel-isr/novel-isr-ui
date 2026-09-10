@@ -1,0 +1,80 @@
+.ui-page-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  min-width: 0;
+  height: 48px;
+  padding-inline: var(--ui-space-3);
+  background: var(--ui-color-surface);
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+.ui-page-tabs-viewport {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.ui-page-tabs-list {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  height: 100%;
+}
+
+.ui-page-tab {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 112px;
+  max-width: 240px;
+  height: 100%;
+  padding-inline: var(--ui-space-1);
+  border-bottom: 2px solid transparent;
+  box-sizing: border-box;
+
+  &[data-active] {
+    border-bottom-color: var(--ui-color-brand-500);
+    background: var(--ui-color-selected);
+  }
+
+  .ui-page-tab-trigger {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    padding-inline: var(--ui-space-3);
+    justify-content: flex-start;
+    color: var(--ui-color-fg-secondary);
+    font-size: var(--ui-font-size-md);
+    font-weight: var(--ui-font-weight-medium);
+    background: transparent;
+    .ui-button-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ui-button-icon span { display: inline-flex; }
+    .ui-button-icon svg { width: 16px; height: 16px; }
+    &:hover { background: var(--ui-color-hover); color: var(--ui-color-fg); }
+    &[aria-current="page"] { color: var(--ui-color-fg); }
+    &:focus-visible { outline-offset: -3px; }
+  }
+}
+
+.ui-page-tab-action,
+.ui-page-tabs-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--ui-space-1);
+}
+
+.ui-page-tabs-actions { padding-inline-start: var(--ui-space-2); }
+.ui-page-tabs-scroll { flex-shrink: 0; }
+
+@media (max-width: 480px) {
+  .ui-page-tabs { padding-inline: var(--ui-space-1); gap: 0; }
+  .ui-page-tab { min-width: 96px; max-width: 168px; }
+  .ui-page-tabs-actions { padding-inline-start: 0; }
+}

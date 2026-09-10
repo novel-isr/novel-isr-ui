@@ -71,6 +71,7 @@ export * from './components/HtmlPreview';
 // ─── 导航 ─────────────────────────────────────────────────────────────
 export * from './components/NavTree';
 export * from './components/Tabs';
+export * from './components/PageTabs';
 export * from './components/Pagination';
 
 // ─── utils ────────────────────────────────────────────────────────────
