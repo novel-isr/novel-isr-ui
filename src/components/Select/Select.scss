@@ -17,6 +17,8 @@
     justify-content: space-between;
     gap: var(--ui-space-2);
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     background-color: var(--ui-color-bg);
     border: 1px solid transparent;
     border-radius: var(--ui-radius-lg);
@@ -51,6 +53,20 @@
         cursor: not-allowed;
         opacity: 0.6;
     }
+}
+
+[data-ui-select-value] {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+[data-ui-select-item-text] {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 [data-theme="dark"] .ui-select-trigger {
@@ -115,6 +131,7 @@
         0 12px 32px rgba(15, 23, 42, 0.12),
         0 0 0 1px rgba(15, 23, 42, 0.04);
     min-width: var(--radix-select-trigger-width);
+    max-width: min(32rem, var(--radix-select-content-available-width, calc(100vw - 16px)));
     max-height: 320px;
     overflow: hidden;
     animation: ui-select-fadein var(--ui-transition-fast);

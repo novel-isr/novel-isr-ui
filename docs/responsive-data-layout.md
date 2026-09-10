@@ -43,6 +43,13 @@ All components accept HTML attributes, className, style and forwarded refs.
 `Page maxWidth` accepts a pixel number or CSS length. Routes, permissions, data
 queries and formatting remain consumer responsibilities.
 
+Use `Toolbar wrap={false}` for atomic action groups such as a filter and refresh
+button. It bounds the group to the available width and lets selects shrink while
+retaining the action. The default Toolbar still wraps. Select's closed value
+uses ellipsis without removing accessible text; open options wrap inside a menu
+bounded by the available viewport, so long API-provided identifiers remain
+inspectable without pushing adjacent actions off screen.
+
 ## Verification
 
 Run `pnpm test`, `pnpm type-check` and `pnpm build`. Browser checks exercise the

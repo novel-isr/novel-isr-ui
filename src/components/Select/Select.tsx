@@ -62,7 +62,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
           className
         )}
       >
-        <RadixSelect.Value placeholder={placeholder} />
+        <RadixSelect.Value data-ui-select-value="" placeholder={placeholder} />
         <RadixSelect.Icon className="ui-select-icon">
           <ChevronDown size={16} strokeWidth={2} aria-hidden='true' />
         </RadixSelect.Icon>
@@ -96,7 +96,7 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
   const { children, className, ...rest } = props;
   return (
     <RadixSelect.Item ref={ref} className={cn('ui-select-item', className)} {...rest}>
-      <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
+      <RadixSelect.ItemText data-ui-select-item-text="">{children}</RadixSelect.ItemText>
       <RadixSelect.ItemIndicator className="ui-select-item-indicator">
         <Check size={14} strokeWidth={3} aria-hidden='true' />
       </RadixSelect.ItemIndicator>

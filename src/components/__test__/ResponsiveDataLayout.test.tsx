@@ -11,6 +11,13 @@ it('declarative table headers explicitly identify their columns', () => {
   expect(html).toMatch(/<th[^>]*scope="col"/);
 });
 
+it('toolbar consumes an explicit no-wrap mode and select exposes a bounded value surface', () => {
+  const html = renderToStaticMarkup(<UI.Toolbar wrap={false}><UI.Select aria-label="Event"><UI.SelectItem value="a">A</UI.SelectItem></UI.Select></UI.Toolbar>);
+  expect(html).toContain('ui-toolbar-nowrap');
+  expect(html).not.toMatch(/ wrap=/);
+  expect(html).toContain('data-ui-select-value');
+});
+
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 let container: HTMLDivElement;
 let root: ReturnType<typeof createRoot>;

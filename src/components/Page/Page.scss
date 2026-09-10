@@ -64,9 +64,14 @@
   flex-wrap: wrap;
   gap: var(--ui-space-3);
   min-width: 0;
+  max-width: 100%;
   > * { max-width: 100%; min-width: 0; }
   > .ui-input-root { flex: 1 1 16rem; }
   > .ui-select-trigger { width: auto; flex: 0 1 12rem; }
+}
+.ui-toolbar-nowrap {
+  flex-wrap: nowrap;
+  > .ui-select-trigger { width: 12rem; }
 }
 .ui-stat-card {
   display: flex;

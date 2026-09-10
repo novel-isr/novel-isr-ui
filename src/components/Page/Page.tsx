@@ -53,11 +53,14 @@ export const PageSection = forwardRef<HTMLElement, PageSectionProps>(function Pa
   );
 });
 
-export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Toolbar(
-  { className, ...props }, ref,
+export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
+  wrap?: boolean;
+}
+export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar(
+  { className, wrap = true, ...props }, ref,
 ) {
   // This is a wrapping form/action group, not an ARIA toolbar requiring roving focus.
-  return <div ref={ref} role="group" className={cn('ui-toolbar', className)} {...props} />;
+  return <div ref={ref} role="group" className={cn('ui-toolbar', !wrap && 'ui-toolbar-nowrap', className)} {...props} />;
 });
 
 export interface StatCardProps extends HTMLAttributes<HTMLDivElement> {

@@ -9,12 +9,13 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const output = process.env.UI_TEST_OUTPUT || '/tmp/ui-data-layout';
 const code = String.raw`import React from 'react';import{createRoot}from'react-dom/client';
-import{ResponsiveGrid,TableCellContent,CodeBlock,Page,PageHeader,Table,StatCard,ThemeProvider}from'/dist/index.js';import'/dist/styles.css';
+import{ResponsiveGrid,TableCellContent,CodeBlock,Page,PageHeader,Table,StatCard,ThemeProvider,Toolbar,Select,SelectItem,IconButton}from'/dist/index.js';import'/dist/styles.css';
 const long='https://example.test/'+ 'unbroken'.repeat(32);
 const rows=Array.from({length:20},(_,id)=>({id,title:long}));
 createRoot(document.getElementById('root')).render(<ThemeProvider defaultTheme={new URLSearchParams(location.search).get('theme')} defaultPalette='graphite' disableStorage>
 <Page maxWidth={1280}><PageHeader title='Data layout'/>
 <div id='container' style={{width:280,maxWidth:'100%'}}>
+<Toolbar wrap={false}><Select aria-label='Event'><SelectItem value='short'>Short</SelectItem><SelectItem value='long'>{'long_event_identifier_'.repeat(12)}</SelectItem></Select><IconButton label='Refresh'>R</IconButton></Toolbar>
 <ResponsiveGrid id='metrics' columns={{base:1,sm:2,md:3,lg:6}} gap={3}>
 {Array.from({length:6},(_,i)=><StatCard key={i} label={'Metric '+i} value={i} description='Current reporting period'/>)}</ResponsiveGrid>
 <ResponsiveGrid id='nested-outer' columns={2}><ResponsiveGrid id='nested-inner'><span>Nested A</span><span>Nested B</span></ResponsiveGrid><span>Sibling</span></ResponsiveGrid>
@@ -82,6 +83,21 @@ try {
         await page.waitForFunction(()=>document.querySelector('[aria-label="Scrollable log"]').scrollLeft>0);
         assert.ok(await log.evaluate(el=>getComputedStyle(el).outlineStyle!=='none'));
         await page.setViewportSize({width:320,height:800});
+        const select=page.getByRole('combobox',{name:'Event'});
+        await select.click();
+        const popup=await page.getByRole('listbox').boundingBox();
+        assert.ok(popup.x>=0 && popup.x+popup.width<=321,'Popup fits viewport');
+        const option=page.getByRole('option',{name:'long_event_identifier_'.repeat(12),exact:true});
+        assert.ok(await option.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+        await option.click();
+        const trigger=await select.boundingBox();
+        const refresh=await page.getByRole('button',{name:'Refresh',exact:true}).boundingBox();
+        assert.ok(refresh.x+refresh.width<=320 && Math.abs(trigger.y-refresh.y)<3);
+        assert.ok(await select.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+        await select.focus();await page.keyboard.press('ArrowDown');
+        await page.getByRole('listbox').waitFor();await page.keyboard.press('Escape');
+        await page.getByRole('listbox').waitFor({state:'hidden'});
+        await page.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='Event');
         assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
         assert.deepEqual(errors,[]);
         await page.close();
