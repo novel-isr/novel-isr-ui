@@ -4,6 +4,7 @@
 
 import { forwardRef, type CSSProperties, type ElementType, type HTMLAttributes } from 'react';
 import { cn } from '../../utils/cn';
+import { resolveSpace } from '../../utils/space';
 
 type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';
 type FlexAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
@@ -25,13 +26,6 @@ const justifyMap: Record<FlexJustify, string> = {
   around: 'space-around',
   evenly: 'space-evenly',
 };
-
-function resolveSpace(v: string | number | undefined): string | undefined {
-  if (v === undefined) return undefined;
-  if (typeof v === 'number') return `var(--ui-space-${v})`;
-  if (/^\d+(\.\d+)?$/.test(v)) return `var(--ui-space-${v})`;
-  return v;
-}
 
 export interface StackProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;

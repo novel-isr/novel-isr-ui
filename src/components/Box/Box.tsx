@@ -10,16 +10,9 @@
  */
 
 import { forwardRef, type CSSProperties, type ElementType, type HTMLAttributes } from 'react';
+import { resolveSpace as space } from '../../utils/space';
 
 type SpaceValue = string | number;
-
-/** 解析 spacing：数字/纯数字字符串 → token；否则原样 */
-function space(v: SpaceValue | undefined): string | undefined {
-  if (v === undefined) return undefined;
-  if (typeof v === 'number') return `var(--ui-space-${v})`;
-  if (/^\d+(\.\d+)?$/.test(v)) return `var(--ui-space-${v})`;
-  return v;
-}
 
 /** semantic bg alias：bg.subtle / bg.muted / bg.emphasis */
 function bgValue(v: string | undefined): string | undefined {

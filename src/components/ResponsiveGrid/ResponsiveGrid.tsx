@@ -1,5 +1,6 @@
 import { forwardRef, type CSSProperties, type ElementType, type HTMLAttributes } from 'react';
 import { cn } from '../../utils/cn';
+import { resolveSpace as space } from '../../utils/space';
 
 export type GridColumns = number | { base?: number; sm?: number; md?: number; lg?: number };
 export interface ResponsiveGridProps extends HTMLAttributes<HTMLElement> {
@@ -9,11 +10,6 @@ export interface ResponsiveGridProps extends HTMLAttributes<HTMLElement> {
   gap?: string | number;
   rowGap?: string | number;
   columnGap?: string | number;
-}
-
-function space(value: string | number) {
-  return typeof value === 'number' || /^\d+(\.\d+)?$/.test(value)
-    ? `var(--ui-space-${value})` : value;
 }
 
 export const ResponsiveGrid = forwardRef<HTMLElement, ResponsiveGridProps>(function ResponsiveGrid({

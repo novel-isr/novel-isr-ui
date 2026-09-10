@@ -52,6 +52,9 @@ export function App() {
 
 所有组件接受 `colorScheme: 'brand' | 'gray' | 'success' | 'warning' | 'danger'`、`size: 'sm' | 'md' | 'lg'`、`variant`(因组件而异)等 Chakra 风格 props。
 
+See [Layout Spacing](docs/layout-spacing.md) for Box, Stack, SplitLayout and grid
+spacing token mappings, CSS values, defaults and consumer overrides.
+
 ## 本地开发
 
 ```bash

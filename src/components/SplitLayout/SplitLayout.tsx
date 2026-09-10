@@ -1,5 +1,6 @@
 import { forwardRef, type CSSProperties, type HTMLAttributes, type ReactNode } from 'react'
 import { cn } from '../../utils/cn'
+import { resolveSpace as space } from '../../utils/space'
 
 export interface SplitLayoutProps extends HTMLAttributes<HTMLDivElement> {
   aside: ReactNode
@@ -9,11 +10,6 @@ export interface SplitLayoutProps extends HTMLAttributes<HTMLDivElement> {
   collapseBelow?: 'md' | 'lg'
   /** Numbers and numeric strings reference spacing tokens. Defaults to 6. */
   gap?: string | number
-}
-
-function space(value: string | number) {
-  return typeof value === 'number' || /^\d+(\.\d+)?$/.test(value)
-    ? `var(--ui-space-${String(value).replace('.', '-')})` : value
 }
 
 export const SplitLayout = forwardRef<HTMLDivElement, SplitLayoutProps>(function SplitLayout({
@@ -29,7 +25,7 @@ export const SplitLayout = forwardRef<HTMLDivElement, SplitLayoutProps>(function
     <div ref={ref} className={cn('ui-split-layout', className)}
       style={{
         '--ui-split-layout-aside-width': `${asideWidth}px`,
-        '--ui-split-layout-gap': space(gap),
+        '--ui-split-layout-gap': space(gap, true),
         ...style,
       } as CSSProperties} {...rest}>
       <div className={cn(
