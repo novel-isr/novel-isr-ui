@@ -81,7 +81,7 @@
   :where(img, video) { max-width: 100%; height: auto; }
   :where(figure) { max-width: 100%; }
   :where(figcaption) { margin-top: var(--ui-space-2); font-size: var(--ui-font-size-md); color: var(--ui-color-fg-muted); }
-  :where(table) { width: 100%; border-collapse: collapse; color: inherit; }
+  :where(table) { width: 100%; border-collapse: collapse; color: inherit; overflow-wrap: normal; }
   :where(th, td) { padding: 0.5em 0.75em; border: 1px solid var(--ui-color-border); text-align: start; vertical-align: top; }
   :where(th) { background: var(--ui-color-control); font-weight: var(--ui-font-weight-semibold); }
   :where(th > p, td > p) { margin: 0; }

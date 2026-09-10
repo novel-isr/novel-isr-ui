@@ -76,6 +76,8 @@ try {
         assert.equal(await pre.evaluate(el=>getComputedStyle(el).backgroundImage),'none');
         assert.equal(await page.getByRole('table',{name:'Native table'}).evaluate(el=>getComputedStyle(el).display),'table');
         assert.equal(await page.getByRole('columnheader').count(),8);
+        assert.equal(await page.getByRole('columnheader').first().evaluate(el=>getComputedStyle(el).overflowWrap),'normal');
+        assert.ok(await page.locator('#document-scroll').evaluate(el=>el.scrollWidth>el.clientWidth),'wide table scrolls rather than splitting words');
         assert.equal(await page.getByText('Author formatting',{exact:true}).evaluate(el=>getComputedStyle(el).color),'rgb(18, 52, 86)');
         await page.locator('#image').scrollIntoViewIfNeeded();const before=await page.locator('#image').boundingBox();
         await page.locator('#image').hover();const after=await page.locator('#image').boundingBox();

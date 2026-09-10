@@ -62,6 +62,7 @@ it('ships scoped semantic typography with readable syntax and no decorative tran
   const css = compile('src/components/Prose/Prose.scss').css;
   expect(css).toMatch(/\.ui-prose\s*\{[^}]*overflow-wrap:\s*anywhere/);
   expect(css).toMatch(/:where\(blockquote\)/);
+  expect(css).toMatch(/:where\(table\)\s*\{[^}]*overflow-wrap:\s*normal/);
   expect(css).toMatch(/:where\(pre\)[\s\S]*overflow-x:\s*auto/);
   expect(css).toMatch(/:where\(pre code\)\s*\{[^}]*white-space:\s*pre/);
   expect(css).toMatch(/:where\(a\)[\s\S]*text-decoration[^;]*underline/);
