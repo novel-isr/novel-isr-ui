@@ -1,0 +1,31 @@
+.ui-split-layout {
+  container: ui-split-layout / inline-size;
+  width: 100%;
+  min-width: 0;
+}
+
+.ui-split-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--ui-split-layout-gap);
+  min-width: 0;
+}
+
+.ui-split-layout-main,
+.ui-split-layout-aside {
+  min-width: 0;
+}
+
+// Match the inner grid itself so every query uses its nearest named container.
+@container ui-split-layout (min-width: 768px) {
+  .ui-split-layout-grid--md.ui-split-layout-grid--has-aside {
+    grid-template-columns: minmax(0, 1fr) min(var(--ui-split-layout-aside-width), 50%);
+  }
+}
+
+@container ui-split-layout (min-width: 1200px) {
+  .ui-split-layout-grid--lg.ui-split-layout-grid--has-aside {
+    grid-template-columns: minmax(0, 1fr) min(var(--ui-split-layout-aside-width), 50%);
+  }
+}

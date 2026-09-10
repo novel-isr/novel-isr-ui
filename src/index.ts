@@ -29,6 +29,8 @@ export * from './components/Stack';
 export * from './components/ResponsiveGrid/ResponsiveGrid';
 export * from './components/ResponsiveGrid/GridItem';
 export * from './components/CodeBlock/CodeBlock';
+export * from './components/Prose/Prose';
+export * from './components/SplitLayout/SplitLayout';
 export * from './components/Divider';
 export * from './components/Card';
 export * from './components/Skeleton';
