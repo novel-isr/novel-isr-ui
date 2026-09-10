@@ -5,6 +5,9 @@
  */
 
 .ui-empty-state {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,12 +39,17 @@
 }
 
 .ui-empty-state-actions {
+  min-width: 0;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: var(--ui-space-2);
   margin-top: var(--ui-space-2);
   flex-wrap: wrap;
   justify-content: center;
+
+  > * { min-width: 0; max-width: 100%; }
+  .ui-button-label { white-space: normal; overflow-wrap: anywhere; }
 }
 
 /* ── size 档位 ──────────────────────────────────── */

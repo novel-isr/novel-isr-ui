@@ -1,0 +1,100 @@
+.ui-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-md);
+  line-height: var(--ui-line-height-base);
+  letter-spacing: 0;
+}
+
+.ui-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: var(--ui-space-14);
+  margin: 0;
+  padding: var(--ui-space-3) var(--ui-space-4);
+}
+
+.ui-list-density-compact > .ui-list-item {
+  min-height: var(--ui-space-10);
+  padding-block: var(--ui-space-2);
+}
+
+.ui-list-dividers > .ui-list-item + .ui-list-item {
+  border-top: 1px solid var(--ui-color-divider);
+}
+
+.ui-list-item-content {
+  flex: 1 1 0%;
+}
+
+.ui-list-item-content,
+.ui-list-item-primary,
+.ui-list-item-secondary {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.ui-list-item-primary {
+  color: var(--ui-color-fg);
+  font-size: var(--ui-font-size-md);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-base);
+}
+
+.ui-list-item-secondary {
+  margin-top: var(--ui-space-1);
+  color: var(--ui-color-fg-muted);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-regular);
+  line-height: var(--ui-line-height-base);
+}
+
+.ui-list-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--ui-space-6);
+  width: var(--ui-space-6);
+  height: var(--ui-space-6);
+  color: var(--ui-color-fg-muted);
+
+  > * {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.ui-list-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  min-width: 0;
+  max-width: 50%;
+
+  > * {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .ui-button-label {
+    min-width: 0;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}

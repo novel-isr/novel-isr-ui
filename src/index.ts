@@ -38,6 +38,7 @@ export * from './components/EmptyState';
 export * from './components/Page';
 export * from './components/TextLink';
 export * from './components/DescriptionList';
+export * from './components/List';
 export * from './components/Menu';
 export * from './components/Upload';
 export * from './components/Steps';
