@@ -7,10 +7,33 @@ import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, it, vi } from 'vitest';
 import { NavTree } from '../NavTree';
+import { compile } from 'sass';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 describe('NavTree', () => {
+  it('opts into readable multiline labels without changing default or compact navigation', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    const root = createRoot(container);
+    const style = document.createElement('style');
+    style.textContent = compile('src/components/NavTree/NavTree.scss').css;
+    document.head.append(style);
+    const sections = [{id:'main',items:[{id:'long',label:'Article editor with a long name',endContent:<span>Preview</span>}]}];
+    try {
+      act(() => root.render(<NavTree sections={sections} />));
+      expect(getComputedStyle(container.querySelector('.ui-nav-tree-label')!).whiteSpace).toBe('nowrap');
+      act(() => root.render(<NavTree key="wrapped" sections={sections} wrapLabels />));
+      expect(getComputedStyle(container.querySelector('.ui-nav-tree-label')!).whiteSpace).toBe('normal');
+      expect(getComputedStyle(container.querySelector('.ui-nav-tree-label')!).overflowWrap).toBe('anywhere');
+      expect(container.querySelector('.ui-nav-tree-end')?.textContent).toBe('Preview');
+      act(() => root.render(<NavTree key="compact" sections={sections} wrapLabels collapsed />));
+      expect(getComputedStyle(container.querySelector('.ui-nav-tree-copy')!).display).toBe('none');
+    } finally {
+      act(() => root.unmount()); container.remove(); style.remove();
+    }
+  });
+
   it('keeps active item content and trailing metadata visible', () => {
     const container = document.createElement('div');
     const root = createRoot(container);

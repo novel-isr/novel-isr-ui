@@ -38,6 +38,8 @@ export interface NavTreeProps {
   sections: NavTreeSection[];
   activeId?: string;
   collapsed?: boolean;
+  /** Wrap long labels and descriptions instead of truncating them. */
+  wrapLabels?: boolean;
   defaultExpandedIds?: string[];
   expandedIds?: string[];
   onExpandedChange?: (expandedIds: string[]) => void;
@@ -56,6 +58,7 @@ export function NavTree(props: NavTreeProps) {
     sections,
     activeId,
     collapsed = false,
+    wrapLabels = false,
     defaultExpandedIds,
     expandedIds,
     onExpandedChange,
@@ -120,7 +123,7 @@ export function NavTree(props: NavTreeProps) {
 
   return (
     <nav
-      className={cn('ui-nav-tree', collapsed && 'ui-nav-tree-collapsed', className)}
+      className={cn('ui-nav-tree', collapsed && 'ui-nav-tree-collapsed', wrapLabels && 'ui-nav-tree-wrap-labels', className)}
       aria-label={props['aria-label'] ?? 'Navigation'}
       data-collapsed={collapsed || undefined}
     >

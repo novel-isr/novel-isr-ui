@@ -140,6 +140,17 @@
   line-height: 1.2;
 }
 
+.ui-nav-tree-wrap-labels:not(.ui-nav-tree-collapsed) {
+  .ui-nav-tree-item { padding-block: var(--ui-space-2); }
+  .ui-nav-tree-label,
+  .ui-nav-tree-description {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
 .ui-nav-tree-description {
   color: var(--ui-color-fg-disabled);
   font-size: var(--ui-font-size-xs);
