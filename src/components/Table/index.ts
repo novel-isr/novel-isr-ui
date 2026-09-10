@@ -16,3 +16,4 @@ export type {
   TableScrollConfig,
 } from "./Table";
 export * from './DataTable';
+export * from './TableCellContent';

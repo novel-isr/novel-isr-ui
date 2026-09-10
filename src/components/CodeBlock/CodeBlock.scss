@@ -1,0 +1,20 @@
+.ui-code-block {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
+  padding: var(--ui-space-4);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-color-control);
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-mono);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-base);
+  letter-spacing: 0;
+  tab-size: 2;
+  white-space: pre;
+  &[data-wrap='true'] { white-space: pre-wrap; overflow-wrap: anywhere; }
+  &:focus-visible { outline: 2px solid var(--ui-color-focus-ring); outline-offset: 2px; }
+  code { font: inherit; color: inherit; }
+}

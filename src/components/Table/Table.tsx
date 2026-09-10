@@ -311,6 +311,7 @@ export function Table<T>(props: TableProps<T>) {
           {columns.map((col) => (
             <TableHeader
               key={col.key}
+              scope="col"
               style={cellStyleFor(col)}
               data-ellipsis={col.ellipsis ? "true" : undefined}
               {...fixedDataAttrs(col)}

@@ -26,6 +26,8 @@ export * from './components/Button';
 export * from './components/Spinner';
 export * from './components/Box';
 export * from './components/Stack';
+export * from './components/ResponsiveGrid/ResponsiveGrid';
+export * from './components/CodeBlock/CodeBlock';
 export * from './components/Divider';
 export * from './components/Card';
 export * from './components/Skeleton';

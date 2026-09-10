@@ -153,9 +153,6 @@
   background-color: var(--ui-color-bg-subtle);
 }
 
-.ui-table-variant-bordered {
-  overflow: hidden;
-}
 .ui-table-variant-bordered .ui-table th + th,
 .ui-table-variant-bordered .ui-table td + td {
   border-left: 1px solid var(--ui-color-border);
@@ -190,6 +187,19 @@
   padding: var(--ui-space-10) !important;
   color: var(--ui-color-fg-muted);
 }
+
+.ui-table-cell-content {
+  display: block;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: inherit;
+  font: inherit;
+}
+.ui-table-cell-primary { display: block; }
+.ui-table-cell-content[data-secondary] .ui-table-cell-primary { font-weight: var(--ui-font-weight-semibold); }
+code.ui-table-cell-primary { font-family: var(--ui-font-family-mono); }
+.ui-table-cell-secondary { margin-top: var(--ui-space-1); color: var(--ui-color-fg-muted); }
 
 @media (max-width: 48rem) {
   .ui-table th,

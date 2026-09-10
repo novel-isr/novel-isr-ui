@@ -1,10 +1,14 @@
 import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 
-export const Page = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Page(
-  { className, ...props }, ref,
+export interface PageProps extends HTMLAttributes<HTMLDivElement> {
+  maxWidth?: string | number;
+}
+
+export const Page = forwardRef<HTMLDivElement, PageProps>(function Page(
+  { className, maxWidth, style, ...props }, ref,
 ) {
-  return <div ref={ref} className={cn('ui-page', className)} {...props} />;
+  return <div ref={ref} className={cn('ui-page', className)} style={{ maxWidth, ...style }} {...props} />;
 });
 
 export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
