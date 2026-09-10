@@ -28,9 +28,12 @@ createRoot(document.getElementById('root')).render(<ThemeProvider defaultTheme={
 const server=await createServer({root,configFile:false,cacheDir:'/tmp/ui-editor-presentation-vite',server:{host:'127.0.0.1',port:0},plugins:[{
     name:'editor-presentation-fixture',resolveId:id=>id==='/fixture.tsx'?'\0fixture':undefined,
     load:id=>id==='\0fixture'?ts.transpileModule(code,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText:undefined,
-    configureServer(vite){vite.middlewares.use((req,res,next)=>{
+    configureServer(vite){vite.middlewares.use(async (req,res,next)=>{
         if(new URL(req.url,'http://localhost').pathname!=='/')return next();
-        res.setHeader('Content-Type','text/html');res.end('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div id="root"></div><script type="module" src="/fixture.tsx"></script></body></html>');
+        try {
+            const html=await vite.transformIndexHtml(req.url,'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div id="root"></div><script type="module" src="/fixture.tsx"></script></body></html>');
+            res.setHeader('Content-Type','text/html');res.end(html);
+        } catch(error) { next(error); }
     });},
 }]});
 await server.listen();
@@ -39,7 +42,7 @@ try {
     browser=await chromium.launch({channel:'chrome',headless:true});await mkdir(output,{recursive:true});
     for(const theme of ['light','dark']) {
         const page=await browser.newPage({viewport:{width:1440,height:1000}});page.setDefaultTimeout(10000);
-        const errors=[];page.on('pageerror',error=>errors.push(error.message));
+        const errors=[];page.on('pageerror',error=>{errors.push(error.message);console.error(error);});
         await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/?theme=${theme}`);
         await page.getByRole('heading',{name:'Document title',exact:true}).waitFor();
         for(const width of [280,767,768,1200]) {

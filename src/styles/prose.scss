@@ -1,0 +1,110 @@
+@mixin prose {
+  min-width: 0;
+  max-width: 100%;
+  color: var(--ui-color-fg);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-regular);
+  font-style: normal;
+  line-height: var(--ui-line-height-relaxed);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    margin: 1.5em 0 0.5em;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-style: inherit;
+    font-weight: var(--ui-font-weight-semibold);
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+  :where(h1) { font-size: var(--ui-font-size-3xl); }
+  :where(h2) { font-size: var(--ui-font-size-2xl); }
+  :where(h3) { font-size: var(--ui-font-size-xl); }
+  :where(h4) { font-size: var(--ui-font-size-lg); }
+  :where(h5, h6) { font-size: var(--ui-font-size-md); }
+  :where(h6) { color: var(--ui-color-fg-muted); }
+  // Keep body resets off generic spans/divs used by code and editor controls.
+  :where(p, ul, ol, li, blockquote) {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
+  :where(p) { padding: 0; border: 0; background: transparent; }
+  :where(p, ul, ol, blockquote, pre, table, figure) { margin: 1em 0; }
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+
+  :where(ul, ol) { padding: 0; padding-inline-start: 1.5em; }
+  :where(li) { margin: 0.25em 0; }
+  :where(li > ul, li > ol, li > p) { margin-block: 0.25em; }
+  :where(blockquote) {
+    padding: 0.25em 1em;
+    border: 0;
+    border-inline-start: 3px solid var(--ui-color-border);
+    background: transparent;
+    color: inherit;
+  }
+  :where(a) {
+    color: var(--ui-color-brand-700);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+  :where(a:hover) { text-decoration-thickness: 2px; }
+  :where(a:focus-visible) { outline: 2px solid var(--ui-color-brand-500); outline-offset: 3px; }
+
+  :where(code, kbd, samp) { font-family: var(--ui-font-family-mono); font-size: 0.875em; }
+  :where(code) { padding: 0.12em 0.3em; border-radius: 3px; background: var(--ui-color-control); }
+  :where(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--ui-space-4);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 4px;
+    background: var(--ui-color-surface-raised);
+    color: var(--ui-color-fg);
+    font-family: var(--ui-font-family-mono);
+    line-height: var(--ui-line-height-base);
+    white-space: pre;
+    overflow-wrap: normal;
+    tab-size: 2;
+  }
+  :where(pre code) { padding: 0; border: 0; border-radius: 0; background: transparent; color: inherit; white-space: pre; }
+  :where(pre:focus-visible) { outline: 2px solid var(--ui-color-brand-500); outline-offset: 2px; }
+
+  :where(.hljs-comment, .hljs-quote) { color: var(--ui-color-fg-muted); }
+  :where(.hljs-keyword, .hljs-selector-tag, .hljs-name, .hljs-tag, .hljs-attr, .hljs-attribute, .hljs-doctag) {
+    color: var(--ui-color-brand-700);
+  }
+  :where(.hljs-string, .hljs-symbol, .hljs-bullet, .hljs-regexp, .hljs-type, .hljs-literal) {
+    color: var(--ui-color-success-700);
+  }
+  :where(.hljs-number, .hljs-title, .hljs-section, .hljs-built_in, .hljs-meta, .hljs-variable) {
+    color: var(--ui-color-warning-700);
+  }
+  :where(.hljs-subst, .hljs-operator, .hljs-punctuation, .hljs-params) { color: var(--ui-color-fg); }
+  :where(.hljs-addition) { background: var(--ui-color-success-50); color: var(--ui-color-success-700); }
+  :where(.hljs-deletion) { background: var(--ui-color-danger-50); color: var(--ui-color-danger-700); }
+  :where(.hljs-strong) { font-weight: var(--ui-font-weight-bold); }
+  :where(.hljs-emphasis) { font-style: italic; }
+
+  :where(mark) { background: var(--ui-color-warning-50); color: inherit; }
+  :where(img, video) { max-width: 100%; height: auto; }
+  :where(figure) { max-width: 100%; }
+  :where(figcaption) { margin-top: var(--ui-space-2); font-size: var(--ui-font-size-md); color: var(--ui-color-fg-muted); }
+  :where(table) { display: table; width: 100%; border-collapse: collapse; color: inherit; overflow-wrap: normal; }
+  :where(tr) { border: 0; background: transparent; }
+  :where(th, td) { padding: 0.5em 0.75em; border: 1px solid var(--ui-color-border); text-align: start; vertical-align: top; white-space: normal; }
+  :where(th) { background: var(--ui-color-control); font-weight: var(--ui-font-weight-semibold); }
+  :where(th > p, td > p) { margin: 0; }
+  :where(hr) { height: 0; padding: 0; margin: 1.5em 0; border: 0; border-top: 1px solid var(--ui-color-divider); background: transparent; }
+  :where(sub, sup) { font-size: 0.75em; line-height: 0; }
+}
