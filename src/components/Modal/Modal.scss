@@ -44,6 +44,7 @@
  */
 .ui-modal-content > form,
 .ui-modal-content > fieldset {
+  order: 2;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -108,8 +109,21 @@
   }
 }
 
+.ui-modal-header,
+.ui-modal-description,
+.ui-modal-body {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ui-modal-content:has(> .ui-modal-close) .ui-modal-header {
+  padding-right: calc(2rem + var(--ui-space-3) + var(--ui-space-3));
+}
+
 .ui-modal-header {
   order: 0;
+  max-height: 30dvh;
+  overflow-y: auto;
   padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 3vw, 1.5rem) var(--ui-space-3);
   font-size: var(--ui-font-size-xl);
   font-weight: var(--ui-font-weight-semibold);
@@ -119,6 +133,9 @@
 
 .ui-modal-description {
   order: 1;
+  max-height: 20dvh;
+  overflow-y: auto;
+  flex-shrink: 0;
   margin: 0;
   padding: 0 clamp(1rem, 3vw, 1.5rem) var(--ui-space-2);
   color: var(--ui-color-fg-muted);
@@ -140,6 +157,8 @@
 
 .ui-modal-footer {
   order: 3;
+  max-height: 30dvh;
+  overflow-y: auto;
   padding: var(--ui-space-4) clamp(1rem, 3vw, 1.5rem) clamp(1rem, 3vw, 1.5rem);
   display: flex;
   align-items: center;
@@ -147,6 +166,16 @@
   gap: var(--ui-space-2);
   flex-shrink: 0;
   flex-wrap: wrap;
+
+  > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .ui-button-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 .ui-modal-close {

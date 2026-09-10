@@ -22,7 +22,7 @@
  */
 
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -140,12 +140,37 @@ export interface ModalProps {
 export function Modal(props: ModalProps) {
   const { isOpen, onClose, title, description, size, hideCloseButton, children } =
     props;
+  const opener = useRef<HTMLElement | null>(null);
+  const content = useRef<HTMLDivElement | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useLayoutEffect(() => {
+    // Capture before mounting content: a child's autoFocus can bypass Radix's open event.
+    if (isOpen) {
+      const active = document.activeElement;
+      if (!content.current?.contains(active)) {
+        opener.current = active instanceof HTMLElement && active !== document.body ? active : null;
+      }
+    }
+    setReady(isOpen);
+  }, [isOpen]);
+
   return (
-    <ModalRoot open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <ModalRoot open={isOpen && ready} onOpenChange={(open) => !open && onClose()}>
       <ModalContent
+        ref={content}
         size={size}
         hideCloseButton={hideCloseButton}
         description={description}
+        onCloseAutoFocus={event => {
+          // The simple API has no Radix Trigger to restore focus to.
+          event.preventDefault();
+          // Radix defers this event; a reopened dialog must keep its focus and opener.
+          if (content.current?.isConnected) return;
+          const target = opener.current;
+          opener.current = null;
+          if (target?.isConnected) target.focus({ preventScroll: true });
+        }}
       >
         {title && <ModalHeader>{title}</ModalHeader>}
         {children}

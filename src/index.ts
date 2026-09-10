@@ -35,6 +35,7 @@ export * from './components/Divider';
 export * from './components/Card';
 export * from './components/Skeleton';
 export * from './components/EmptyState';
+export * from './components/LoadingState';
 export * from './components/Page';
 export * from './components/TextLink';
 export * from './components/DescriptionList';
