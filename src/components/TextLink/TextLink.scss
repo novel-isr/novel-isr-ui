@@ -1,0 +1,40 @@
+.ui-text-link {
+  color: var(--ui-color-brand-500);
+  font-family: var(--ui-font-family-sans);
+  font-size: inherit;
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-base);
+  letter-spacing: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: color var(--ui-transition-fast), background-color var(--ui-transition-fast);
+  &:visited { color: var(--ui-color-brand-500); }
+  &:hover { text-decoration: underline; }
+  &:focus-visible { outline: 2px solid var(--ui-color-focus-ring); outline-offset: 3px; border-radius: var(--ui-radius-sm); }
+  > svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+}
+.ui-text-link-subtle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  text-decoration: none;
+  &, &:visited { color: var(--ui-color-fg-secondary); }
+  &:hover { color: var(--ui-color-brand-500); }
+}
+.ui-text-link-action {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: var(--ui-space-3);
+  border-bottom: 1px solid var(--ui-color-divider);
+  font-size: var(--ui-font-size-md);
+  &, &:visited { color: var(--ui-color-fg); }
+  &:hover { color: var(--ui-color-brand-500); background: var(--ui-color-bg-subtle); text-decoration: none; }
+  > svg:first-child { color: var(--ui-color-brand-500); }
+  > svg:last-child:not(:first-child) { margin-left: auto; color: var(--ui-color-fg-muted); }
+}

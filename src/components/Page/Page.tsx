@@ -60,15 +60,19 @@ export interface StatCardProps extends HTMLAttributes<HTMLDivElement> {
   label: ReactNode;
   value: ReactNode;
   icon?: ReactNode;
+  description?: ReactNode;
 }
 
 export const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
-  { label, value, icon, className, ...props }, ref,
+  { label, value, icon, description, className, ...props }, ref,
 ) {
   return (
     <div ref={ref} className={cn('ui-stat-card', className)} {...props}>
       {icon && <span className="ui-stat-icon" aria-hidden="true">{icon}</span>}
-      <dl><dt>{label}</dt><dd>{value}</dd></dl>
+      <div className="ui-stat-content">
+        <dl><dt>{label}</dt><dd>{value}</dd></dl>
+        {description != null && <p className="ui-stat-description">{description}</p>}
+      </div>
     </div>
   );
 });

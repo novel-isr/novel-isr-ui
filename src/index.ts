@@ -31,6 +31,8 @@ export * from './components/Card';
 export * from './components/Skeleton';
 export * from './components/EmptyState';
 export * from './components/Page';
+export * from './components/TextLink';
+export * from './components/DescriptionList';
 export * from './components/Menu';
 export * from './components/Upload';
 export * from './components/Steps';
