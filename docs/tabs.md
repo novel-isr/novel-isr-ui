@@ -18,6 +18,9 @@ variants remain available.
 Manual activation keeps keyboard focus separate from selection, allowing the
 parent to confirm unsaved changes before accepting a new value. Render a real
 `TabPanel` for the selected tab and give each `TabList` an accessible label.
+The list reveals the selected tab after async option updates and viewport resizing
+without scrolling the page or taking focus from the editor. Tab values must not
+contain whitespace because Radix uses them in accessible ID references.
 
 Textareas, including KeyValueEditor and JsonField fields, do not expose manual
 resize handles. Set `rows` or layout dimensions; overflowing content scrolls.

@@ -10,9 +10,10 @@ const output = process.env.TABS_TEST_OUTPUT || '/tmp/ui-language-tabs';
 const code = `import React,{useState}from'react';import{createRoot}from'react-dom/client';import{flushSync}from'react-dom';
 import{Tabs,TabList,Tab,TabPanel,Textarea,KeyValueEditor,ThemeProvider,useTheme}from'/dist/index.js';import'/dist/styles.css';
 function App(){const{setTheme,setPalette}=useTheme();const[scheme,color]=useState('brand');const[value,select]=useState('en');
-window.fixture={theme:(theme,palette)=>flushSync(()=>{setTheme(theme);setPalette(palette)}),color:c=>flushSync(()=>color(c)),select:v=>flushSync(()=>select(v))};
+const[items,setItems]=useState(['en','ja','disabled','zh-hans','fr','de','es','it','pt-br','ko']);
+window.fixture={theme:(theme,palette)=>flushSync(()=>{setTheme(theme);setPalette(palette)}),color:c=>flushSync(()=>color(c)),select:v=>flushSync(()=>select(v)),items:items=>flushSync(()=>setItems(items))};
 return <Tabs value={value} onValueChange={select} variant='pills' colorScheme={scheme} activationMode='manual'>
-<TabList aria-label='Languages'>{['en','ja','disabled','zh-hans','fr','de','es','it','pt-br','ko'].map(v=><Tab key={v} value={v} disabled={v==='disabled'}>{v}</Tab>)}</TabList>
+<TabList aria-label='Languages'>{items.map(v=><Tab key={v} value={v} disabled={v==='disabled'}>{v}</Tab>)}</TabList>
 <TabPanel value={value}><Textarea aria-label='Notes' resize='both' rows={3} defaultValue={'long text\\n'.repeat(40)}/>
 <KeyValueEditor entries={[{id:'1',key:'home',value:'Welcome'}]} onChange={()=>{}}/><textarea aria-label='Native'/></TabPanel></Tabs>}
 createRoot(document.getElementById('root')).render(<ThemeProvider defaultTheme='light' defaultPalette='graphite' disableStorage><App/></ThemeProvider>);`;
@@ -37,6 +38,11 @@ try {
   await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);
   const list = page.getByRole('tablist', { name: 'Languages' }); await list.waitFor();
   const selected = () => list.getByRole('tab', { selected: true });
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.evaluate(() => window.fixture.items(['en']));
+  await page.evaluate(() => window.fixture.items(['ja','disabled','zh-hans','fr','de','es','it','pt-br','ko','en']));
+  assert.ok(await selected().evaluate(el => { const item = el.getBoundingClientRect(); const list = el.closest('[role="tablist"]').getBoundingClientRect(); return item.left >= list.left - 1 && item.right <= list.right + 1; }), 'async options reveal an unchanged selected tab');
+  await page.evaluate(() => window.fixture.items(['en','ja','disabled','zh-hans','fr','de','es','it','pt-br','ko']));
   const settled = () => page.locator('.ui-tabs').evaluate(async el => {
     await Promise.allSettled(el.getAnimations({ subtree: true }).map(animation => animation.finished));
   });

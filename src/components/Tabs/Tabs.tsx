@@ -35,29 +35,10 @@ export interface TabsProps extends Omit<RadixTabs.TabsProps, 'asChild'> {
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(props, ref) {
   const { variant = 'line', colorScheme = 'brand', orientation = 'horizontal', className, children, ...rest } = props;
-  const rootRef = useRef<HTMLDivElement>(null);
-  useImperativeHandle(ref, () => rootRef.current!);
-  useEffect(() => {
-    const root = rootRef.current;
-    const selected = Array.from(root?.querySelectorAll<HTMLElement>('[role="tab"][aria-selected="true"]') ?? [])
-      .find(tab => tab.closest('.ui-tabs') === root);
-    const list = selected?.closest<HTMLElement>('[role="tablist"]');
-    if (!selected || !list) return;
-    // Reveal controlled selections without moving the page or stealing editor focus.
-    const itemBox = selected.getBoundingClientRect();
-    const listBox = list.getBoundingClientRect();
-    if (orientation === 'horizontal') {
-      if (itemBox.left < listBox.left) list.scrollLeft += itemBox.left - listBox.left;
-      else if (itemBox.right > listBox.right) list.scrollLeft += itemBox.right - listBox.right;
-    } else {
-      if (itemBox.top < listBox.top) list.scrollTop += itemBox.top - listBox.top;
-      else if (itemBox.bottom > listBox.bottom) list.scrollTop += itemBox.bottom - listBox.bottom;
-    }
-  }, [rest.value, rest.defaultValue, orientation]);
   return (
     <TabsContext.Provider value={{ variant, orientation }}>
       <RadixTabs.Root
-        ref={rootRef}
+        ref={ref}
         orientation={orientation}
         className={cn(
           'ui-tabs',
@@ -77,7 +58,35 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(props, r
 export interface TabListProps extends Omit<RadixTabs.TabsListProps, 'asChild'> {}
 export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList(props, ref) {
   const { className, ...rest } = props;
-  return <RadixTabs.List ref={ref} className={cn('ui-tabs-list', className)} {...rest} />;
+  const { orientation } = useContext(TabsContext);
+  const listRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => listRef.current!);
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const reveal = () => {
+      const selected = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"][data-state="active"]'))
+        .find(tab => tab.closest('[role="tablist"]') === list);
+      if (!selected) return;
+      // Scroll only the list, including async options and responsive layout changes.
+      const itemBox = selected.getBoundingClientRect();
+      const listBox = list.getBoundingClientRect();
+      if (orientation === 'horizontal') {
+        if (itemBox.left < listBox.left) list.scrollLeft += itemBox.left - listBox.left;
+        else if (itemBox.right > listBox.right) list.scrollLeft += itemBox.right - listBox.right;
+      } else {
+        if (itemBox.top < listBox.top) list.scrollTop += itemBox.top - listBox.top;
+        else if (itemBox.bottom > listBox.bottom) list.scrollTop += itemBox.bottom - listBox.bottom;
+      }
+    };
+    reveal();
+    const mutations = new MutationObserver(reveal);
+    mutations.observe(list, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-state'] });
+    const resize = new ResizeObserver(reveal);
+    resize.observe(list);
+    return () => { mutations.disconnect(); resize.disconnect(); };
+  }, [orientation]);
+  return <RadixTabs.List ref={listRef} className={cn('ui-tabs-list', className)} {...rest} />;
 });
 
 export interface TabProps extends Omit<RadixTabs.TabsTriggerProps, 'asChild'> {
@@ -97,5 +106,3 @@ export const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(function TabPa
   const { className, ...rest } = props;
   return <RadixTabs.Content ref={ref} className={cn('ui-tabs-content', className)} {...rest} />;
 });
-
-void useContext; // for type-only re-export hygiene
