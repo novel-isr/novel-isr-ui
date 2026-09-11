@@ -45,7 +45,7 @@ export function App() {
 |---|---|
 | Provider / hooks | `ThemeProvider` / `useTheme` / `useDisclosure` |
 | 基础 | `Button` / `Box` / `Stack` (HStack/VStack) / `Divider` / `Tag` / `Badge` / `Spinner` / `Avatar` |
-| 表单 | `Input` / `Textarea` / `Select` / `Checkbox` / `Radio` / `Switch` / `FormControl` |
+| 表单 | `Input` / `Textarea` / `KeyValueEditor` / `Select` / `Checkbox` / `Radio` / `Switch` / `FormControl` |
 | 反馈 | `Alert` / `Toast` (toast.success/error/info) / `Tooltip` |
 | 浮层 | `Modal` / `Drawer` / `Popover` |
 | 导航 / 数据 | `Tabs` / `Pagination` / `Table` |
@@ -54,6 +54,10 @@ export function App() {
 
 See [Layout Spacing](docs/layout-spacing.md) for Box, Stack, SplitLayout and grid
 spacing token mappings, CSS values, defaults and consumer overrides.
+
+See [Key Value Editor](docs/key-value-editor.md) for controlled dictionary fields,
+localized labels, multiline strings and per-entry errors, and
+[Page Tabs](docs/page-tabs.md) for route navigation presentation and interactions.
 
 ## 本地开发
 

@@ -20,6 +20,8 @@
 
 .ui-page-tabs-list {
   display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
   width: max-content;
   min-width: 100%;
   height: 100%;
@@ -31,9 +33,11 @@
   flex: 0 0 auto;
   min-width: 112px;
   max-width: 240px;
-  height: 100%;
+  height: 36px;
   padding-inline: var(--ui-space-1);
-  border-bottom: 2px solid transparent;
+  border: 0;
+  border-radius: var(--ui-radius-lg);
+  box-shadow: none;
   box-sizing: border-box;
   color: var(--ui-color-fg-secondary);
   transition: background-color var(--ui-transition-fast), color var(--ui-transition-fast);
@@ -44,7 +48,6 @@
   }
 
   &[data-active] {
-    border-bottom-color: var(--ui-color-brand-500);
     background: var(--ui-color-selected);
     color: var(--ui-color-fg);
 
@@ -58,7 +61,7 @@
     min-width: 0;
     height: 100%;
     border: 0;
-    border-radius: 0;
+    border-radius: inherit;
     padding-inline: var(--ui-space-3);
     justify-content: flex-start;
     color: inherit;

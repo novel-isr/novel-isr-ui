@@ -52,7 +52,8 @@ try {
   const trigger = item.locator('.ui-page-tab-trigger');
   const style = locator => locator.evaluate(el => {
     const s = getComputedStyle(el);const r = el.getBoundingClientRect();
-    return { background: s.backgroundColor, color: s.color, border: s.borderBottomColor, width: r.width, height: r.height, transform: s.transform };
+    return { background: s.backgroundColor, color: s.color, borderWidth: s.borderBottomWidth,
+      radius: s.borderRadius, shadow: s.boxShadow, width: r.width, height: r.height, top: r.top, bottom: r.bottom, transform: s.transform };
   });
   const settled = async () => {
     await page.locator('.ui-page-tabs').evaluate(async el => {
@@ -61,16 +62,44 @@ try {
       }
     });
   };
+  const contrast = locator => locator.evaluate(el => {
+    const canvas = document.createElement('canvas');canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext('2d');const s = getComputedStyle(el);
+    const luminance = color => {
+      ctx.fillStyle = getComputedStyle(el.closest('nav')).backgroundColor;ctx.fillRect(0, 0, 1, 1);
+      ctx.fillStyle = color;ctx.fillRect(0, 0, 1, 1);
+      const rgb = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3).map(value => {
+        const c = value / 255;return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      });
+      return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+    };
+    const fg = luminance(s.color);const bg = luminance(s.backgroundColor);
+    return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+  });
   for (const width of [1280, 390, 320]) for (const theme of ['light','dark']) {
     await page.setViewportSize({ width, height: 400 });await page.evaluate(theme => window.fixture.theme(theme), theme);
     await page.locator('#outside').click();await page.evaluate(() => window.fixture.select('article'));await settled();
     const before = await style(item);
+    const nav = await style(page.locator('.ui-page-tabs'));
+    assert.equal(nav.height, 48, 'navigation keeps its 48px footprint');
+    assert.equal(before.height, 36, 'page items have a stable 36px surface');
+    assert.equal(before.radius, '8px', 'page items have rounded corners');
+    assert.equal(before.borderWidth, '0px', 'selection has no bottom indicator');
+    assert.equal(before.shadow, 'none', 'page items remain flat');
+    assert.ok(before.top > nav.top && before.bottom < nav.bottom, 'items are vertically inset');
+    assert.equal(await page.locator('.ui-page-tabs-list').evaluate(el => getComputedStyle(el).gap), '8px');
+    assert.equal(await item.evaluate(el => {
+      const previous = el.previousElementSibling.getBoundingClientRect();
+      return el.getBoundingClientRect().left - previous.right;
+    }), 8, 'adjacent surfaces are separated');
     await trigger.hover();await settled();
     const hovered = await style(item);
+    assert.ok(await contrast(item) >= 4.5, 'selected hover retains readable text contrast');
     await page.screenshot({ path: `${output}/${theme}-${width}-selected-hover.png` });
     assert.equal((await style(trigger)).background, 'rgba(0, 0, 0, 0)', 'hover belongs to the entire page item, not a nested button rectangle');
     assert.notEqual(hovered.background, before.background, 'selected hover is distinguishable');
-    assert.equal(hovered.border, before.border, 'selected indicator remains visible');
+    assert.equal(hovered.borderWidth, '0px', 'hover does not introduce a bottom indicator');
+    assert.equal(hovered.radius, before.radius);assert.equal(hovered.shadow, 'none');
     assert.equal(hovered.width, before.width);assert.equal(hovered.height, before.height);
     assert.equal(await trigger.getAttribute('title'), null);
     const tooltip = page.getByRole('tooltip');await tooltip.waitFor();assert.equal(await tooltip.textContent(), label);
@@ -88,6 +117,7 @@ try {
     await page.keyboard.press('Escape');await tooltip.waitFor({ state: 'detached' });
     await page.locator('#outside').click();await page.evaluate(() => window.fixture.select('home'));await settled();
     const inactive = await style(item);await trigger.hover();await settled();assert.notEqual((await style(item)).background, inactive.background);
+    assert.ok(await contrast(item) >= 4.5, 'inactive hover retains readable text contrast');
     assert.equal((await style(trigger)).background, 'rgba(0, 0, 0, 0)');
     await page.locator('#outside').click();const disabled = page.locator('.ui-page-tab[data-value="disabled"]');
     const disabledBefore = await style(disabled);await disabled.hover();await settled();assert.equal((await style(disabled)).background, disabledBefore.background);
@@ -96,5 +126,5 @@ try {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false);
   }
   assert.deepEqual(errors, []);
-  console.log('PASS PageTabs: unified hover/selected surfaces, stable press geometry, shared pointer/focus tooltips, long titles, disabled items, actions, light/dark desktop/mobile');
+  console.log('PASS PageTabs: flat separated rounded tabs, 48px nav/36px items/8px radius and gaps, no indicator/shadow, readable hover contrast, stable press geometry, shared pointer/focus tooltips, long titles, disabled items, actions, light/dark desktop/mobile');
 } finally { await browser?.close();await server.close(); }

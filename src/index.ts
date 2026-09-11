@@ -52,6 +52,7 @@ export * from './components/Autocomplete';
 export * from './components/NumberInput';
 export * from './components/Textarea';
 export * from './components/JsonField';
+export * from './components/KeyValueEditor';
 export * from './components/Checkbox';
 export * from './components/Radio';
 export * from './components/Switch';

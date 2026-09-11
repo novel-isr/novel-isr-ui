@@ -4,7 +4,10 @@ PageTabs presents open application routes, not in-page ARIA tab panels. The
 application owns navigation, permissions, pinning, closing and unsaved changes.
 
 - PageTab owns the complete hover/selected surface, including the area around
-  its separate action. Selection retains the bottom indicator during hover.
+  its separate action. Items are flat, separate rounded surfaces: 36px tall,
+  8px radius and 8px gaps, vertically centered within a stable 48px nav.
+  Selection uses a quiet theme fill with no bottom indicator or shadow.
+  Both selected and unselected items have distinct light/dark hover fills.
 - Route labels do not inherit the generic Button pressed-scale animation.
 - Each enabled label uses the shared Tooltip for pointer hover and keyboard
   focus, positioned below the label and rendered outside the scrolling viewport.

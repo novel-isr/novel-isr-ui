@@ -1,0 +1,45 @@
+.ui-key-value-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  min-width: 0;
+  width: 100%;
+  container-type: inline-size;
+  font-family: var(--ui-font-family-sans);
+  letter-spacing: 0;
+}
+
+.ui-key-value-editor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px;
+  align-items: start;
+  gap: var(--ui-space-2);
+  min-width: 0;
+
+  .ui-form-control { min-width: 0; }
+  .ui-form-label, .ui-form-error { overflow-wrap: anywhere; }
+  .ui-key-value-editor-key { min-height: 32px; }
+}
+
+.ui-key-value-editor-remove {
+  width: 32px;
+  height: 32px;
+  margin-top: calc(var(--ui-font-size-sm) * var(--ui-line-height-tight) + var(--ui-space-2));
+}
+
+.ui-key-value-editor-add {
+  align-self: flex-start;
+  max-width: 100%;
+  height: auto;
+  min-height: 32px;
+  white-space: normal;
+  .ui-button-label { overflow-wrap: anywhere; min-width: 0; }
+}
+
+@container (max-width: 400px) {
+  .ui-key-value-editor-row {
+    grid-template-columns: minmax(0, 1fr) 32px;
+    > .ui-form-control { grid-column: 1; }
+  }
+  .ui-key-value-editor-remove { grid-column: 2; grid-row: 1; }
+}
