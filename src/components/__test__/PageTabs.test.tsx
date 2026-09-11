@@ -10,6 +10,27 @@ document.body.append(container);
 let root = createRoot(container);
 afterEach(() => { act(() => root.unmount()); root = createRoot(container); vi.restoreAllMocks(); });
 
+it('uses the shared tooltip on keyboard focus instead of a duplicate native title', async () => {
+  act(() => root.render(h(UI.PageTab, { value: 'article', label: 'Complete article title', active: true })));
+  const trigger = container.querySelector<HTMLButtonElement>('.ui-page-tab-trigger')!;
+  expect(trigger.hasAttribute('title')).toBe(false);
+  await act(async () => trigger.focus());
+  const tooltip = document.querySelector('[role="tooltip"]');
+  expect(tooltip?.textContent).toBe('Complete article title');
+  expect(trigger.getAttribute('aria-describedby')).toBe(tooltip?.id);
+  expect(trigger.getAttribute('aria-current')).toBe('page');
+  await act(async () => trigger.blur());
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+});
+
+it('exposes disabled presentation state without changing the action control', () => {
+  act(() => root.render(h(UI.PageTab, { value: 'draft', label: 'Draft', disabled: true,
+    action: h(UI.IconButton, { label: 'Close Draft' }, 'x') })));
+  expect(container.querySelector('.ui-page-tab')?.hasAttribute('data-disabled')).toBe(true);
+  expect(container.querySelector<HTMLButtonElement>('.ui-page-tab-trigger')?.disabled).toBe(true);
+  expect(container.querySelector<HTMLButtonElement>('[aria-label="Close Draft"]')?.disabled).toBe(false);
+});
+
 it('exposes route navigation without inventing tab panels or nesting controls', () => {
   expect(UI).toHaveProperty('PageTabs');
   const select = vi.fn();
@@ -93,7 +114,7 @@ it('returns focus to the current page when a focused item is removed, without st
   expect(document.activeElement?.getAttribute('aria-current')).toBe('page');
   const outside = document.createElement('button');
   document.body.append(outside);
-  outside.focus();
+  act(() => outside.focus());
   act(() => render());
   expect(document.activeElement).toBe(outside);
   outside.remove();

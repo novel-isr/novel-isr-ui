@@ -17,6 +17,7 @@
   box-shadow: var(--ui-tooltip-shadow);
   z-index: calc(var(--ui-z-toast) + 10);
   max-width: min(20rem, calc(100vw - 2rem));
+  overflow-wrap: anywhere;
   pointer-events: none;
   user-select: none;
   backdrop-filter: blur(14px) saturate(1.12);

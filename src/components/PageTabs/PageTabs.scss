@@ -35,10 +35,22 @@
   padding-inline: var(--ui-space-1);
   border-bottom: 2px solid transparent;
   box-sizing: border-box;
+  color: var(--ui-color-fg-secondary);
+  transition: background-color var(--ui-transition-fast), color var(--ui-transition-fast);
+
+  &:not([data-disabled]):hover {
+    background: var(--ui-color-hover);
+    color: var(--ui-color-fg);
+  }
 
   &[data-active] {
     border-bottom-color: var(--ui-color-brand-500);
     background: var(--ui-color-selected);
+    color: var(--ui-color-fg);
+
+    &:not([data-disabled]):hover {
+      background: color-mix(in srgb, var(--ui-color-brand-500) 8%, var(--ui-color-selected));
+    }
   }
 
   .ui-page-tab-trigger {
@@ -49,15 +61,16 @@
     border-radius: 0;
     padding-inline: var(--ui-space-3);
     justify-content: flex-start;
-    color: var(--ui-color-fg-secondary);
+    color: inherit;
     font-size: var(--ui-font-size-md);
     font-weight: var(--ui-font-weight-medium);
     background: transparent;
     .ui-button-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .ui-button-icon span { display: inline-flex; }
     .ui-button-icon svg { width: 16px; height: 16px; }
-    &:hover { background: var(--ui-color-hover); color: var(--ui-color-fg); }
-    &[aria-current="page"] { color: var(--ui-color-fg); }
+    // The complete item owns its state surface, including the separate action.
+    &:not(:disabled):hover { background: transparent; color: inherit; }
+    &:not(:disabled):active { transform: none; }
     &:focus-visible { outline-offset: -3px; }
   }
 }

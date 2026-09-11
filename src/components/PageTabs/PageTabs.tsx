@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { forwardRef, useCallback, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
+import { Tooltip, TooltipProvider } from '../Tooltip/Tooltip';
 import { cn } from '../../utils/cn';
 
 export interface PageTabsProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
@@ -103,10 +104,15 @@ export interface PageTabProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chil
 export const PageTab = forwardRef<HTMLDivElement, PageTabProps>(function PageTab({
   value, label, active, disabled, icon, action, onSelect, className, ...rest
 }, ref) {
-  return <div {...rest} ref={ref} className={cn('ui-page-tab', className)} data-value={value} data-active={active || undefined}>
-    <Button className="ui-page-tab-trigger" variant="ghost" size="sm" intent="neutral" title={label}
-      aria-current={active ? 'page' : undefined} disabled={disabled} onClick={onSelect}
-      leftIcon={icon ? <span aria-hidden="true">{icon}</span> : undefined}>{label}</Button>
+  return <div {...rest} ref={ref} className={cn('ui-page-tab', className)} data-value={value} data-active={active || undefined}
+    data-disabled={disabled || undefined}>
+    <TooltipProvider>
+      <Tooltip label={label} side="bottom" align="start" disabled={disabled}>
+        <Button className="ui-page-tab-trigger" variant="ghost" size="sm" intent="neutral"
+          aria-current={active ? 'page' : undefined} disabled={disabled} onClick={onSelect}
+          leftIcon={icon ? <span aria-hidden="true">{icon}</span> : undefined}>{label}</Button>
+      </Tooltip>
+    </TooltipProvider>
     {action && <span className="ui-page-tab-action">{action}</span>}
   </div>;
 });
