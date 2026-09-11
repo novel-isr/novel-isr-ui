@@ -5,5 +5,6 @@ export type {
   TabProps,
   TabPanelProps,
   TabsVariant,
+  TabsColorScheme,
   TabsOrientation,
 } from './Tabs';

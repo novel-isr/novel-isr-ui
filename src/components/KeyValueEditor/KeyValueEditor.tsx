@@ -51,12 +51,12 @@ export function KeyValueEditor({
     {entries.map((entry, index) => <div className="ui-key-value-editor-row" key={entry.id}>
       <FormField label={<>{keyLabel}<span className="ui-sr-only"> {index + 1}</span></>}
         isDisabled={disabled} isInvalid={Boolean(errors?.[entry.id]?.key)} errorMessage={errors?.[entry.id]?.key}>
-        <Textarea className="ui-key-value-editor-key" size="sm" rows={1} resize="vertical"
+        <Textarea className="ui-key-value-editor-key" size="sm" rows={1}
           value={entry.key} onChange={event => update(entry.id, 'key', event.target.value)} />
       </FormField>
       <FormField label={<>{valueLabel}<span className="ui-sr-only"> {index + 1}</span></>}
         isDisabled={disabled} isInvalid={Boolean(errors?.[entry.id]?.value)} errorMessage={errors?.[entry.id]?.value}>
-        <Textarea size="sm" rows={2} resize="vertical"
+        <Textarea size="sm" rows={2}
           value={entry.value} onChange={event => update(entry.id, 'value', event.target.value)} />
       </FormField>
       <IconButton className="ui-key-value-editor-remove" label={`${removeLabel} ${index + 1}`} type="button"

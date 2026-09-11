@@ -1,7 +1,24 @@
 .ui-tabs {
+  --ui-tabs-accent: var(--ui-color-brand-500);
+  --ui-tabs-selected-bg: var(--ui-color-brand-50);
+  --ui-tabs-selected-fg: var(--ui-color-brand-700);
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
+}
+
+@each $color in success, warning, danger {
+  .ui-tabs-color-#{$color} {
+    --ui-tabs-accent: var(--ui-color-#{$color}-500);
+    --ui-tabs-selected-bg: var(--ui-color-#{$color}-50);
+    --ui-tabs-selected-fg: var(--ui-color-#{$color}-700);
+  }
+}
+.ui-tabs-color-gray {
+  --ui-tabs-accent: var(--ui-color-fg-secondary);
+  --ui-tabs-selected-bg: var(--ui-color-bg-muted);
+  --ui-tabs-selected-fg: var(--ui-color-fg);
 }
 
 .ui-tabs-orientation-vertical {
@@ -26,6 +43,8 @@
 }
 
 .ui-tabs-trigger {
+  flex: 0 0 auto;
+  min-width: 0;
   appearance: none;
   background: transparent;
   border: none;
@@ -45,15 +64,15 @@
     background-color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast);
 
-  &:hover {
+  &:hover:not(:disabled):not([data-state="active"]) {
     color: var(--ui-color-fg);
   }
   &:focus-visible {
-    outline: var(--ui-focus-ring-width) solid var(--ui-color-brand-500);
+    outline: var(--ui-focus-ring-width) solid var(--ui-tabs-accent);
     outline-offset: -2px;
   }
   &[data-state="active"] {
-    color: var(--ui-color-brand-500);
+    color: var(--ui-tabs-selected-fg);
   }
   &:disabled {
     opacity: 0.5;
@@ -75,7 +94,7 @@
     border-color var(--ui-transition-fast);
 }
 .ui-tabs-variant-line .ui-tabs-trigger[data-state="active"] {
-  border-bottom-color: var(--ui-color-brand-500);
+  border-bottom-color: var(--ui-tabs-accent);
 }
 
 // vertical line variant
@@ -93,7 +112,7 @@
 }
 .ui-tabs-variant-line.ui-tabs-orientation-vertical
   .ui-tabs-trigger[data-state="active"] {
-  border-right-color: var(--ui-color-brand-500);
+  border-right-color: var(--ui-tabs-accent);
 }
 
 // variant: enclosed —— 类似浏览器 tab 标签
@@ -129,5 +148,29 @@
 .ui-tabs-content {
   padding: var(--ui-space-4) 0;
   flex: 1;
-  outline: none;
+  min-width: 0;
+}
+
+// Independent, flat tabs for child views; the list itself stays unframed.
+.ui-tabs-variant-pills .ui-tabs-list {
+  gap: var(--ui-space-2);
+  padding-block: var(--ui-space-1);
+}
+.ui-tabs-variant-pills .ui-tabs-trigger {
+  min-height: 36px;
+  max-width: 100%;
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-space-2) var(--ui-space-3);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+
+  &:hover:not(:disabled):not([data-state="active"]) {
+    background-color: var(--ui-color-bg-muted);
+  }
+  &[data-state="active"] {
+    background-color: var(--ui-tabs-selected-bg);
+    color: var(--ui-tabs-selected-fg);
+  }
 }

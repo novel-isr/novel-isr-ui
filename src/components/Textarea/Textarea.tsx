@@ -2,7 +2,7 @@
  * Textarea —— 多行文本输入。跟 Input 同 token 系统。
  *
  *   <Textarea placeholder="说点什么" />
- *   <Textarea variant="filled" size="lg" rows={6} resize="vertical" />
+ *   <Textarea variant="filled" size="lg" rows={6} />
  */
 
 import { forwardRef, type TextareaHTMLAttributes } from 'react';
@@ -18,6 +18,7 @@ export interface TextareaProps
   variant?: TextareaVariant;
   size?: TextareaSize;
   isInvalid?: boolean;
+  /** @deprecated Manual resizing is disabled. Set rows or layout dimensions instead. */
   resize?: TextareaResize;
 }
 
@@ -29,7 +30,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     variant = 'outline',
     size = 'md',
     isInvalid = false,
-    resize = 'none',
+    resize: _resize,
     className,
     ...rest
   } = props;
@@ -43,7 +44,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         'ui-textarea',
         `ui-textarea-variant-${variant}`,
         `ui-textarea-size-${size}`,
-        `ui-textarea-resize-${resize}`,
+        'ui-textarea-resize-none',
         (isInvalid || fc['aria-invalid']) && 'ui-textarea-error',
         className
       )}

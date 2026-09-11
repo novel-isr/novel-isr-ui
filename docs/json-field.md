@@ -5,7 +5,7 @@ spacing and validation colors. No editor engine is required.
 
 ```tsx
 <FormField label="Dictionary" helperText="Public translation dictionary" isDisabled={loading}>
-  <JsonField value={text} onChange={setText} name="dictionary" rows={16} resize="vertical" />
+  <JsonField value={text} onChange={setText} name="dictionary" rows={16} />
 </FormField>
 ```
 

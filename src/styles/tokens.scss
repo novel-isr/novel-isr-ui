@@ -825,6 +825,10 @@ textarea {
   color: inherit;
 }
 
+textarea {
+  resize: none;
+}
+
 :focus {
   outline: none;
 }

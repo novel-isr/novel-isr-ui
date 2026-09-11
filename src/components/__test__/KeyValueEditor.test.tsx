@@ -14,6 +14,21 @@ const initial = [
   { id: 'first', key: 'duplicate', value: 'one' },
   { id: 'second', key: 'duplicate', value: 'two' },
 ];
+
+it('keeps all editor textareas non-resizable', () => {
+  fixture();
+  const fields = container.querySelectorAll('textarea');
+  expect(fields).toHaveLength(4);
+  expect(Array.from(fields).every(field => field.classList.contains('ui-textarea-resize-none'))).toBe(true);
+});
+
+it('ignores deprecated textarea resize requests without leaking them into native attributes', () => {
+  act(() => root.render(<UI.Textarea resize="both" rows={8} />));
+  const field = container.querySelector('textarea')!;
+  expect(field.classList.contains('ui-textarea-resize-none')).toBe(true);
+  expect(field.hasAttribute('resize')).toBe(false);
+  expect(field.getAttribute('rows')).toBe('8');
+});
 const inputs = () => Array.from(container.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea'));
 const button = (label: string) => Array.from(container.querySelectorAll('button'))
   .find(el => (el.getAttribute('aria-label') || el.textContent) === label)!;
