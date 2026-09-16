@@ -91,11 +91,13 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList
 
 export interface TabProps extends Omit<RadixTabs.TabsTriggerProps, 'asChild'> {
   children: ReactNode;
+  /** Override the group color and keep this tab tinted when inactive. */
+  colorScheme?: TabsColorScheme;
 }
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab(props, ref) {
-  const { className, children, ...rest } = props;
+  const { className, children, colorScheme, ...rest } = props;
   return (
-    <RadixTabs.Trigger ref={ref} className={cn('ui-tabs-trigger', className)} {...rest}>
+    <RadixTabs.Trigger ref={ref} className={cn('ui-tabs-trigger', colorScheme && `ui-tabs-color-${colorScheme}`, className)} {...rest}>
       {children}
     </RadixTabs.Trigger>
   );

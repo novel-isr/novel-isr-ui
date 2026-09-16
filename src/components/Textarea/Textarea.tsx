@@ -49,6 +49,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         className
       )}
       {...fc}
+      style={{ ...fc.style, resize: 'none' }}
     />
   );
 });

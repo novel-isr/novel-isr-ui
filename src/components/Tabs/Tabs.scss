@@ -8,7 +8,7 @@
   min-width: 0;
 }
 
-@each $color in success, warning, danger {
+@each $color in brand, success, warning, danger {
   .ui-tabs-color-#{$color} {
     --ui-tabs-accent: var(--ui-color-#{$color}-500);
     --ui-tabs-selected-bg: var(--ui-color-#{$color}-50);
@@ -172,5 +172,30 @@
   &[data-state="active"] {
     background-color: var(--ui-tabs-selected-bg);
     color: var(--ui-tabs-selected-fg);
+  }
+}
+
+// Explicit tab colors stay visible in every state, independent of the group.
+.ui-tabs .ui-tabs-trigger[class*='ui-tabs-color-'] {
+  background-color: var(--ui-tabs-selected-bg);
+  color: var(--ui-tabs-selected-fg);
+  border-bottom: 2px solid transparent;
+
+  &:hover:not(:disabled):not([data-state='active']) {
+    background-color: var(--ui-tabs-selected-bg);
+    color: var(--ui-tabs-selected-fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  &[data-state='active'] {
+    border-bottom-color: var(--ui-tabs-selected-fg);
+  }
+}
+
+.ui-tabs-variant-line.ui-tabs-orientation-vertical .ui-tabs-trigger[class*='ui-tabs-color-'] {
+  border-bottom: none;
+
+  &[data-state='active'] {
+    border-right-color: var(--ui-tabs-selected-fg);
   }
 }

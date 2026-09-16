@@ -22,6 +22,13 @@ it('keeps all editor textareas non-resizable', () => {
   expect(Array.from(fields).every(field => field.classList.contains('ui-textarea-resize-none'))).toBe(true);
 });
 
+it('prevents inline styles from re-enabling manual resize while preserving layout styles', () => {
+  act(() => root.render(<UI.Textarea style={{ resize: 'both', height: 120 }} />));
+  const field = container.querySelector('textarea')!;
+  expect(field.style.resize).toBe('none');
+  expect(field.style.height).toBe('120px');
+});
+
 it('ignores deprecated textarea resize requests without leaking them into native attributes', () => {
   act(() => root.render(<UI.Textarea resize="both" rows={8} />));
   const field = container.querySelector('textarea')!;

@@ -10,11 +10,12 @@ const output = process.env.TABS_TEST_OUTPUT || '/tmp/ui-language-tabs';
 const code = `import React,{useState}from'react';import{createRoot}from'react-dom/client';import{flushSync}from'react-dom';
 import{Tabs,TabList,Tab,TabPanel,Textarea,KeyValueEditor,ThemeProvider,useTheme}from'/dist/index.js';import'/dist/styles.css';
 function App(){const{setTheme,setPalette}=useTheme();const[scheme,color]=useState('brand');const[value,select]=useState('en');
+const[individual,setIndividual]=useState(false);
 const[items,setItems]=useState(['en','ja','disabled','zh-hans','fr','de','es','it','pt-br','ko']);
-window.fixture={theme:(theme,palette)=>flushSync(()=>{setTheme(theme);setPalette(palette)}),color:c=>flushSync(()=>color(c)),select:v=>flushSync(()=>select(v)),items:items=>flushSync(()=>setItems(items))};
+window.fixture={theme:(theme,palette)=>flushSync(()=>{setTheme(theme);setPalette(palette)}),color:c=>flushSync(()=>color(c)),individual:v=>flushSync(()=>setIndividual(v)),select:v=>flushSync(()=>select(v)),items:items=>flushSync(()=>setItems(items))};
 return <Tabs value={value} onValueChange={select} variant='pills' colorScheme={scheme} activationMode='manual'>
-<TabList aria-label='Languages'>{items.map(v=><Tab key={v} value={v} disabled={v==='disabled'}>{v}</Tab>)}</TabList>
-<TabPanel value={value}><Textarea aria-label='Notes' resize='both' rows={3} defaultValue={'long text\\n'.repeat(40)}/>
+<TabList aria-label='Languages'>{items.map(v=><Tab key={v} value={v} colorScheme={individual?(v==='ja'?'danger':scheme):undefined} disabled={v==='disabled'}>{v}</Tab>)}</TabList>
+<TabPanel value={value}><Textarea aria-label='Notes' resize='both' style={{resize:'both'}} rows={3} defaultValue={'long text\\n'.repeat(40)}/>
 <KeyValueEditor entries={[{id:'1',key:'home',value:'Welcome'}]} onChange={()=>{}}/><textarea aria-label='Native'/></TabPanel></Tabs>}
 createRoot(document.getElementById('root')).render(<ThemeProvider defaultTheme='light' defaultPalette='graphite' disableStorage><App/></ThemeProvider>);`;
 const server = await createServer({ root, configFile: false, cacheDir: '/tmp/ui-language-tabs-vite',
@@ -52,7 +53,7 @@ try {
       await page.evaluate(({ theme, palette }) => window.fixture.theme(theme, palette), { theme, palette });
       for (const scheme of ['brand', 'gray', 'success', 'warning', 'danger']) {
         await page.evaluate(scheme => window.fixture.color(scheme), scheme); await settled();
-        const inspect = () => selected().evaluate(el => {
+        const inspect = (tab = selected()) => tab.evaluate(el => {
           const s = getComputedStyle(el); const canvas = document.createElement('canvas');
           canvas.width = canvas.height = 1; const ctx = canvas.getContext('2d');
           const lum = color => { ctx.fillStyle = color; ctx.fillRect(0, 0, 1, 1);
@@ -65,6 +66,21 @@ try {
         assert.ok(before.contrast >= 4.5, `${palette}/${theme}/${scheme} contrast ${before.contrast}`);
         assert.ok(before.radius > 0 && before.radius <= 8); assert.equal(before.shadow, 'none');
         await selected().hover(); await settled(); assert.deepEqual(await inspect(), before, 'selected hover must preserve its color');
+        await page.evaluate(() => window.fixture.individual(true)); await settled();
+        const english = list.getByRole('tab', { name: 'en', exact: true });
+        const active = await inspect(english);
+        assert.ok(active.contrast >= 4.5, `${palette}/${theme}/${scheme} per-tab selected contrast`);
+        const activeBorder = await english.evaluate(el => getComputedStyle(el).borderBottomColor);
+        await page.evaluate(() => window.fixture.select('ja')); await settled();
+        const inactive = await inspect(english);
+        assert.equal(inactive.background, active.background, 'inactive tabs retain their semantic tint');
+        assert.equal(inactive.color, active.color, 'inactive tabs retain readable semantic text');
+        assert.ok(inactive.contrast >= 4.5, `${palette}/${theme}/${scheme} per-tab inactive contrast`);
+        assert.notEqual(await english.evaluate(el => getComputedStyle(el).borderBottomColor), activeBorder, 'selection has a visible marker');
+        await english.hover(); await settled();
+        assert.deepEqual(await inspect(english), inactive, 'inactive hover preserves readable semantic colors');
+        assert.equal(await list.getByRole('tab', { name: 'disabled', exact: true }).isDisabled(), true);
+        await page.evaluate(() => { window.fixture.select('en'); window.fixture.individual(false); }); await settled();
       }
     }
     await page.evaluate(theme => { window.fixture.theme(theme, 'graphite'); window.fixture.color('brand'); }, theme);
@@ -95,5 +111,5 @@ try {
     assert.ok(await selected().evaluate(el => { const box = el.getBoundingClientRect(); const list = el.closest('[role="tablist"]').getBoundingClientRect(); return box.left >= list.left - 1 && box.right <= list.right + 1; }), 'programmatic selection reveals an offscreen tab');
     await page.evaluate(() => window.fixture.select('en'));
   }
-  assert.deepEqual(errors, []); console.log('PASS: 120 palette/theme/color/viewport combinations, keyboard tabs, panel linkage, fixed textareas with scrolling');
+  assert.deepEqual(errors, []); console.log('PASS: 120 palette/theme/color/viewport combinations with inherited and per-tab selected/inactive colors, keyboard tabs, async reveal, panel linkage, fixed textareas with scrolling');
 } finally { await browser?.close(); await server.close(); }
