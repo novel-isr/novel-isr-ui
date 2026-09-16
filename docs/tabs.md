@@ -17,8 +17,10 @@ variants remain available.
 
 Each `Tab` also accepts the same optional `colorScheme`, overriding the group
 color. Explicitly colored tabs keep a semantic background and readable text while
-inactive; selection adds a bottom marker (a side marker for vertical line tabs).
-Hover underlines inactive labels and keyboard focus retains its focus ring.
+inactive. Colored pills use a solid semantic fill with contrasting text when
+selected, without borders, underlines or shadows. Their dimensions stay unchanged
+when switching selection. Line tabs retain their edge marker. Keyboard focus
+retains its focus ring independently of selection.
 The existing semantic tokens adapt to all palettes and light/dark themes.
 Tabs without an explicit color retain the existing group styling. Disabled tabs
 remain disabled and dimmed. Color is decorative, not a replacement for selection

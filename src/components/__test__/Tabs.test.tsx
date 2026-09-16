@@ -77,14 +77,17 @@ it('keeps explicit colors readable and selection distinct across palettes and th
             </TabList>
           </Tabs>));
           const [selected, inactive, disabled] = Array.from(container.querySelectorAll('[role="tab"]'), tab => getComputedStyle(tab));
-          expect(inactive!.backgroundColor).toBe(selected!.backgroundColor);
-          expect(inactive!.color).toBe(selected!.color);
-          expect(inactive!.borderBottomColor).not.toBe(selected!.borderBottomColor);
+          expect(inactive!.backgroundColor).not.toBe(selected!.backgroundColor);
+          expect(inactive!.color).not.toBe(selected!.color);
+          expect(selected!.borderBottomStyle).toBe('none');
+          expect(inactive!.borderBottomStyle).toBe('none');
           expect(Number(disabled!.opacity)).toBe(0.5);
           backgrounds.add(inactive!.backgroundColor);
-          const fg = luminance(inactive!.color);
-          const bg = luminance(inactive!.backgroundColor);
-          expect((Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05), `${palette}/${theme}/${colorScheme}`).toBeGreaterThanOrEqual(4.5);
+          for (const tab of [selected!, inactive!]) {
+            const fg = luminance(tab.color);
+            const bg = luminance(tab.backgroundColor);
+            expect((Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05), `${palette}/${theme}/${colorScheme}`).toBeGreaterThanOrEqual(4.5);
+          }
         }
         expect(backgrounds.size).toBe(5);
       }
@@ -95,6 +98,31 @@ it('keeps explicit colors readable and selection distinct across palettes and th
     delete container.dataset.theme;
   }
 }, 30000);
+
+it('does not apply colored pill selection to nested non-pill variants', () => {
+  const style = document.createElement('style');
+  style.textContent = compile('src/styles/index.scss', { style: 'compressed' }).css;
+  document.head.append(style);
+  const inspect = () => {
+    const tab = container.querySelector('[aria-label="Nested"] [role="tab"]')!;
+    const css = getComputedStyle(tab);
+    return [css.backgroundColor, css.color, css.borderBottomStyle, css.borderBottomWidth, css.borderBottomColor];
+  };
+  try {
+    for (const variant of ['line', 'enclosed', 'soft'] as const) {
+      const inner = <Tabs variant={variant} value="inner"><TabList aria-label="Nested">
+        <Tab value="inner" colorScheme="warning">Inner</Tab>
+      </TabList></Tabs>;
+      act(() => root.render(inner));
+      const standalone = inspect();
+      act(() => root.render(<Tabs variant="pills" value="outer">
+        <TabList><Tab value="outer">Outer</Tab></TabList>
+        <TabPanel value="outer">{inner}</TabPanel>
+      </Tabs>));
+      expect(inspect(), variant).toEqual(standalone);
+    }
+  } finally { style.remove(); }
+});
 
 it('connects the selected language to its editor and leaves controlled changes to the parent', () => {
   const onValueChange = vi.fn();

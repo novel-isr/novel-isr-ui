@@ -60,7 +60,7 @@ try {
             const rgb = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3).map(v => { const c = v / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; });
             return rgb[0] * .2126 + rgb[1] * .7152 + rgb[2] * .0722; };
           const fg = lum(s.color), bg = lum(s.backgroundColor);
-          return { contrast: (Math.max(fg, bg) + .05) / (Math.min(fg, bg) + .05), color: s.color, background: s.backgroundColor, radius: parseFloat(s.borderRadius), shadow: s.boxShadow };
+          return { contrast: (Math.max(fg, bg) + .05) / (Math.min(fg, bg) + .05), color: s.color, background: s.backgroundColor, radius: parseFloat(s.borderRadius), shadow: s.boxShadow, border: s.borderBottomWidth, width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height };
         });
         const before = await inspect();
         assert.ok(before.contrast >= 4.5, `${palette}/${theme}/${scheme} contrast ${before.contrast}`);
@@ -70,13 +70,24 @@ try {
         const english = list.getByRole('tab', { name: 'en', exact: true });
         const active = await inspect(english);
         assert.ok(active.contrast >= 4.5, `${palette}/${theme}/${scheme} per-tab selected contrast`);
-        const activeBorder = await english.evaluate(el => getComputedStyle(el).borderBottomColor);
+        assert.equal(active.border, '0px', 'colored pills must not use a bottom selection border');
+        assert.equal(active.shadow, 'none', 'flat selected pills have no inset marker');
+        await english.focus(); await page.keyboard.press('Home');
+        assert.ok(await english.evaluate(el => {
+          const style = getComputedStyle(el);
+          return style.outlineStyle === 'solid' && parseFloat(style.outlineWidth) >= 2 && style.outlineColor === style.color;
+        }), 'selected pill focus ring uses the contrasting foreground');
+        await english.evaluate(el => el.blur());
+        await english.hover(); await settled();
+        assert.deepEqual(await inspect(english), active, 'selected semantic fill stays stable on hover');
         await page.evaluate(() => window.fixture.select('ja')); await settled();
         const inactive = await inspect(english);
-        assert.equal(inactive.background, active.background, 'inactive tabs retain their semantic tint');
-        assert.equal(inactive.color, active.color, 'inactive tabs retain readable semantic text');
+        assert.notEqual(inactive.background, active.background, 'selection is visible across the whole tab surface');
+        assert.notEqual(inactive.color, active.color, 'selected text contrasts with the filled surface');
+        assert.equal(inactive.border, '0px');
+        assert.equal(inactive.width, active.width, 'selection does not change tab width');
+        assert.equal(inactive.height, active.height, 'selection does not change tab height');
         assert.ok(inactive.contrast >= 4.5, `${palette}/${theme}/${scheme} per-tab inactive contrast`);
-        assert.notEqual(await english.evaluate(el => getComputedStyle(el).borderBottomColor), activeBorder, 'selection has a visible marker');
         await english.hover(); await settled();
         assert.deepEqual(await inspect(english), inactive, 'inactive hover preserves readable semantic colors');
         assert.equal(await list.getByRole('tab', { name: 'disabled', exact: true }).isDisabled(), true);
@@ -104,12 +115,13 @@ try {
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     const panelId = await selected().getAttribute('aria-controls');
     assert.equal(await page.getByRole('tabpanel').getAttribute('id'), panelId);
+    await page.evaluate(() => window.fixture.individual(true));
     await page.mouse.move(0, 650); await settled();
     await page.screenshot({ path: `${output}/tabs-${width}-${theme}.png` });
     await list.getByRole('tab', { name: 'en', exact: true }).click();
     await page.evaluate(() => window.fixture.select('ko'));
     assert.ok(await selected().evaluate(el => { const box = el.getBoundingClientRect(); const list = el.closest('[role="tablist"]').getBoundingClientRect(); return box.left >= list.left - 1 && box.right <= list.right + 1; }), 'programmatic selection reveals an offscreen tab');
-    await page.evaluate(() => window.fixture.select('en'));
+    await page.evaluate(() => { window.fixture.select('en'); window.fixture.individual(false); });
   }
   assert.deepEqual(errors, []); console.log('PASS: 120 palette/theme/color/viewport combinations with inherited and per-tab selected/inactive colors, keyboard tabs, async reveal, panel linkage, fixed textareas with scrolling');
 } finally { await browser?.close(); await server.close(); }

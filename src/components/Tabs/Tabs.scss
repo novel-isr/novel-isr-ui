@@ -199,3 +199,21 @@
     border-right-color: var(--ui-tabs-selected-fg);
   }
 }
+
+// Colored pills indicate selection through the full surface, not an edge marker.
+.ui-tabs-variant-pills > .ui-tabs-list .ui-tabs-trigger[class*='ui-tabs-color-'] {
+  border: none;
+
+  &:hover:not(:disabled):not([data-state='active']) {
+    text-decoration: none;
+  }
+  &[data-state='active'] {
+    background-color: var(--ui-tabs-selected-fg);
+    color: var(--ui-tabs-selected-bg);
+
+    &:focus-visible {
+      outline-color: currentColor;
+      outline-offset: -3px;
+    }
+  }
+}
