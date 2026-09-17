@@ -17,7 +17,7 @@
  *   boundaryCount=2 时首尾各保留 2 个页码（[1][2][...][p][...][N-1][N]）。
  */
 
-import { forwardRef, useMemo, type HTMLAttributes } from 'react';
+import { forwardRef, useMemo, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 import { Select, SelectItem } from '../Select/Select';
 
@@ -46,6 +46,8 @@ export interface PaginationProps extends HTMLAttributes<HTMLElement> {
   onPageSizeChange?: (size: number) => void;
   /** page-size 选择器右侧的显示文本（默认「条 / 页」） */
   pageSizeLabel?: string;
+  /** 显示总数，可自定义总数和当前范围的文案。 */
+  showTotal?: boolean | ((total: number, range: [number, number]) => ReactNode);
 }
 
 function range(start: number, end: number): number[] {
@@ -117,6 +119,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
     pageSizeOptions,
     onPageSizeChange,
     pageSizeLabel = '条 / 页',
+    showTotal = false,
     className,
     ...rest
   } = props;
@@ -133,6 +136,10 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
 
   const showPageList = !simple && !hideNumbers;
   const showSimpleCounter = simple || hideNumbers;
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const visibleRange: [number, number] = total === 0
+    ? [0, 0]
+    : [(currentPage - 1) * pageSize + 1, Math.min(currentPage * pageSize, total)];
 
   return (
     <nav
@@ -142,6 +149,11 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
       className={cn('ui-pagination', simple && 'ui-pagination-simple', className)}
       {...rest}
     >
+      {showTotal && (
+        <span className="ui-pagination-total" aria-live="polite" aria-atomic="true">
+          {typeof showTotal === 'function' ? showTotal(total, visibleRange) : `共 ${total} 条`}
+        </span>
+      )}
       {!hideEdges && (
         <button
           type="button"

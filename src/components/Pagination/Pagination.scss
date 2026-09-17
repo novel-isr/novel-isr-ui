@@ -43,6 +43,15 @@
   }
 }
 
+.ui-pagination-total {
+  margin-inline-end: var(--ui-space-2);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-fg-muted);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
 .ui-pagination-ellipsis {
   min-width: 2rem;
   height: 2rem;
